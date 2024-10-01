@@ -1,3 +1,5 @@
+# bill-aplit-app
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -5,33 +7,37 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+% docker compose build
+% docker compose up -d
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You can now access the app at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Prisma
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Prisma is an ORM (Object-Relational Mapping) tool used in this project to interact with the PostgreSQL database in a type-safe and efficient manner. It simplifies database schema management and data operations such as querying and updating.
 
-## Learn More
+### Prisma Setup
+1. **Running Migrations**: 
+To apply changes to the database, run the following Prisma migration command. This will create tables in the database based on the schema.prisma file.
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npx prisma migrate dev --name init
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This command will also generate the Prisma Client, allowing you to interact with the database through your code.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Prisma Studio**: 
+Prisma Studio is a web-based UI that allows you to visually interact with your database. You can start Prisma Studio with the following command:
+
+```bash
+npx prisma studio
+```
+
+After running the command, open your browser and go to http://localhost:5555 to access Prisma Studio.
 
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# bill-aplit-app
