@@ -7,7 +7,7 @@ RUN apk add --no-cache g++ make py3-pip git
 WORKDIR /app
 
 # Prisma スキーマと package.json をコピー
-COPY prisma ./prisma
+COPY ./src/prisma ./src/prisma
 COPY package*.json ./
 
 # 依存関係をインストール（キャッシュを活用）

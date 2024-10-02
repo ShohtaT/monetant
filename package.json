@@ -10,7 +10,7 @@
     "prisma:generate": "npx prisma generate"
   },
   "prisma": {
-    "schema": "./prisma/schema.prisma"
+    "schema": "./src/prisma/schema.prisma"
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",
