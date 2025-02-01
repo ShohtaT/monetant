@@ -60,8 +60,6 @@ src/
   │          ├── domains/              # ドメインオブジェクト
   │          └── services/             # ビジネスロジックを管理
   │
-  └── prisma/
-      └── schema.prisma                # Prismaスキーマファイル
 ```
 
 ### Frontend
