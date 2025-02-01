@@ -7,34 +7,29 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, run the development server:
 
 ```bash
-% docker compose build
-% docker compose up -d
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-You can now access the app at [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Prisma
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-Prisma is an ORM (Object-Relational Mapping) tool used in this project to interact with the PostgreSQL database in a type-safe and efficient manner. It simplifies database schema management and data operations such as querying and updating.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-### Prisma Setup
-1. **Running Migrations**: 
-To apply changes to the database, run the following Prisma migration command. This will create tables in the database based on the schema.prisma file.
+## Learn More
 
-```bash
-npx prisma migrate dev --name init
-```
+To learn more about Next.js, take a look at the following resources:
 
-This command will also generate the Prisma Client, allowing you to interact with the database through your code.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-2. **Prisma Studio**: 
-Prisma Studio is a web-based UI that allows you to visually interact with your database. You can start Prisma Studio with the following command:
-
-```bash
-npx prisma studio
-```
-
-After running the command, open your browser and go to http://localhost:5555 to access Prisma Studio.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
 ## Deploy on Vercel
 
