@@ -43,23 +43,22 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ```bash
 src/
-  ├── app/
-  │   └── api/
-  │      ├── v1/
-  │      │   ├── endpoints/
-  │      │   │   └── route.ts
-  │      │   └── other-endpoints/
-  │      │       └── route.ts
-  │      ├── v2/                       # 将来のバージョン用
-  │      │
-  │      └── lib/
-  │          ├── actions/              # DBとのやり取りやAPIロジック
-  │          ├── constants/            # 共通定義（定数など）
-  │          ├── errors/               # 共通エラー定義
-  │          ├── types/                # 型定義をまとめる
-  │          ├── domains/              # ドメインオブジェクト
-  │          └── services/             # ビジネスロジックを管理
-  │
+  └── app/
+      └── api/
+         ├── v1/
+         │   ├── endpoints/
+         │   │   └── route.ts
+         │   └── other-endpoints/
+         │       └── route.ts
+         ├── v2/                       # 将来のバージョン用
+         │
+         └── lib/
+             ├── actions/              # DBとのやり取りやAPIロジック
+             ├── constants/            # 共通定義（定数など）
+             ├── errors/               # 共通エラー定義
+             ├── types/                # 型定義をまとめる
+             ├── domains/              # ドメインオブジェクト
+             └── services/             # ビジネスロジックを管理
 ```
 
 ### Frontend
@@ -84,7 +83,7 @@ src/
   │       ├── components/  # プロフィールページ固有のコンポーネント (Presentation Layer)
   │       └── api/         # プロフィール関連API呼び出し (Data Access Layer)
   │
-  ├── utils/               # ユーティリティ関数 (Business Logic Layer)
+  ├── lib/                 # ユーティリティ関数 (Business Logic Layer)
   │
   ├── api/                 # グローバルなAPI通信ロジック (Data Access Layer)
   │
