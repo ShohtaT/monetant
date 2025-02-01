@@ -91,3 +91,15 @@ src/
   │
   └── styles/              # 共通スタイル (Presentation Layer)
 ```
+
+### Code formatting
+
+```bash
+npx prettier --write .
+```
+
+### Linting
+
+```bash
+npx next lint
+```
