@@ -1,9 +1,3 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
-  "plugins": ["prettier"],
-  "rules": {
-    "prettier/prettier": "error",
-    "no-unused-vars": "warn",
-    "react/no-unescaped-entities": "off"
-  }
+  "extends": ["next/core-web-vitals", "next/typescript"]
 }
