@@ -1,3 +1,70 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "env": {
+    "es2024": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/jsx-runtime",
+    "prettier" // To avoid conflict with Prettier, this should be the last one.
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "react"
+  ],
+  "rules": {
+    // 基本的なルール
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/ban-types": "off",
+    "no-constant-condition": "error",
+    "no-magic-numbers": ["error", { "ignore": [-1, 0, 1] }],
+    "spaced-comment": ["error", "always"],
+
+    // 複雑性を制限するルール
+    "no-nested-ternary": "error",
+    "max-depth": ["error", 4],
+    "complexity": ["error", 15],
+
+    // 命名に関するルール
+    "unicorn/filename-case": "off",
+    "unicorn/prevent-abbreviations": "off",
+    "storybook/prefer-pascal-case": "off",
+
+    // 配列操作に関するルール
+    "unicorn/prefer-includes": "error",
+
+    // switchに関するルール
+    "no-fallthrough": "error",
+
+    // 厳密な比較と型チェック
+    "eqeqeq": ["error", "always"],
+
+    // 数値の評価
+    "no-implicit-coercion": [
+      "error",
+      { "boolean": true, "number": true, "string": true }
+    ],
+
+    // JSXでの条件付きレンダリング
+    "react/jsx-no-useless-fragment": "error",
+    "react/jsx-curly-brace-presence": [
+      "error",
+      { "props": "never", "children": "never" }
+    ]
+  },
+  "settings": {
+    "react": {
+      "version": "detect" // @ref https://qiita.com/kohta9521/items/aa083ebb708a0e446694
+    },
+    "tailwindcss": {
+      "config": "./tailwind.config.ts",
+      "groupByResponsive": true
+    }
+  }
 }

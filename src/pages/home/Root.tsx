@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+
   const onSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage("");
-    
+    setMessage('');
+
     try {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) {
         throw error;
       }
-      setMessage("サインアップ成功！メールを確認してください。");
+      setMessage('サインアップ成功！メールを確認してください。');
     } catch (error) {
       setMessage(`エラー: ${error}`);
     }
   };
-  
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 sm:p-20 font-geist">
       <h1 className="text-2xl font-bold mb-4">サインアップ</h1>
-      
+
       <form onSubmit={onSignUp} className="w-full max-w-md flex flex-col gap-4">
         <input
           type="email"
@@ -51,10 +51,8 @@ export default function Home() {
           サインアップ
         </button>
       </form>
-      
-      {message && (
-        <p className="mt-4 text-sm text-center text-red-500">{message}</p>
-      )}
+
+      {message && <p className="mt-4 text-sm text-center text-red-500">{message}</p>}
     </div>
   );
 }
