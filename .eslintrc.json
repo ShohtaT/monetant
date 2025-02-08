@@ -1,12 +1,13 @@
 {
   "env": {
-    "es2021": true,
+    "es2024": true,
     "node": true
   },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "plugin:react/jsx-runtime",
+    "prettier" // To avoid conflict with Prettier, this should be the last one.
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -14,7 +15,8 @@
     "sourceType": "module"
   },
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "react"
   ],
   "rules": {
     // 基本的なルール
@@ -48,9 +50,6 @@
       "error",
       { "boolean": true, "number": true, "string": true }
     ],
-
-    // Promise関連のルール
-    "@typescript-eslint/no-floating-promises": "error",
 
     // JSXでの条件付きレンダリング
     "react/jsx-no-useless-fragment": "error",
