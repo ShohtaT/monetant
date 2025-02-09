@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import InputField from '@/components/common/form/InputField';
 import SubmitButton from '@/components/common/form/SubmitButton';
-import { signup } from '@/app/api/users';
+import { login } from '@/app/api/users';
 
 export default function Page() {
   const [email, setEmail] = useState('');
@@ -14,8 +14,8 @@ export default function Page() {
     e.preventDefault();
     setMessage('');
     try {
-      await signup(email, password);
-      setMessage('サインアップ成功！メールを確認してください。');
+      await login(email, password);
+      setMessage('ログイン成功！');
     } catch (error) {
       setMessage(`エラー: ${error}`);
     }
@@ -23,7 +23,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 sm:p-20 font-geist">
-      <h1 className="text-2xl font-bold mb-4">サインアップ</h1>
+      <h1 className="text-2xl font-bold mb-4">ログイン</h1>
 
       <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-4">
         <InputField
@@ -38,7 +38,7 @@ export default function Page() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <SubmitButton label="サインアップ" />
+        <SubmitButton label="ログイン" />
       </form>
 
       {message && <p className="mt-4 text-sm text-center text-red-500">{message}</p>}
