@@ -2,9 +2,11 @@
 
 import Home from '@/app/home/page';
 
-// root page
+// root component
 export default function Page() {
   return (
-    <Home />
+    <div className="m-20">
+      <Home />
+    </div>
   );
 }
