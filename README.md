@@ -12,7 +12,7 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `app/Page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
@@ -55,52 +55,36 @@ To deploy to preview environment, push to the some branch.
 Standard environment — included with all Vercel projects — used to supply environment variables in local development.
 
 ## Structure
-@ref https://zenn.dev/yutabeee/articles/0f7e8e2fa03946
+About "AppRouter" https://nextjs.org/docs/app/getting-started/layouts-and-pages
 
 ```
 src/
-├── app/
+├── app/ // Using AppRouter
 │   ├── api/
 │   │   └── hello/
 │   │       └── route.ts
-│   ├── components/
-│   │   ├── ui/
-│   │   │   ├── button/
-│   │   │   │   ├── page.tsx
-│   │   │   │   ├── button.module.css
-│   │   │   │   └── button.test.tsx
-│   │   │   └── card/
-│   │   │       ├── page.tsx
-│   │   │       ├── card.module.css
-│   │   │       └── card.test.tsx
-│   │   └── layout/
-│   │       ├── footer/
-│   │       │   ├── page.tsx
-│   │       │   ├── footer.module.css
-│   │       │   └── footer.test.tsx
-│   │       ├── header/
-│   │       │   ├── page.tsx
-│   │       │   ├── header.module.css
-│   │       │   └── header.test.tsx
-│   │       └── layout.tsx
-│   ├── hooks/
-│   │   └── use-custom-hook.ts
-│   ├── lib/
-│   │   ├── db.ts
-│   │   └── utils.ts
-│   ├── styles/
-│   │   ├── globals.css
-│   │   └── theme.ts
-│   ├── types/
-│   │   └── index.d.ts
-│   ├── page.tsx
+│   ├── signup/
+│   │   └── page.tsx
 │   ├── layout.tsx
-│   ├── head.tsx
-│   ├── error.tsx
-│   └── loading.tsx
-└── public/
-    ├── images/
-    │   ├── favicon.ico
-    │   └── logo.svg
-    └── fonts/
+│   └── page.tsx
+│
+├── components/
+│   └── common/
+│       ├── form/
+│       │   ├── InputField.tsx
+│       │   └── SubmitButton.tsx
+│       ├── header.tsx
+│       ├── error.tsx
+│       └── loading.tsx
+│
+├── lib/
+│   ├── db.ts
+│   └── utils.ts
+│
+├── styles/
+│   ├── globals.css
+│   └── theme.ts
+│
+└── types/
+    └── index.ts
 ```
