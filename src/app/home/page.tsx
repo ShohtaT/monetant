@@ -29,7 +29,8 @@ export default function Page() {
       <ul className="mt-4">
         {paymentsData.map((payment) => (
           <li key={payment.id} className="border p-5 mb-2 rounded-md w-full">
-            【{payment.id}】 {payment.name}: ¥{payment.amount}<br/>
+            【{payment.id}】 {payment.name}: ¥{payment.amount}
+            <br />
             user: {payment.creator_id}
           </li>
         ))}

@@ -1,6 +1,6 @@
 import { getPaymentsAtSupabase, insertAtSupabase } from '@/lib/supabase/requests/payments';
 import { getCurrentUser } from '@/lib/authHelper';
-import {Payments} from "@/types/payments";
+import { Payments } from '@/types/payments';
 
 export async function createPayment(name: string, amount: number) {
   const currentUser = await getCurrentUser();
