@@ -1,11 +1,10 @@
 'use client';
 
+import Home from '@/app/home/page';
+
+// root page
 export default function Page() {
   return (
-    <>
-      <div className="mt-20 flex justify-center text-xl font-bold">
-        <h1>Home</h1>
-      </div>
-    </>
+    <Home />
   );
 }
