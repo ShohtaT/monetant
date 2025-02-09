@@ -55,39 +55,36 @@ To deploy to preview environment, push to the some branch.
 Standard environment — included with all Vercel projects — used to supply environment variables in local development.
 
 ## Structure
-@ref https://zenn.dev/yutabeee/articles/0f7e8e2fa03946
+About "AppRouter" https://nextjs.org/docs/app/getting-started/layouts-and-pages
 
 ```
 src/
-├── app/
+├── app/ // Using AppRouter
 │   ├── api/
 │   │   └── hello/
 │   │       └── route.ts
-│   ├── components/
-│   │       ├── common/
-│   │       │   ├── form/
-│   │       │   │   ├── InputField.tsx
-│   │       │   │   └── SubmitButton.tsx
-│   │       │   ├── header.tsx
-│   │       │   ├── error.tsx
-│   │       │   └── loading.tsx
-│   │       └── signUp/
-│   │           ├── SignUpPage.tsx // having one page component.
-│   │           ├── SignUpForm.tsx
-│   │           └── SignUpButton.tsx
-│   ├── lib/
-│   │   ├── db.ts
-│   │   └── utils.ts
-│   ├── styles/
-│   │   ├── globals.css
-│   │   └── theme.ts
-│   ├── types/
-│   │   └── index.d.ts
-│   ├── Page.tsx // setting routing
-│   └── layout.tsx // called first
-└── public/
-    ├── images/
-    │   ├── favicon.ico
-    │   └── logo.svg
-    └── fonts/
+│   ├── signup/
+│   │   └── page.tsx
+│   ├── layout.tsx
+│   └── page.tsx
+│
+├── components/
+│   └── common/
+│       ├── form/
+│       │   ├── InputField.tsx
+│       │   └── SubmitButton.tsx
+│       ├── header.tsx
+│       ├── error.tsx
+│       └── loading.tsx
+│
+├── lib/
+│   ├── db.ts
+│   └── utils.ts
+│
+├── styles/
+│   ├── globals.css
+│   └── theme.ts
+│
+└── types/
+    └── index.ts
 ```

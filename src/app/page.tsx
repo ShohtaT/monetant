@@ -1,7 +1,11 @@
 'use client';
 
-import SignUpPage from "@/app/components/signUp/SignUpPage";
-
 export default function Page() {
-  return <SignUpPage />;
+  return (
+    <>
+      <div className="mt-20 flex justify-center text-xl font-bold">
+        <h1>Home</h1>
+      </div>
+    </>
+  );
 }

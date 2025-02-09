@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { signUp } from '@/app/api/auth';
-import InputField from "@/app/components/common/form/InputField";
-import SubmitButton from "@/app/components/common/form/SubmitButton";
+import InputField from '@/components/common/form/InputField';
+import SubmitButton from '@/components/common/form/SubmitButton';
 
-export default function SignUpPage() {
+export default function Page() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
