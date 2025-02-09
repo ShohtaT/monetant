@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { signUp } from '@/app/api/auth';
 import InputField from '@/components/common/form/InputField';
 import SubmitButton from '@/components/common/form/SubmitButton';
+import { createUser } from '@/app/api/users';
 
 export default function Page() {
   const [email, setEmail] = useState('');
@@ -14,7 +14,7 @@ export default function Page() {
     e.preventDefault();
     setMessage('');
     try {
-      await signUp(email, password);
+      await createUser(email, password);
       setMessage('サインアップ成功！メールを確認してください。');
     } catch (error) {
       setMessage(`エラー: ${error}`);
