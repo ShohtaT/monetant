@@ -40,11 +40,21 @@ https://supabase.com/dashboard/projects
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Production
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Primary project environment meant to serve qualified, promoted deployments to real users.
+To deploy to prod environment, push to the `main` branch.
 
-## Directory structure
+### Preview
+
+Standard environment — included with all Vercel projects — for previewing changes before promoting them to production.
+To deploy to preview environment, push to the some branch.
+
+### Development
+
+Standard environment — included with all Vercel projects — used to supply environment variables in local development.
+
+## Structure
 @ref https://zenn.dev/yutabeee/articles/0f7e8e2fa03946
 
 ```
