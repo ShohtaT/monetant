@@ -1,6 +1,6 @@
 'use client';
 
-import HomeClientRoot from '@/pages/home/Root';
+import HomeClientRoot from '@/app/components/layout/Root';
 
 export default function Home() {
   return <HomeClientRoot />;
