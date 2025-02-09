@@ -1,7 +1,7 @@
 'use client';
 
-import HomeClientRoot from '@/app/components/layout/Root';
+import SignUpPage from "@/app/components/signUp/SignUpPage";
 
-export default function Home() {
-  return <HomeClientRoot />;
+export default function Page() {
+  return <SignUpPage />;
 }

@@ -12,7 +12,7 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `app/Page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
@@ -64,27 +64,17 @@ src/
 │   │   └── hello/
 │   │       └── route.ts
 │   ├── components/
-│   │   ├── ui/
-│   │   │   ├── button/
-│   │   │   │   ├── page.tsx
-│   │   │   │   ├── button.module.css
-│   │   │   │   └── button.test.tsx
-│   │   │   └── card/
-│   │   │       ├── page.tsx
-│   │   │       ├── card.module.css
-│   │   │       └── card.test.tsx
-│   │   └── layout/
-│   │       ├── footer/
-│   │       │   ├── page.tsx
-│   │       │   ├── footer.module.css
-│   │       │   └── footer.test.tsx
-│   │       ├── header/
-│   │       │   ├── page.tsx
-│   │       │   ├── header.module.css
-│   │       │   └── header.test.tsx
-│   │       └── layout.tsx
-│   ├── hooks/
-│   │   └── use-custom-hook.ts
+│   │       ├── common/
+│   │       │   ├── form/
+│   │       │   │   ├── InputField.tsx
+│   │       │   │   └── SubmitButton.tsx
+│   │       │   ├── header.tsx
+│   │       │   ├── error.tsx
+│   │       │   └── loading.tsx
+│   │       └── signUp/
+│   │           ├── SignUpPage.tsx // having one page component.
+│   │           ├── SignUpForm.tsx
+│   │           └── SignUpButton.tsx
 │   ├── lib/
 │   │   ├── db.ts
 │   │   └── utils.ts
@@ -93,11 +83,8 @@ src/
 │   │   └── theme.ts
 │   ├── types/
 │   │   └── index.d.ts
-│   ├── page.tsx
-│   ├── layout.tsx
-│   ├── head.tsx
-│   ├── error.tsx
-│   └── loading.tsx
+│   ├── Page.tsx // setting routing
+│   └── layout.tsx // called first
 └── public/
     ├── images/
     │   ├── favicon.ico
