@@ -1,19 +1,19 @@
 import { getPaymentsAtSupabase, insertAtSupabase } from '@/lib/supabase/requests/payments';
-import { getCurrentUser } from '@/lib/authHelper';
+import { getCurrentUserUuid } from '@/lib/authHelper';
 import { Payments } from '@/types/payments';
 
 export async function createPayment(name: string, amount: number) {
-  const currentUser = await getCurrentUser();
-  if (currentUser === null) return;
+  const currentUserUuid = await getCurrentUserUuid();
+  if (currentUserUuid === null) return;
 
-  await insertAtSupabase(name, amount, currentUser.id);
+  await insertAtSupabase(name, amount, currentUserUuid);
 }
 
 export async function getPayments(): Promise<Payments[]> {
-  const currentUser = await getCurrentUser();
-  if (currentUser === null) return [];
+  const currentUserUuid = await getCurrentUserUuid();
+  if (currentUserUuid === null) return [];
 
-  const payments = await getPaymentsAtSupabase(currentUser.id);
+  const payments = await getPaymentsAtSupabase(currentUserUuid);
   if (payments === null) return [];
 
   return payments;

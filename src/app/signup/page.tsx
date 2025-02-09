@@ -1,11 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputField from '@/components/common/form/InputField';
 import SubmitButton from '@/components/common/form/SubmitButton';
 import { signup } from '@/app/api/users';
+import { useUserStore } from '@/stores/users';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -21,8 +24,14 @@ export default function Page() {
     }
   };
 
+  useEffect(() => {
+    if (useUserStore.getState().getIsLogin()) {
+      router.push('/');
+    }
+  }, []);
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 sm:p-20 font-geist">
+    <div className="flex flex-col items-center justify-center min-h-screen font-geist">
       <h1 className="text-2xl font-bold mb-4">サインアップ</h1>
 
       <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-4">
