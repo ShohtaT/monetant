@@ -2,7 +2,7 @@ import {
   signInAtSupabase,
   signOutAtSupabase,
   signUpAtSupabase,
-} from '@/lib/supabase/requests/auth';
+} from '@/lib/supabase/auth';
 
 export async function signup(email: string, password: string) {
   await signUpAtSupabase(email, password);

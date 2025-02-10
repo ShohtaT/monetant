@@ -1,4 +1,4 @@
-import { getSessionAtSupabase, getUserAtSupabase } from '@/lib/supabase/requests/auth';
+import { getSessionAtSupabase, getUserAtSupabase } from '@/lib/supabase/auth';
 
 // @see https://qiita.com/megmogmog1965/items/37d7a4a3335f2758c861
 export const getCurrentUserUuid = async (): Promise<string | null> => {
