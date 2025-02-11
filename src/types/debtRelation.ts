@@ -1,11 +1,11 @@
-export interface DebtRelations {
+export interface DebtRelation {
   id: number;
-  created_at: string;
-  updated_at: string;
   payment_id: number;
   payer_id: string;
   payee_id: string;
   status: 'awaiting' | 'completed';
   split_amount: number;
   paid_at?: string;
+  created_at: string;
+  updated_at: string;
 }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import InputField from '@/components/common/form/InputField';
 import SubmitButton from '@/components/common/form/SubmitButton';
-import { signup } from '@/app/api/users';
+import { createUser } from '@/app/api/endpoints/auth';
 import { useUserStore } from '@/stores/users';
 import { useRouter } from 'next/navigation';
 
@@ -11,13 +11,14 @@ export default function Page() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [nickname, setNickname] = useState('');
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage('');
     try {
-      await signup(email, password);
+      await createUser(email, password, nickname);
       setMessage('サインアップ成功！メールを確認してください。');
     } catch (error) {
       setMessage(`エラー: ${error}`);
@@ -35,6 +36,12 @@ export default function Page() {
       <h1 className="text-2xl font-bold mb-4">サインアップ</h1>
 
       <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-4">
+        <InputField
+          type="text"
+          placeholder="ニックネーム"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+        />
         <InputField
           type="email"
           placeholder="メールアドレス"
