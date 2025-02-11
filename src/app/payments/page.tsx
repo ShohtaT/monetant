@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createPayment, getPayments } from '@/app/api/endpoints/payments';
+import { getPayments } from '@/app/api/endpoints/payments';
 import { signOut } from '@/app/api/endpoints/auth';
 import { useUserStore } from '@/stores/users';
 import { ExpandedPayment } from '@/types/payment';
 import Card from '@/app/payments/card';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+  const router = useRouter();
   const [awaitingPayments, setAwaitingPayments] = useState<ExpandedPayment[] | null>(null);
   const [completedPayments, setCompletedPayments] = useState<ExpandedPayment[] | null>(null);
 
@@ -23,19 +25,20 @@ export default function Page() {
   }, []);
 
   const create = async () => {
-    await createPayment('cool', 100);
+    router.push('/payments/new');
   };
 
   const logout = async () => {
     await signOut();
     useUserStore.getState().setIsLogin(false);
+    router.push('/login');
   };
 
   return (
     <div className="mt-6 flex flex-col justify-center font-geist">
       <h1 className="text-center text-2xl font-bold mb-4">支払い一覧</h1>
 
-      <div className="flex justify-end mb-4" onClick={create}>
+      <div className="flex justify-end mb-4">
         <div className="text-xl cursor-pointer hover:opacity-70" onClick={logout}>
           サインアウト
         </div>

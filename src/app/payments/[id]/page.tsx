@@ -28,15 +28,15 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col justify-center font-geist">
+    <div className="mt-6 flex flex-col justify-center font-geist">
       <p className="mb-4 font-bold">
-        <span className="underline cursor-pointer" onClick={() => router.push('/')}>
+        <span className="underline cursor-pointer" onClick={() => router.push('/payments')}>
           一覧
         </span>{' '}
         ＞ 詳細
       </p>
 
-      <h1 className="text-2xl font-bold mb-4">詳細ページ</h1>
+      <h1 className="text-center text-2xl font-bold mb-4">詳細ページ</h1>
 
       <h1 className="text-2xl font-bold mb-4 cursor-pointer" onClick={create}>
         新規作成

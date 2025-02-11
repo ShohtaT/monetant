@@ -41,12 +41,14 @@ export default function Page() {
           placeholder="メールアドレス"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required={true}
         />
         <InputField
           type="password"
           placeholder="パスワード"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required={true}
         />
         <SubmitButton label="ログイン" />
       </form>

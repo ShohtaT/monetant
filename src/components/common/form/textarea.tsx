@@ -1,28 +1,27 @@
 'use client';
 
+import { ChangeEventHandler } from 'react';
+
 interface InputFieldProps {
-  type: 'email' | 'password' | 'text' | 'date' | 'number';
   placeholder?: string;
   value: string | number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;
+  onChange?: ChangeEventHandler<HTMLTextAreaElement> | undefined;
   required?: boolean;
   rows?: number;
 }
 
-export default function InputField({
-  type,
+export default function Textarea({
   placeholder,
   value,
-  onChange,
   label,
+  onChange,
   required,
 }: InputFieldProps) {
   return (
     <div>
       {label ? <label className="text-sm font-semibold">{label}</label> : null}
-      <input
-        type={type}
+      <textarea
         placeholder={placeholder}
         className="mt-1 border p-3 rounded-md w-full text-black"
         value={value}

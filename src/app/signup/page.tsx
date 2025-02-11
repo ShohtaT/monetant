@@ -41,18 +41,24 @@ export default function Page() {
           placeholder="ニックネーム"
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
+          label="ニックネーム"
+          required={true}
         />
         <InputField
           type="email"
           placeholder="メールアドレス"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          label="メールアドレス"
+          required={true}
         />
         <InputField
           type="password"
           placeholder="パスワード"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          label="パスワード"
+          required={true}
         />
         <SubmitButton label="サインアップ" />
       </form>
