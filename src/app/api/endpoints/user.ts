@@ -8,8 +8,18 @@ import { supabaseClient } from '@/lib/supabase/supabaseClient';
  * @return data of User
  */
 export async function getUser(userId: number): Promise<User | null> {
-  const { data, error } = await supabaseClient.from('Users').select().eq('id', userId);
+  return await getUserByUserId(userId);
+}
+
+/**
+ * Retrieve User
+ *
+ * @param userId number
+ * @return data of User
+ */
+async function getUserByUserId(userId: number): Promise<User | null> {
+  const { data, error } = await supabaseClient.from('Users').select().eq('id', userId).single();
   if (error) throw error;
 
-  return data[0] ?? null;
+  return data ?? null;
 }
