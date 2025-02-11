@@ -44,7 +44,7 @@ const expandPayments = async (payments: Payment[], status: string): Promise<Expa
     payments
       .filter((payment) => payment.status === status)
       .map(async (payment) => {
-        const creator_name = await getUserNickname(payment.creator_id);
+        const creator_name = await getUserNickname(payment.creator_id); // FIXME: dataの数だけリクエストを送っている
         return { ...payment, creator_name } as ExpandedPayment;
       })
   );
