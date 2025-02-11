@@ -1,6 +1,6 @@
 import { getSession, getUser } from '@/app/api/endpoints/auth';
-import {supabaseClient} from "@/lib/supabase/supabaseClient";
-import {User} from "@/types/user";
+import { supabaseClient } from '@/lib/supabase/supabaseClient';
+import { User } from '@/types/user';
 
 /**
  * Create a new user
@@ -24,10 +24,7 @@ export async function signUp(email: string, password: string) {
 export const getCurrentUser = async (): Promise<User | null> => {
   const uuid = await getCurrentUserUuid();
 
-  const { data, error } = await supabaseClient
-    .from('Users')
-    .select()
-    .eq('auth_id', uuid);
+  const { data, error } = await supabaseClient.from('Users').select().eq('auth_id', uuid);
   if (error) throw error;
 
   return data[0] ?? null;

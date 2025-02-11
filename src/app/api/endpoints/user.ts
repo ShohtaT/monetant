@@ -1,5 +1,5 @@
-import {User} from "@/types/user";
-import {supabaseClient} from "@/lib/supabase/supabaseClient";
+import { User } from '@/types/user';
+import { supabaseClient } from '@/lib/supabase/supabaseClient';
 
 /**
  * Retrieve User
@@ -8,11 +8,8 @@ import {supabaseClient} from "@/lib/supabase/supabaseClient";
  * @return data of User
  */
 export async function getUser(userId: number): Promise<User | null> {
-  const { data, error } = await supabaseClient
-    .from('Users')
-    .select()
-    .eq('id', userId);
+  const { data, error } = await supabaseClient.from('Users').select().eq('id', userId);
   if (error) throw error;
-  
+
   return data[0] ?? null;
 }

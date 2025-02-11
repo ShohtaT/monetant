@@ -1,5 +1,5 @@
 import { supabaseClient } from '@/lib/supabase/supabaseClient';
-import {signUp} from "@/app/api/helper/authHelper";
+import { signUp } from '@/app/api/helper/authHelper';
 
 /**
  * Create a new user
@@ -15,8 +15,8 @@ export async function createUser(email: string, password: string, nickname: stri
 
   const { data, error } = await supabaseClient
     .from('Users')
-    .insert([{ auth_id: user.id, nickname: nickname}]);
-  
+    .insert([{ auth_id: user.id, nickname: nickname }]);
+
   if (error) throw error;
   return data;
 }
