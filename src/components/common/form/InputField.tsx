@@ -20,11 +20,11 @@ export default function InputField({
 }: InputFieldProps) {
   return (
     <div>
-      {label ? <label className="text-sm font-semibold">{label}</label> : null}
+      {label ? <div className="text-sm font-semibold mb-1">{label}</div> : null}
       <input
         type={type}
         placeholder={placeholder}
-        className="mt-1 border p-3 rounded-md w-full text-black"
+        className="border p-3 rounded-md w-full text-black"
         value={value}
         onChange={onChange}
         required={required}

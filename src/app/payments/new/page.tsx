@@ -5,20 +5,57 @@ import InputField from '@/components/common/form/InputField';
 import SubmitButton from '@/components/common/form/SubmitButton';
 import Textarea from '@/components/common/form/textarea';
 import { useRouter } from 'next/navigation';
+import { User } from '@/types/user';
+import BillingsForm from '@/app/payments/new/billingsForm';
+import {createPayment} from "@/app/api/endpoints/payments";
+
+interface Billing {
+  user: User | null;
+  splitAmount: number;
+}
 
 export default function Page() {
   const router = useRouter();
 
+  // 送信するデータ
   const [title, setTitle] = useState('');
   const [paymentDate, setPaymentDate] = useState(new Date().toISOString().slice(0, 10));
   const [totalAmount, setTotalAmount] = useState(0);
   const [note, setNote] = useState('');
+  const [billings, setBillings] = useState<Billing[]>([{ user: null, splitAmount: 0 }]);
+
+  // エラーメッセージ
   const [message, setMessage] = useState('');
+
+  const optionUsers: User[] = [
+    {
+      id: 1,
+      nickname: 'Alice',
+      auth_id: 'auth0|123',
+      created_at: '2022-01, 01',
+      updated_at: '2022-01-01',
+    },
+    {
+      id: 2,
+      nickname: 'Bob',
+      auth_id: 'auth0|123',
+      created_at: '2022-01, 01',
+      updated_at: '2022-01-01',
+    },
+    {
+      id: 3,
+      nickname: 'Charlie',
+      auth_id: 'auth0|123',
+      created_at: '2022-01, 01',
+      updated_at: '2022-01-01',
+    },
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage('');
     try {
+      console.log(billings);
       // TODO: await createPayment
     } catch (error) {
       setMessage(`保存に失敗しました\nError: ${error}`);
@@ -39,7 +76,7 @@ export default function Page() {
       <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-6">
         <InputField
           type="text"
-          placeholder="支払い名称"
+          placeholder="忘年会2024"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           label="支払い名称"
@@ -60,14 +97,19 @@ export default function Page() {
           required={true}
         />
         <Textarea
-          placeholder="メモ"
+          placeholder="みんなへの備忘録など"
           value={note}
           onChange={(e) => setNote(e.target.value)}
           label="メモ"
           rows={3}
           required={false}
         />
-        <SubmitButton label="登録する" />
+
+        <BillingsForm billings={billings} optionUsers={optionUsers} onChange={setBillings} />
+
+        <div className="mt-6 w-full flex justify-center">
+          <SubmitButton label="登録する" />
+        </div>
       </form>
 
       {message && <p className="mt-4 text-sm text-center text-red-500">{message}</p>}
