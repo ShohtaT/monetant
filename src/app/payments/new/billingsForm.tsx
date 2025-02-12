@@ -2,11 +2,7 @@
 
 import { User } from '@/types/user';
 import InputField from '@/components/common/form/InputField';
-
-interface Billing {
-  user: User | null;
-  splitAmount: number;
-}
+import { Billing } from '@/types/payment';
 
 interface BillingsFormProps {
   billings: Billing[];
@@ -16,7 +12,7 @@ interface BillingsFormProps {
 
 export default function BillingsForm({ billings, optionUsers, onChange }: BillingsFormProps) {
   const handleUserChange = (index: number, userId: number) => {
-    const updatedBillings = billings.map((billing, i) =>
+    const updatedBillings: Billing[] = billings.map((billing, i) =>
       i === index
         ? { ...billing, user: optionUsers.find((option) => option.id === userId) || null }
         : billing
@@ -35,27 +31,27 @@ export default function BillingsForm({ billings, optionUsers, onChange }: Billin
     <div>
       <label className="text-sm font-semibold">立替内訳</label>
       <div className="flex flex-col gap-2">
-        {billings.map ((billing, index) => (
+        {billings.map((billing, index) => (
           <div key={index} className="flex items-center justify-between gap-4">
             <select
               className="border p-3 rounded-md w-full text-black h-[50px]"
               value={billing.user?.id || 0}
-              onChange={(e) => handleUserChange (index, Number (e.target.value))}
+              onChange={(e) => handleUserChange(index, Number(e.target.value))}
               required
             >
               <option value={0}>選択してください</option>
-              {optionUsers.map ((option) => (
+              {optionUsers.map((option) => (
                 <option key={option.id} value={option.id}>
                   {option.nickname}
                 </option>
               ))}
             </select>
-            
+
             <div className="w-40 flex items-end">
               <InputField
                 type="number"
                 value={billing.splitAmount}
-                onChange={(e) => handleAmountChange (index, Number (e.target.value))}
+                onChange={(e) => handleAmountChange(index, Number(e.target.value))}
                 required
               />
               <p className="ml-1">円</p>
@@ -65,8 +61,10 @@ export default function BillingsForm({ billings, optionUsers, onChange }: Billin
       </div>
 
       <div className="mt-4 w-full flex justify-center">
-        <span className="border border-gray-950 dark:border-white px-5 rounded-full cursor-pointer"
-              onClick={() => onChange ([...billings, {user: null, splitAmount: 0}])}>
+        <span
+          className="border border-gray-950 dark:border-white px-5 rounded-full cursor-pointer"
+          onClick={() => onChange([...billings, { user: null, splitAmount: 0 }])}
+        >
           ＋追加
         </span>
       </div>

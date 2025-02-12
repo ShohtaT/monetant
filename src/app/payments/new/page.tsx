@@ -7,12 +7,8 @@ import Textarea from '@/components/common/form/textarea';
 import { useRouter } from 'next/navigation';
 import { User } from '@/types/user';
 import BillingsForm from '@/app/payments/new/billingsForm';
-import {createPayment} from "@/app/api/endpoints/payments";
-
-interface Billing {
-  user: User | null;
-  splitAmount: number;
-}
+import { createPayment } from '@/app/api/endpoints/payments';
+import { Billing } from '@/types/payment';
 
 export default function Page() {
   const router = useRouter();
@@ -28,6 +24,7 @@ export default function Page() {
   const [message, setMessage] = useState('');
 
   const optionUsers: User[] = [
+    // TODO: get users
     {
       id: 1,
       nickname: 'Alice',
@@ -55,8 +52,7 @@ export default function Page() {
     e.preventDefault();
     setMessage('');
     try {
-      console.log(billings);
-      // TODO: await createPayment
+      await createPayment(title, paymentDate, totalAmount, billings, note);
     } catch (error) {
       setMessage(`保存に失敗しました\nError: ${error}`);
     }

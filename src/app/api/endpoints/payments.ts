@@ -1,18 +1,41 @@
 import { supabaseClient } from '@/lib/supabase/supabaseClient';
 import { getCurrentUser } from '@/app/api/helper/authHelper';
-import { ExpandedPayment, Payment, PaymentList } from '@/types/payment';
+import { Billing, ExpandedPayment, Payment, PaymentCreate, PaymentList } from '@/types/payment';
 import { getUser } from '@/app/api/endpoints/user';
+import { DebtRelation, DebtRelationCreate } from '@/types/debtRelation';
 
-export async function createPayment(title: string, amount: number) {
+export async function createPayment(
+  title: string,
+  paymentDate: string,
+  amount: number,
+  billings: Billing[],
+  note?: string
+): Promise<Payment | undefined> {
   const currentUser = await getCurrentUser();
-  if (currentUser === null) return;
+  if (currentUser === null) return undefined;
 
-  const { data, error } = await supabaseClient
-    .from('Payments')
-    .insert([{ title: title, amount: amount, creator_id: currentUser.id }]);
+  // Payment を作成
+  const newPayment = await createPaymentToSupabase({
+    title,
+    amount,
+    note,
+    status: 'awaiting',
+    creator_id: currentUser.id,
+    payment_at: paymentDate,
+  });
+  if (!newPayment) return undefined;
 
-  if (error) throw error;
-  return data;
+  // DebtRelation を作成
+  for (const billing of billings) {
+    if (billing.user === null) continue;
+    await createDebtRelationToSupabase({
+      payment_id: newPayment.id,
+      payer_id: currentUser.id.toString(),
+      payee_id: billing.user?.id.toString(),
+      status: 'awaiting',
+      split_amount: billing.splitAmount,
+    } as DebtRelation);
+  }
 }
 
 /**
@@ -36,6 +59,8 @@ export async function getPayments(): Promise<PaymentList | null> {
   };
 }
 
+// PRIVATE FUNCTIONS
+
 /**
  * 指定したステータスの Payment を `ExpandedPayment[]` に変換
  */
@@ -56,4 +81,26 @@ const expandPayments = async (payments: Payment[], status: string): Promise<Expa
 const getUserNickname = async (userId: number): Promise<string> => {
   const user = await getUser(userId);
   return user?.nickname || 'Unknown';
+};
+
+/**
+ * Supabase に Payment を作成
+ * @param payment as PaymentCreate
+ */
+const createPaymentToSupabase = async (payment: PaymentCreate): Promise<Payment | null> => {
+  const { data, error } = await supabaseClient.from('Payments').insert([payment]);
+  if (error) throw error;
+  return data ? data[0] : null;
+};
+
+/**
+ * Supabase に DebtRelation を作成
+ * @param debtRelation as DebtRelation
+ */
+const createDebtRelationToSupabase = async (
+  debtRelation: DebtRelationCreate
+): Promise<DebtRelation | null> => {
+  const { data, error } = await supabaseClient.from('DebtRelation').insert([debtRelation]);
+  if (error) throw error;
+  return data ? data[0] : null;
 };
