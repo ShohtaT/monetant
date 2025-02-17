@@ -71,8 +71,8 @@ src/
 ├── components/
 │   └── common/
 │       ├── form/
-│       │   ├── InputField.tsx
-│       │   └── SubmitButton.tsx
+│       │   ├── inputField.tsx
+│       │   └── submitButton.tsx
 │       ├── header.tsx
 │       ├── error.tsx
 │       └── loading.tsx

@@ -15,7 +15,7 @@ export async function createPayment(
   if (currentUser === null) return undefined;
 
   // Payment を作成
-  const newPayment = await createPaymentToSupabase({
+  await createPaymentToSupabase({
     title,
     amount,
     note,
@@ -23,6 +23,7 @@ export async function createPayment(
     creator_id: currentUser.id,
     payment_at: paymentDate,
   });
+  const newPayment = await getPaymentLastOne();
   if (!newPayment) return undefined;
 
   // DebtRelation を作成
@@ -30,8 +31,8 @@ export async function createPayment(
     if (billing.user === null) continue;
     await createDebtRelationToSupabase({
       payment_id: newPayment.id,
-      payer_id: currentUser.id.toString(),
-      payee_id: billing.user?.id.toString(),
+      payer_id: currentUser.id,
+      payee_id: billing.user?.id,
       status: 'awaiting',
       split_amount: billing.splitAmount,
     } as DebtRelation);
@@ -59,7 +60,7 @@ export async function getPayments(): Promise<PaymentList | null> {
   };
 }
 
-// PRIVATE FUNCTIONS
+// PRIVATE FUNCTIONS =======================
 
 /**
  * 指定したステータスの Payment を `ExpandedPayment[]` に変換
@@ -85,22 +86,35 @@ const getUserNickname = async (userId: number): Promise<string> => {
 
 /**
  * Supabase に Payment を作成
+ *
  * @param payment as PaymentCreate
+ * @return Promise<void>
  */
-const createPaymentToSupabase = async (payment: PaymentCreate): Promise<Payment | null> => {
-  const { data, error } = await supabaseClient.from('Payments').insert([payment]);
+const createPaymentToSupabase = async (payment: PaymentCreate) => {
+  const { error } = await supabaseClient.from('Payments').insert([payment]);
   if (error) throw error;
-  return data ? data[0] : null;
 };
 
 /**
+ * Supabase から最新の Payment を取得
+ *
+ * @return Promise<Payment | undefined>
+ */
+const getPaymentLastOne = async () => {
+  const { data, error } = await supabaseClient.from('Payments').select().order('id', { ascending: false }).limit(1);
+  if (error) throw error;
+  return data?.[0];
+}
+
+/**
  * Supabase に DebtRelation を作成
+ *
  * @param debtRelation as DebtRelation
+ * @return Promise<void>
  */
 const createDebtRelationToSupabase = async (
   debtRelation: DebtRelationCreate
-): Promise<DebtRelation | null> => {
-  const { data, error } = await supabaseClient.from('DebtRelation').insert([debtRelation]);
+) => {
+  const { error } = await supabaseClient.from('DebtRelations').insert([debtRelation]);
   if (error) throw error;
-  return data ? data[0] : null;
 };

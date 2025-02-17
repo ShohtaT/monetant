@@ -1,7 +1,7 @@
 'use client';
 
 import { User } from '@/types/user';
-import InputField from '@/components/common/form/InputField';
+import InputField from '@/components/common/form/inputField';
 import { Billing } from '@/types/payment';
 
 interface BillingsFormProps {

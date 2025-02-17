@@ -1,14 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import InputField from '@/components/common/form/InputField';
-import SubmitButton from '@/components/common/form/SubmitButton';
+import {useEffect, useState} from 'react';
+import InputField from '@/components/common/form/inputField';
+import SubmitButton from '@/components/common/form/submitButton';
 import Textarea from '@/components/common/form/textarea';
 import { useRouter } from 'next/navigation';
 import { User } from '@/types/user';
 import BillingsForm from '@/app/payments/new/billingsForm';
 import { createPayment } from '@/app/api/endpoints/payments';
 import { Billing } from '@/types/payment';
+import {getUsersList} from "@/app/api/endpoints/user";
 
 export default function Page() {
   const router = useRouter();
@@ -23,36 +24,27 @@ export default function Page() {
   // エラーメッセージ
   const [message, setMessage] = useState('');
 
-  const optionUsers: User[] = [
-    // TODO: get users
-    {
-      id: 1,
-      nickname: 'Alice',
-      auth_id: 'auth0|123',
-      created_at: '2022-01, 01',
-      updated_at: '2022-01-01',
-    },
-    {
-      id: 2,
-      nickname: 'Bob',
-      auth_id: 'auth0|123',
-      created_at: '2022-01, 01',
-      updated_at: '2022-01-01',
-    },
-    {
-      id: 3,
-      nickname: 'Charlie',
-      auth_id: 'auth0|123',
-      created_at: '2022-01, 01',
-      updated_at: '2022-01-01',
-    },
-  ];
+  const [optionUsers, setOptionUsers] = useState<User[]>([]);
+  
+  useEffect(() => {
+    fetchUsers().then();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const users = await getUsersList();
+      setOptionUsers(users);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage('');
     try {
       await createPayment(title, paymentDate, totalAmount, billings, note);
+      router.push('/payments');
     } catch (error) {
       setMessage(`保存に失敗しました\nError: ${error}`);
     }

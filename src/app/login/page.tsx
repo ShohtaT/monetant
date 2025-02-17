@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import InputField from '@/components/common/form/InputField';
-import SubmitButton from '@/components/common/form/SubmitButton';
+import InputField from '@/components/common/form/inputField';
+import SubmitButton from '@/components/common/form/submitButton';
 import { signIn } from '@/app/api/endpoints/auth';
 import { useUserStore } from '@/stores/users';
 import { useRouter } from 'next/navigation';

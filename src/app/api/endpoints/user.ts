@@ -2,6 +2,18 @@ import { User } from '@/types/user';
 import { supabaseClient } from '@/lib/supabase/supabaseClient';
 
 /**
+ * Retrieve Users
+ *
+ * @return data of User[]
+ */
+export async function getUsersList(): Promise<User[]> {
+  const { data, error } = await supabaseClient.from('Users').select();
+  if (error) throw error;
+
+  return data ?? [];
+}
+
+/**
  * Retrieve User
  *
  * @param userId number
