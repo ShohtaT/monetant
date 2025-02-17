@@ -60,7 +60,9 @@ export default function Page() {
           label="パスワード"
           required={true}
         />
-        <SubmitButton label="サインアップ" />
+        <div className="mt-4 flex justify-center">
+          <SubmitButton label="サインアップ" />
+        </div>
       </form>
 
       {message && <p className="mt-4 text-sm text-center text-red-500">{message}</p>}
