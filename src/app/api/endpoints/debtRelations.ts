@@ -1,21 +1,6 @@
 import { supabaseClient } from '@/lib/supabase/supabaseClient';
 import { getCurrentUser } from '@/app/api/helper/authHelper';
-import {DebtRelation, DebtRelationCreate} from '@/types/debtRelation';
-
-/**
- * Insert a new DebtRelation
- *
- * @param debtRelation
- * @return data of DebtRelations
- */
-export async function createDebtRelation(debtRelation: DebtRelationCreate) {
-  const currentUser = await getCurrentUser();
-  if (currentUser === null) return;
-
-  const { data, error } = await supabaseClient.from('DebtRelations').insert([debtRelation]);
-  if (error) throw error;
-  return data;
-}
+import { DebtRelation } from '@/types/debtRelation';
 
 /**
  * Retrieve DebtRelation

@@ -34,27 +34,27 @@ export default function Page() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen font-geist">
       <h1 className="text-2xl font-bold mb-4">ログイン</h1>
-      
+
       <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-4">
         <InputField
           type="email"
           placeholder="メールアドレス"
           value={email}
-          onChange={(e) => setEmail (e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           required={true}
         />
         <InputField
           type="password"
           placeholder="パスワード"
           value={password}
-          onChange={(e) => setPassword (e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           required={true}
         />
         <div className="mt-4 flex justify-center">
-          <SubmitButton label="ログイン"/>
+          <SubmitButton label="ログイン" />
         </div>
       </form>
-      
+
       {message && <p className="mt-4 text-sm text-center text-red-500">{message}</p>}
     </div>
   );

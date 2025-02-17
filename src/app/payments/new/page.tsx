@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import InputField from '@/components/common/form/inputField';
 import SubmitButton from '@/components/common/form/submitButton';
 import Textarea from '@/components/common/form/textarea';
@@ -9,7 +9,7 @@ import { User } from '@/types/user';
 import BillingsForm from '@/app/payments/new/billingsForm';
 import { createPayment } from '@/app/api/endpoints/payments';
 import { Billing } from '@/types/payment';
-import {getUsersList} from "@/app/api/endpoints/user";
+import { getUsersList } from '@/app/api/endpoints/user';
 
 export default function Page() {
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function Page() {
   const [message, setMessage] = useState('');
 
   const [optionUsers, setOptionUsers] = useState<User[]>([]);
-  
+
   useEffect(() => {
     fetchUsers().then();
   }, []);
@@ -35,7 +35,7 @@ export default function Page() {
       const users = await getUsersList();
       setOptionUsers(users);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error('Error fetching users:', error);
     }
   };
 

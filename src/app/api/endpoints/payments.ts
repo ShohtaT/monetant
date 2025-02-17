@@ -101,10 +101,14 @@ const createPaymentToSupabase = async (payment: PaymentCreate) => {
  * @return Promise<Payment | undefined>
  */
 const getPaymentLastOne = async () => {
-  const { data, error } = await supabaseClient.from('Payments').select().order('id', { ascending: false }).limit(1);
+  const { data, error } = await supabaseClient
+    .from('Payments')
+    .select()
+    .order('id', { ascending: false })
+    .limit(1);
   if (error) throw error;
   return data?.[0];
-}
+};
 
 /**
  * Supabase に DebtRelation を作成
@@ -112,9 +116,7 @@ const getPaymentLastOne = async () => {
  * @param debtRelation as DebtRelation
  * @return Promise<void>
  */
-const createDebtRelationToSupabase = async (
-  debtRelation: DebtRelationCreate
-) => {
+const createDebtRelationToSupabase = async (debtRelation: DebtRelationCreate) => {
   const { error } = await supabaseClient.from('DebtRelations').insert([debtRelation]);
   if (error) throw error;
 };

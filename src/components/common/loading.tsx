@@ -1,7 +1,7 @@
 import { Audio } from 'react-loader-spinner';
 
 // @see https://mhnpd.github.io/react-loader-spinner/docs/category/components/
-export default function Loading () {
+export default function Loading() {
   return (
     <div className="w-full flex justify-center my-24">
       <Audio

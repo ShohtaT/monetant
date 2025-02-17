@@ -2,30 +2,27 @@
 
 import { DebtRelation } from '@/types/debtRelation';
 import { useEffect, useState } from 'react';
-import { createDebtRelation, getDebtRelations } from '@/app/api/endpoints/debtRelations';
-import { useRouter } from 'next/navigation';
+import { getDebtRelations } from '@/app/api/endpoints/debtRelations';
+import {useParams, useRouter} from 'next/navigation';
+import Loading from '@/components/common/loading';
 
 export default function Page() {
   const router = useRouter();
+  const params = useParams();
   const [debtRelations, setDebtRelations] = useState<DebtRelation[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const paymentId = Number(params.id);
   const fetchDebtRelations = async () => {
-    const data: DebtRelation[] = await getDebtRelations(6);
+    setIsLoading(true);
+    const data: DebtRelation[] = await getDebtRelations(paymentId);
     setDebtRelations(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     fetchDebtRelations().then();
   }, []);
-
-  const create = async () => {
-    await createDebtRelation(
-      6,
-      'ab18abf4-08d3-46e0-bf0e-871e32fa16b7',
-      'ab18abf4-08d3-46e0-bf0e-871e32fa16b7',
-      100
-    );
-  };
 
   return (
     <div className="mt-6 flex flex-col justify-center font-geist">
@@ -38,25 +35,27 @@ export default function Page() {
 
       <h1 className="text-center text-2xl font-bold mb-4">詳細ページ</h1>
 
-      <h1 className="text-2xl font-bold mb-4 cursor-pointer" onClick={create}>
-        新規作成
-      </h1>
-
-      <ul className="mt-4">
-        {debtRelations.map((debtRelation) => (
-          <li
-            key={debtRelation.id}
-            className="border p-5 mb-2 rounded-md w-full flex justify-between items-center"
-          >
-            <div>
-              【{debtRelation.id}: {debtRelation.status}】 ¥{debtRelation.split_amount}
-              <br />
-              {debtRelation.payer_id} さんへ
-            </div>
-            <div className="p-2 border border-green-400 rounded">返済完了</div>
-          </li>
-        ))}
-      </ul>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <ul className="mt-4">
+            {debtRelations.map((debtRelation) => (
+              <li
+                key={debtRelation.id}
+                className="border p-5 mb-2 rounded-md w-full flex justify-between items-center"
+              >
+                <div>
+                  【{debtRelation.id}: {debtRelation.status}】 ¥{debtRelation.split_amount}
+                  <br />
+                  {debtRelation.payer_id} さんへ
+                </div>
+                <div className="p-2 border border-green-400 rounded">返済完了</div>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   );
 }
