@@ -46,10 +46,18 @@ export async function getPayments(): Promise<PaymentList | null> {
   const currentUser = await getCurrentUser();
   if (!currentUser) return null;
 
+  // currentUser が payee_id または payer_id の DebitRelations を取得し、それが紐づく Payment を取得
+  const payerDebtRelations = await getDebtRelationsToSupabase('payer_id', currentUser.id);
+  const payeeDebtRelations = await getDebtRelationsToSupabase('payee_id', currentUser.id);
+  const myPaymentIds = Array.from(new Set([
+    ...payerDebtRelations.map((debtRelation) => debtRelation.payment_id),
+    ...payeeDebtRelations.map((debtRelation) => debtRelation.payment_id),
+  ]));
+
   const { data, error } = await supabaseClient
     .from('Payments')
     .select()
-    .eq('creator_id', currentUser.id);
+    .in('id', myPaymentIds);
 
   if (error) throw error;
 
@@ -120,3 +128,23 @@ const createDebtRelationToSupabase = async (debtRelation: DebtRelationCreate) =>
   const { error } = await supabaseClient.from('DebtRelations').insert([debtRelation]);
   if (error) throw error;
 };
+
+/**
+ * Retrieve DebtRelation based on a given column and value
+ *
+ * @param column - The column to filter by (e.g., 'payer_id', 'payee_id', 'payment_id')
+ * @param value - The value to filter for
+ * @return data of DebtRelations[]
+ */
+const getDebtRelationsToSupabase = async (
+  column: 'payer_id' | 'payee_id' | 'payment_id',
+  value: number
+): Promise<DebtRelation[]> => {
+  const { data, error } = await supabaseClient
+    .from('DebtRelations')
+    .select()
+    .eq(column, value);
+
+  if (error) throw error;
+  return data ?? [];
+}

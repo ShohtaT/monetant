@@ -55,6 +55,13 @@ export default function Page() {
       ) : (
         <>
           <p className="text-2xl font-bold mt-4 text-orange-500">未完了</p>
+          {awaitingPayments?.length === 0 && (
+            <p className="text-center">
+              未完了の支払いはありません！
+              <br />
+              その調子です！🎉
+            </p>
+          )}
           <ul className="mt-4">
             {awaitingPayments?.map((payment: ExpandedPayment) => (
               <Card key={payment.id} payment={payment} />
