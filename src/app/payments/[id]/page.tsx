@@ -3,7 +3,7 @@
 import { DebtRelation } from '@/types/debtRelation';
 import { useEffect, useState } from 'react';
 import { getDebtRelations } from '@/app/api/endpoints/debtRelations';
-import {useParams, useRouter} from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/components/common/loading';
 
 export default function Page() {
