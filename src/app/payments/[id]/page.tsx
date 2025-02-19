@@ -27,6 +27,12 @@ export default function Page() {
     fetchDebtRelations().then();
   }, []);
 
+  const completeRepayment = async () => {
+    // TODO:
+    // DebtRelationship の status を 'completed' に更新
+    // 未完了の DebtRelationship がなくなったら、Payment の status を 'completed' に更新
+  }
+  
   return (
     <div className="mt-6 flex flex-col justify-center font-geist">
       <p className="mb-4 font-bold">
@@ -54,12 +60,18 @@ export default function Page() {
             {debtRelations?.map((debtRelation) => (
               <li
                 key={debtRelation.id}
-                className="bg-white dark:bg-[#1a1a1a] p-5 mb-2 rounded-md w-full flex justify-between items-center"
+                className={"bg-white dark:bg-[#1a1a1a] p-5 mb-2 rounded-md w-full border" + (debtRelation.status === 'awaiting' && " border-orange-500")}
               >
-                <div>
-                  【{debtRelation.id}: {debtRelation.status}】 ¥{debtRelation.split_amount}
-                  <br />
-                  {debtRelation.payee?.nickname} さん
+                <div className="flex justify-between items-center">
+                  <div className="flex justify-start items-center gap-4">
+                    {debtRelation.status === 'awaiting' && <div className="cursor-pointer" onClick={completeRepayment}>☑️</div>}
+                    {debtRelation.status === 'completed' && <div>✅</div>}
+                    <div>
+                      <div>{debtRelation.split_amount} 円</div>
+                      <div>{debtRelation.payee?.nickname} さん</div>
+                    </div>
+                  </div>
+                  {debtRelation.status === 'awaiting' && <div className="text-orange-500 font-bold">未完了</div>}
                 </div>
               </li>
             ))}

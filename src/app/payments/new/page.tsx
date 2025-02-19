@@ -56,10 +56,10 @@ export default function Page() {
         <span className="underline cursor-pointer" onClick={() => router.push('/payments')}>
           一覧
         </span>{' '}
-        ＞ 新規作成
+        ＞ 新規請求
       </p>
 
-      <h1 className="text-center text-2xl font-bold mb-4">新規作成</h1>
+      <h1 className="text-center text-2xl font-bold mb-4">新規請求</h1>
 
       <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-6">
         <InputField

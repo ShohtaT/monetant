@@ -39,14 +39,14 @@ export default function Page() {
 
   return (
     <div className="mt-6 flex flex-col justify-center font-geist">
-      <h1 className="mt-10 mb-4 text-center text-2xl font-bold">支払い一覧</h1>
+      <h1 className="mt-10 mb-4 text-center text-2xl font-bold">お金のやりとり一覧</h1>
 
-      <div className="flex justify-end">
+      <div className="mt-2 flex justify-end">
         <div
-          className="px-2 text-right text-xl font-bold border rounded cursor-pointer hover:opacity-70"
+          className="px-2 text-right text-lg font-bold border-2 rounded cursor-pointer hover:opacity-70"
           onClick={create}
         >
-          ＋新規作成
+          ＋請求をつくる
         </div>
       </div>
 
