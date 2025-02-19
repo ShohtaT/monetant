@@ -1,6 +1,6 @@
 import { User } from '@/types/user';
 import { supabaseClient } from '@/lib/supabase/supabaseClient';
-import {getUserByUserIdToSupabase} from "@/app/api/helper/userHelper";
+import { getUserByUserIdToSupabase } from '@/app/api/helper/userHelper';
 
 /**
  * Retrieve Users

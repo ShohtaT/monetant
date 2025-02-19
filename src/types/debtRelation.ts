@@ -1,11 +1,9 @@
-import {User} from "@/types/user";
-import {Payment} from "@/types/payment";
+import { User } from '@/types/user';
+import { Payment } from '@/types/payment';
 
 export interface DebtRelation {
   id: number;
   payment_id: number;
-  payer_id: number;
-  payer?: User;
   payee_id: number;
   payee?: User;
   status: 'awaiting' | 'completed';
@@ -17,7 +15,6 @@ export interface DebtRelation {
 
 export interface DebtRelationCreate {
   payment_id: number;
-  payer_id: number;
   payee_id: number;
   status: 'awaiting' | 'completed';
   split_amount: number;

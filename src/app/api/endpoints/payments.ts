@@ -31,7 +31,6 @@ export async function createPayment(
     if (billing.user === null) continue;
     await createDebtRelationToSupabase({
       payment_id: newPayment.id,
-      payer_id: currentUser.id,
       payee_id: billing.user?.id,
       status: 'awaiting',
       split_amount: billing.splitAmount,
@@ -46,13 +45,15 @@ export async function getPayments(): Promise<PaymentList | null> {
   const currentUser = await getCurrentUser();
   if (!currentUser) return null;
 
-  // currentUser が payee_id または payer_id の DebitRelations を取得し、それが紐づく Payment を取得
-  const payerDebtRelations = await getDebtRelationsToSupabase('payer_id', currentUser.id);
+  // currentUser が Payment.creator_id または DebtRelation.payee_id に含まれる Payment を取得
+  const myPayments = await getMyPayments(currentUser.id);
   const payeeDebtRelations = await getDebtRelationsToSupabase('payee_id', currentUser.id);
-  const myPaymentIds = Array.from(new Set([
-    ...payerDebtRelations.map((debtRelation) => debtRelation.payment_id),
-    ...payeeDebtRelations.map((debtRelation) => debtRelation.payment_id),
-  ]));
+  const myPaymentIds = Array.from(
+    new Set([
+      ...myPayments.map((payment) => payment.id),
+      ...payeeDebtRelations.map((debtRelation) => debtRelation.payment_id),
+    ])
+  );
 
   const { data, error } = await supabaseClient
     .from('Payments')
@@ -119,6 +120,20 @@ const getPaymentLastOne = async () => {
 };
 
 /**
+ * Supabase から creatorId が紐づく Payment を取得
+ *
+ * @return data of Payment[]
+ */
+const getMyPayments = async (creatorId: number) => {
+  const { data, error } = await supabaseClient
+    .from('Payments')
+    .select()
+    .eq('creator_id', creatorId)
+  if (error) throw error;
+  return data;
+};
+
+/**
  * Supabase に DebtRelation を作成
  *
  * @param debtRelation as DebtRelation
@@ -140,11 +155,8 @@ const getDebtRelationsToSupabase = async (
   column: 'payer_id' | 'payee_id' | 'payment_id',
   value: number
 ): Promise<DebtRelation[]> => {
-  const { data, error } = await supabaseClient
-    .from('DebtRelations')
-    .select()
-    .eq(column, value);
+  const { data, error } = await supabaseClient.from('DebtRelations').select().eq(column, value);
 
   if (error) throw error;
   return data ?? [];
-}
+};
