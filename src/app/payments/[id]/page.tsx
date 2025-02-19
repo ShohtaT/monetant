@@ -1,25 +1,28 @@
 'use client';
 
-import { DebtRelation } from '@/types/debtRelation';
 import { useEffect, useState } from 'react';
-import { getDebtRelations } from '@/app/api/endpoints/debtRelations';
 import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/components/common/loading';
+import {getDebtRelations} from "@/app/api/endpoints/debtRelations";
+import {DebtRelation, DebtRelationsResponse} from "@/types/debtRelation";
+import {Payment} from "@/types/payment";
 
 export default function Page() {
   const router = useRouter();
   const params = useParams();
-  const [debtRelations, setDebtRelations] = useState<DebtRelation[]>([]);
+  const [payment, setPayment] = useState<Payment | null>();
+  const [debtRelations, setDebtRelations] = useState<DebtRelation[]>();
   const [isLoading, setIsLoading] = useState(false);
 
   const paymentId = Number(params.id);
   const fetchDebtRelations = async () => {
     setIsLoading(true);
-    const data: DebtRelation[] = await getDebtRelations(paymentId);
-    setDebtRelations(data);
+    const debtRelations: DebtRelationsResponse | null = await getDebtRelations(paymentId);
+    setPayment(debtRelations?.payment);
+    setDebtRelations(debtRelations?.debt_relations ?? []);
     setIsLoading(false);
   };
-
+  
   useEffect(() => {
     fetchDebtRelations().then();
   }, []);
@@ -39,18 +42,25 @@ export default function Page() {
         <Loading />
       ) : (
         <>
+          <div className="p-5 mx-4 bg-gray-200 dark:bg-gray-900 text-center rounded-md">
+            <p className="text-lg font-bold underline">{payment?.title}</p>
+            <p>支払いID: {payment?.id}</p>
+            <p>支払い日: {payment?.payment_at?.slice (0, 10)}</p>
+            <p>精算未完了額: ¥{payment?.amount}</p>
+          </div>
+
+          <div className="mt-8 text-center text-lg font-bold">請求内訳</div>
           <ul className="mt-4">
-            {debtRelations.map((debtRelation) => (
+            {debtRelations?.map ((debtRelation) => (
               <li
                 key={debtRelation.id}
-                className="border p-5 mb-2 rounded-md w-full flex justify-between items-center"
+                className="bg-white dark:bg-[#1a1a1a] p-5 mb-2 rounded-md w-full flex justify-between items-center"
               >
                 <div>
                   【{debtRelation.id}: {debtRelation.status}】 ¥{debtRelation.split_amount}
-                  <br />
-                  {debtRelation.payer_id} さんへ
+                  <br/>
+                  {debtRelation.payee?.nickname} さん
                 </div>
-                <div className="p-2 border border-green-400 rounded">返済完了</div>
               </li>
             ))}
           </ul>

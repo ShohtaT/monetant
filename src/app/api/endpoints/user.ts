@@ -1,5 +1,6 @@
 import { User } from '@/types/user';
 import { supabaseClient } from '@/lib/supabase/supabaseClient';
+import {getUserByUserIdToSupabase} from "@/app/api/helper/userHelper";
 
 /**
  * Retrieve Users
@@ -30,8 +31,5 @@ export async function getUser(userId: number): Promise<User | null> {
  * @return data of User
  */
 async function getUserByUserId(userId: number): Promise<User | null> {
-  const { data, error } = await supabaseClient.from('Users').select().eq('id', userId).single();
-  if (error) throw error;
-
-  return data ?? null;
+  return await getUserByUserIdToSupabase(userId);
 }

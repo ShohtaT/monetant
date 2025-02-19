@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+
 import { ExpandedPayment } from '@/types/payment';
 import { useRouter } from 'next/navigation';
 
@@ -16,7 +17,7 @@ export default function Card({ payment }: CardProps) {
 
   return (
     <li
-      className="bg-white dark:bg-[#2a2a2a] p-5 mb-2 rounded-md w-full cursor-pointer"
+      className="bg-white dark:bg-[#1a1a1a] p-5 mb-2 rounded-md w-full cursor-pointer"
       onClick={() => handleClick(payment.id)}
     >
       <div className="flex justify-between items-start">
@@ -30,10 +31,6 @@ export default function Card({ payment }: CardProps) {
         </div>
       </div>
       <p className="mt-1 text-sm">{payment.payment_at?.slice(0, 10)}</p>
-      <p className="mt-2.5">
-        ¥{payment.amount}を、{payment.creator_name}さんが
-        {isAwaiting ? '立て替えています。' : '立て替えていました。'}
-      </p>
     </li>
   );
 }
