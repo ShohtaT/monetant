@@ -43,24 +43,15 @@ export async function getDebtRelations(paymentId: number): Promise<DebtRelations
 }
 
 /**
- * Update DebtRelations
+ * Update DebtRelation
  *
  * @param id number
  * @param params Partial<DebtRelation>
  */
-export async function updateDebtRelations(
-  id: number,
-  params: Partial<DebtRelation>
-): Promise<DebtRelation | null> {
+export async function updateDebtRelations(id: number, params: Partial<DebtRelation>) {
   const currentUser = await getCurrentUser();
   if (currentUser === null) return null;
 
-  const { data, error } = await supabaseClient
-    .from('DebtRelations')
-    .update(params)
-    .eq('id', id)
-    .single();
+  const { error } = await supabaseClient.from('DebtRelations').update(params).eq('id', id);
   if (error) throw error;
-
-  return data ?? null;
 }

@@ -74,6 +74,14 @@ export async function deletePayment(paymentId: number): Promise<void> {
   if (error) throw error;
 }
 
+export async function updatePayments(id: number, params: Partial<Payment>) {
+  const currentUser = await getCurrentUser();
+  if (currentUser === null) return null;
+
+  const { error } = await supabaseClient.from('Payments').update(params).eq('id', id);
+  if (error) throw error;
+}
+
 // PRIVATE FUNCTIONS =======================
 
 /**

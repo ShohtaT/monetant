@@ -8,7 +8,7 @@ export interface DebtRelation {
   payee?: User;
   status: 'awaiting' | 'completed';
   split_amount: number;
-  paid_at?: string;
+  paid_at?: string | null;
   created_at?: string;
   updated_at?: string;
 }
@@ -18,7 +18,6 @@ export interface DebtRelationCreate {
   payee_id: number;
   status: 'awaiting' | 'completed';
   split_amount: number;
-  paid_at?: string;
 }
 
 export interface DebtRelationsResponse {

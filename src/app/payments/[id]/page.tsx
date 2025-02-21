@@ -6,7 +6,7 @@ import Loading from '@/components/common/loading';
 import { getDebtRelations, updateDebtRelations } from '@/app/api/endpoints/debtRelations';
 import { DebtRelation, DebtRelationsResponse } from '@/types/debtRelation';
 import { Payment } from '@/types/payment';
-import { deletePayment } from '@/app/api/endpoints/payments';
+import { deletePayment, updatePayments } from '@/app/api/endpoints/payments';
 
 export default function Page() {
   const router = useRouter();
@@ -28,30 +28,65 @@ export default function Page() {
     fetchDebtRelations().then();
   }, []);
 
-  const completeRepayment = async (debtRelationId: number) => {
-    // TODO:
-    // DebtRelationship の status を 'completed' に更新
-    // 未完了の DebtRelationship がなくなったら、Payment の status を 'completed' に更新
+  const unpaidAmount = (): number => {
+    if (!payment || !debtRelations) return -1;
 
-    const updatedDebtRelations =
-      debtRelations?.map((debtRelation) =>
-        debtRelation.id === debtRelationId
-          ? { ...debtRelation, status: 'completed' as const }
-          : debtRelation
-      ) ?? [];
-    setDebtRelations(updatedDebtRelations);
-    await updateDebtRelations(debtRelationId, { status: 'completed' });
+    return (
+      payment.amount -
+      debtRelations
+        .filter((dr) => dr.status === 'completed')
+        .reduce((acc, dr) => acc + dr.split_amount, 0) // 回収済みの金額を除外
+    );
+  };
+
+  const updateDebtRelationStatus = async (
+    debtRelationId: number,
+    status: 'completed' | 'awaiting'
+  ) => {
+    // UI の即時更新
+    setDebtRelations(
+      (prev) =>
+        prev?.map((debtRelation) =>
+          debtRelation.id === debtRelationId ? { ...debtRelation, status } : debtRelation
+        ) ?? []
+    );
+
+    // DB の更新
+    await updateDebtRelations(debtRelationId, {
+      status,
+      paid_at: status === 'completed' ? new Date().toISOString() : null,
+    });
+  };
+
+  const shouldCompletePayment = (debtRelationId: number): boolean => {
+    if (!payment || !debtRelations) return false;
+
+    return (
+      payment?.status === 'awaiting' &&
+      debtRelations
+        ?.filter((dr) => dr.id !== debtRelationId)
+        .every((dr) => dr.status === 'completed')
+    );
+  };
+
+  const completeRepayment = async (debtRelationId: number) => {
+    await updateDebtRelationStatus(debtRelationId, 'completed');
+
+    // すべての debtRelation が `completed` なら、payment も `completed` に変更
+    if (shouldCompletePayment(debtRelationId)) {
+      setPayment((prev) => (prev ? { ...prev, status: 'completed' } : null));
+      await updatePayments(paymentId, { status: 'completed' });
+    }
   };
 
   const rollbackRepayment = async (debtRelationId: number) => {
-    const updatedDebtRelations =
-      debtRelations?.map((debtRelation) =>
-        debtRelation.id === debtRelationId
-          ? { ...debtRelation, status: 'awaiting' as const }
-          : debtRelation
-      ) ?? [];
-    setDebtRelations(updatedDebtRelations);
-    await updateDebtRelations(debtRelationId, { status: 'awaiting' });
+    await updateDebtRelationStatus(debtRelationId, 'awaiting');
+
+    // `payment` が `completed` なら `awaiting` に戻す
+    if (payment?.status === 'completed') {
+      setPayment((prev) => (prev ? { ...prev, status: 'awaiting' } : null));
+      await updatePayments(paymentId, { status: 'awaiting' });
+    }
   };
 
   const destroy = async () => {
@@ -73,16 +108,16 @@ export default function Page() {
         ＞ 詳細
       </p>
 
-      <h1 className="text-center text-2xl font-bold mb-2">「{payment?.title}」</h1>
-      <p className="text-center text-sm mb-4">ID: {payment?.id}</p>
-
       {isLoading ? (
         <Loading />
       ) : (
         <>
+          <h1 className="text-center text-2xl font-bold mb-2">「{payment?.title}」</h1>
+          <p className="text-center text-sm mb-4">ID: {payment?.id}</p>
+
           <div className="p-5 mx-4 bg-gray-200 dark:bg-gray-900 text-center rounded-md">
             <p>支払い日: {payment?.payment_at?.slice(0, 10)}</p>
-            <p>精算未完了額: ¥{payment?.amount}</p>
+            <p>精算未完了額: ¥{unpaidAmount()}</p>
             <div className="flex justify-center mt-4">
               <div
                 className="text-sm border border-red-500 px-4 py-1 rounded hover:opacity-70 cursor-pointer"
@@ -107,7 +142,7 @@ export default function Page() {
                   <div className="flex justify-start items-center gap-4">
                     {debtRelation.status === 'awaiting' && (
                       <div
-                        className="cursor-pointer"
+                        className="text-2xl cursor-pointer"
                         onClick={() => completeRepayment(debtRelation.id)}
                       >
                         ☑️
@@ -115,7 +150,7 @@ export default function Page() {
                     )}
                     {debtRelation.status === 'completed' && (
                       <div
-                        className="cursor-pointer"
+                        className="text-2xl cursor-pointer"
                         onClick={() => rollbackRepayment(debtRelation.id)}
                       >
                         ✅
