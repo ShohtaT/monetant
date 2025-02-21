@@ -6,6 +6,7 @@ import Loading from '@/components/common/loading';
 import { getDebtRelations, updateDebtRelations } from '@/app/api/endpoints/debtRelations';
 import { DebtRelation, DebtRelationsResponse } from '@/types/debtRelation';
 import { Payment } from '@/types/payment';
+import { deletePayment } from '@/app/api/endpoints/payments';
 
 export default function Page() {
   const router = useRouter();
@@ -53,6 +54,16 @@ export default function Page() {
     await updateDebtRelations(debtRelationId, { status: 'awaiting' });
   };
 
+  const destroy = async () => {
+    const result = window.confirm(
+      `${payment?.title}を削除しますか？\n削除したデータは元に戻せません。`
+    );
+    if (!result) return;
+
+    router.push('/payments');
+    await deletePayment(paymentId);
+  };
+
   return (
     <div className="mt-6 flex flex-col justify-center font-geist">
       <p className="mb-4 font-bold">
@@ -62,17 +73,24 @@ export default function Page() {
         ＞ 詳細
       </p>
 
-      <h1 className="text-center text-2xl font-bold mb-4">詳細ページ</h1>
+      <h1 className="text-center text-2xl font-bold mb-2">「{payment?.title}」</h1>
+      <p className="text-center text-sm mb-4">ID: {payment?.id}</p>
 
       {isLoading ? (
         <Loading />
       ) : (
         <>
           <div className="p-5 mx-4 bg-gray-200 dark:bg-gray-900 text-center rounded-md">
-            <p className="text-lg font-bold underline">{payment?.title}</p>
-            <p>支払いID: {payment?.id}</p>
             <p>支払い日: {payment?.payment_at?.slice(0, 10)}</p>
             <p>精算未完了額: ¥{payment?.amount}</p>
+            <div className="flex justify-center mt-4">
+              <div
+                className="text-sm border border-red-500 px-4 py-1 rounded hover:opacity-70 cursor-pointer"
+                onClick={destroy}
+              >
+                削除する
+              </div>
+            </div>
           </div>
 
           <div className="mt-8 text-center text-lg font-bold">請求内訳</div>

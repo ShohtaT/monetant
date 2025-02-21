@@ -66,6 +66,14 @@ export async function getPayments(): Promise<PaymentList | null> {
   };
 }
 
+export async function deletePayment(paymentId: number): Promise<void> {
+  const currentUser = await getCurrentUser();
+  if (currentUser === null) return;
+
+  const { error } = await supabaseClient.from('Payments').delete().eq('id', paymentId);
+  if (error) throw error;
+}
+
 // PRIVATE FUNCTIONS =======================
 
 /**
