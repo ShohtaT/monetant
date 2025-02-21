@@ -47,11 +47,12 @@ export default function BillingsForm({ billings, optionUsers, onChange }: Billin
               ))}
             </select>
 
-            <div className="w-40 flex items-end">
+            <div className="flex items-end">
               <InputField
                 type="number"
                 value={billing.splitAmount}
                 onChange={(e) => handleAmountChange(index, Number(e.target.value))}
+                className="w-24"
                 required
               />
               <p className="ml-1">円</p>

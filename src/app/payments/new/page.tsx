@@ -39,8 +39,21 @@ export default function Page() {
     }
   };
 
+  const remainingAmount =
+    totalAmount - billings.reduce((acc, billing) => acc + billing.splitAmount, 0);
+
+  const confirmMessage = () => {
+    if (remainingAmount === 0) return '一度登録したデータは編集できません。登録しますか？';
+    else if (remainingAmount > 0) return `あと${remainingAmount}円が未精算です。\n登録しますか？`;
+    else return `立替総額より${-remainingAmount}円多く請求しています。\n登録しますか？`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const result = window.confirm(confirmMessage());
+    if (!result) return;
+
     setMessage('');
     try {
       await createPayment(title, paymentDate, totalAmount, billings, note);
@@ -81,6 +94,7 @@ export default function Page() {
           type="number"
           value={totalAmount}
           onChange={(e) => setTotalAmount(Number(e.target.value))}
+          className="w-36"
           label="立替総額"
           required={true}
         />

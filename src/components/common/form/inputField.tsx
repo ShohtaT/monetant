@@ -5,6 +5,7 @@ interface InputFieldProps {
   placeholder?: string;
   value: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
   label?: string;
   required?: boolean;
   rows?: number;
@@ -15,6 +16,7 @@ export default function InputField({
   placeholder,
   value,
   onChange,
+  className,
   label,
   required,
 }: InputFieldProps) {
@@ -24,10 +26,11 @@ export default function InputField({
       <input
         type={type}
         placeholder={placeholder}
-        className="border p-3 rounded-md w-full text-black"
+        className={`border p-3 rounded-md w-full text-black ${className}`}
         value={value}
         onChange={onChange}
         required={required}
+        {...(type === 'number' ? { min: '1', pattern: '^[1-9]\\d*$' } : {})}
       />
     </div>
   );
