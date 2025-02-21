@@ -20,7 +20,12 @@ export default function Textarea({
 }: InputFieldProps) {
   return (
     <div>
-      {label ? <div className="text-sm font-semibold mb-1">{label}</div> : null}
+      {label ? (
+        <div className="text-sm font-semibold mb-1">
+          {label}
+          {required ? <span className="ml-1 text-red-500">*</span> : null}
+        </div>
+      ) : null}
       <textarea
         placeholder={placeholder}
         className="border p-3 rounded-md w-full text-black"

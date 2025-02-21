@@ -22,7 +22,12 @@ export default function InputField({
 }: InputFieldProps) {
   return (
     <div>
-      {label ? <div className="text-sm font-semibold mb-1">{label}</div> : null}
+      {label ? (
+        <div className="text-sm font-semibold mb-1">
+          {label}
+          {required ? <span className="ml-1 text-red-500">*</span> : null}
+        </div>
+      ) : null}
       <input
         type={type}
         placeholder={placeholder}

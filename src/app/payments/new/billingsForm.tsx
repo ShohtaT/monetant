@@ -29,7 +29,9 @@ export default function BillingsForm({ billings, optionUsers, onChange }: Billin
 
   return (
     <div>
-      <label className="text-sm font-semibold">立替内訳</label>
+      <label className="text-sm font-semibold">
+        立替内訳<span className="ml-1 text-red-500">*</span>
+      </label>
       <div className="flex flex-col gap-2">
         {billings.map((billing, index) => (
           <div key={index} className="flex items-center justify-between gap-4">

@@ -43,10 +43,10 @@ export default function Page() {
 
       <div className="mt-2 flex justify-end">
         <div
-          className="px-2 text-right text-lg font-bold border-2 rounded cursor-pointer hover:opacity-70"
+          className="px-2 text-right text-lg border rounded cursor-pointer hover:opacity-70"
           onClick={create}
         >
-          ＋請求をつくる
+          ＋新規
         </div>
       </div>
 

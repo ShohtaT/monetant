@@ -31,12 +31,9 @@ export default function Page() {
   const unpaidAmount = (): number => {
     if (!payment || !debtRelations) return -1;
 
-    return (
-      payment.amount -
-      debtRelations
-        .filter((dr) => dr.status === 'completed')
-        .reduce((acc, dr) => acc + dr.split_amount, 0) // 回収済みの金額を除外
-    );
+    return debtRelations
+      .filter((dr) => dr.status === 'awaiting')
+      .reduce((acc, dr) => acc + dr.split_amount, 0); // 回収済みの金額を除外
   };
 
   const updateDebtRelationStatus = async (
