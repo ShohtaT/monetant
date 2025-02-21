@@ -1,7 +1,6 @@
 import { supabaseClient } from '@/lib/supabase/supabaseClient';
 import { getCurrentUser } from '@/app/api/helper/authHelper';
 import { Billing, ExpandedPayment, Payment, PaymentCreate, PaymentList } from '@/types/payment';
-import { getUser } from '@/app/api/endpoints/user';
 import { DebtRelation, DebtRelationCreate } from '@/types/debtRelation';
 
 export async function createPayment(
@@ -88,22 +87,32 @@ export async function updatePayments(id: number, params: Partial<Payment>) {
  * 指定したステータスの Payment を `ExpandedPayment[]` に変換
  */
 const expandPayments = async (payments: Payment[], status: string): Promise<ExpandedPayment[]> => {
-  return await Promise.all(
-    payments
-      .filter((payment) => payment.status === status)
-      .map(async (payment) => {
-        const creator_name = await getUserNickname(payment.creator_id); // FIXME: dataの数だけリクエストを送っている
-        return { ...payment, creator_name } as ExpandedPayment;
-      })
+  const userNicknames = await getUserNicknames(payments.map((payment) => payment.creator_id));
+  const nicknameMap = new Map(userNicknames.map(({ id, nickname }) => [id, nickname]));
+
+  const expandedPayments: ExpandedPayment[] = payments
+    .filter((payment) => payment.status === status)
+    .map((payment) => {
+      const creator_name = nicknameMap.get(payment.creator_id) || 'Unknown';
+      return { ...payment, creator_name } as ExpandedPayment;
+    });
+
+  return expandedPayments.sort(
+    (a, b) => new Date(b.payment_at ?? 0).getTime() - new Date(a.payment_at ?? 0).getTime()
   );
 };
 
 /**
- * ユーザーのニックネームを取得
+ * ユーザーのニックネームを一括取得
  */
-const getUserNickname = async (userId: number): Promise<string> => {
-  const user = await getUser(userId);
-  return user?.nickname || 'Unknown';
+const getUserNicknames = async (userIds: number[]): Promise<{ id: number; nickname: string }[]> => {
+  const { data, error } = await supabaseClient
+    .from('Users')
+    .select('id, nickname')
+    .in('id', userIds);
+
+  if (error) throw error;
+  return data ?? [];
 };
 
 /**
