@@ -55,10 +55,7 @@ export async function getPayments(): Promise<PaymentList | null> {
     ])
   );
 
-  const { data, error } = await supabaseClient
-    .from('Payments')
-    .select()
-    .in('id', myPaymentIds);
+  const { data, error } = await supabaseClient.from('Payments').select().in('id', myPaymentIds);
 
   if (error) throw error;
 
@@ -128,7 +125,7 @@ const getMyPayments = async (creatorId: number) => {
   const { data, error } = await supabaseClient
     .from('Payments')
     .select()
-    .eq('creator_id', creatorId)
+    .eq('creator_id', creatorId);
   if (error) throw error;
   return data;
 };

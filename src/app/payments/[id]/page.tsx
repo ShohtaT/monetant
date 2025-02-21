@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/components/common/loading';
-import { getDebtRelations } from '@/app/api/endpoints/debtRelations';
+import { getDebtRelations, updateDebtRelations } from '@/app/api/endpoints/debtRelations';
 import { DebtRelation, DebtRelationsResponse } from '@/types/debtRelation';
 import { Payment } from '@/types/payment';
 
@@ -27,12 +27,32 @@ export default function Page() {
     fetchDebtRelations().then();
   }, []);
 
-  const completeRepayment = async () => {
+  const completeRepayment = async (debtRelationId: number) => {
     // TODO:
     // DebtRelationship の status を 'completed' に更新
     // 未完了の DebtRelationship がなくなったら、Payment の status を 'completed' に更新
-  }
-  
+
+    const updatedDebtRelations =
+      debtRelations?.map((debtRelation) =>
+        debtRelation.id === debtRelationId
+          ? { ...debtRelation, status: 'completed' as const }
+          : debtRelation
+      ) ?? [];
+    setDebtRelations(updatedDebtRelations);
+    await updateDebtRelations(debtRelationId, { status: 'completed' });
+  };
+
+  const rollbackRepayment = async (debtRelationId: number) => {
+    const updatedDebtRelations =
+      debtRelations?.map((debtRelation) =>
+        debtRelation.id === debtRelationId
+          ? { ...debtRelation, status: 'awaiting' as const }
+          : debtRelation
+      ) ?? [];
+    setDebtRelations(updatedDebtRelations);
+    await updateDebtRelations(debtRelationId, { status: 'awaiting' });
+  };
+
   return (
     <div className="mt-6 flex flex-col justify-center font-geist">
       <p className="mb-4 font-bold">
@@ -60,18 +80,37 @@ export default function Page() {
             {debtRelations?.map((debtRelation) => (
               <li
                 key={debtRelation.id}
-                className={"bg-white dark:bg-[#1a1a1a] p-5 mb-2 rounded-md w-full border" + (debtRelation.status === 'awaiting' && " border-orange-500")}
+                className={
+                  'bg-white dark:bg-[#1a1a1a] p-5 mb-2 rounded-md w-full border' +
+                  (debtRelation.status === 'awaiting' && ' border-orange-500')
+                }
               >
                 <div className="flex justify-between items-center">
                   <div className="flex justify-start items-center gap-4">
-                    {debtRelation.status === 'awaiting' && <div className="cursor-pointer" onClick={completeRepayment}>☑️</div>}
-                    {debtRelation.status === 'completed' && <div>✅</div>}
+                    {debtRelation.status === 'awaiting' && (
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => completeRepayment(debtRelation.id)}
+                      >
+                        ☑️
+                      </div>
+                    )}
+                    {debtRelation.status === 'completed' && (
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => rollbackRepayment(debtRelation.id)}
+                      >
+                        ✅
+                      </div>
+                    )}
                     <div>
                       <div>{debtRelation.split_amount} 円</div>
                       <div>{debtRelation.payee?.nickname} さん</div>
                     </div>
                   </div>
-                  {debtRelation.status === 'awaiting' && <div className="text-orange-500 font-bold">未完了</div>}
+                  {debtRelation.status === 'awaiting' && (
+                    <div className="text-orange-500 font-bold">未完了</div>
+                  )}
                 </div>
               </li>
             ))}
