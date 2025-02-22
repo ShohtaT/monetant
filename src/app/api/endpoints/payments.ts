@@ -77,7 +77,10 @@ export async function updatePayments(id: number, params: Partial<Payment>) {
   const currentUser = await getCurrentUser();
   if (currentUser === null) return null;
 
-  const { error } = await supabaseClient.from('Payments').update(params).eq('id', id);
+  const { error } = await supabaseClient
+    .from('Payments')
+    .update({ ...params, updated_at: new Date() })
+    .eq('id', id);
   if (error) throw error;
 }
 

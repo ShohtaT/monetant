@@ -52,6 +52,9 @@ export async function updateDebtRelations(id: number, params: Partial<DebtRelati
   const currentUser = await getCurrentUser();
   if (currentUser === null) return null;
 
-  const { error } = await supabaseClient.from('DebtRelations').update(params).eq('id', id);
+  const { error } = await supabaseClient
+    .from('DebtRelations')
+    .update({ ...params, updated_at: new Date() })
+    .eq('id', id);
   if (error) throw error;
 }
