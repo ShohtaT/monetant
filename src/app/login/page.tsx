@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import InputField from '@/components/common/form/InputField';
-import SubmitButton from '@/components/common/form/SubmitButton';
-import { login } from '@/app/api/users';
+import InputField from '@/components/common/form/inputField';
+import SubmitButton from '@/components/common/form/submitButton';
+import { signIn } from '@/app/api/endpoints/auth';
 import { useUserStore } from '@/stores/users';
 import { useRouter } from 'next/navigation';
 
@@ -17,7 +17,7 @@ export default function Page() {
     e.preventDefault();
     setMessage('');
     try {
-      await login(email, password);
+      await signIn(email, password);
       useUserStore.getState().setIsLogin(true);
       router.push('/');
     } catch (error) {
@@ -41,14 +41,18 @@ export default function Page() {
           placeholder="メールアドレス"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required={true}
         />
         <InputField
           type="password"
           placeholder="パスワード"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required={true}
         />
-        <SubmitButton label="ログイン" />
+        <div className="mt-4 flex justify-center">
+          <SubmitButton label="ログイン" />
+        </div>
       </form>
 
       {message && <p className="mt-4 text-sm text-center text-red-500">{message}</p>}
