@@ -51,8 +51,8 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = window.confirm(confirmMessage());
-    if (!result) return;
+    const confirmResult = window.confirm(confirmMessage());
+    if (!confirmResult) return;
 
     setMessage('');
     try {
@@ -72,9 +72,14 @@ export default function Page() {
         ＞ 新規請求
       </p>
 
-      <h1 className="text-center text-2xl font-bold mb-4">新規請求</h1>
+      <h1 className="text-center text-2xl font-bold">新規請求</h1>
+      <p className="mt-2 text-[12px]">
+        あなたが立て替えた分を登録しましょう！
+        <br />
+        （必ず立て替えた人が登録してください）
+      </p>
 
-      <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-6">
+      <form onSubmit={handleSubmit} className="mt-4 w-full max-w-md flex flex-col gap-6">
         <InputField
           type="text"
           placeholder="忘年会2024"
