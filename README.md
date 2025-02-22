@@ -7,37 +7,84 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, run the development server:
 
 ```bash
-% docker compose build
-% docker compose up -d
+yarn dev
 ```
 
-You can now access the app at [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Prisma
+You can start editing the page by modifying `app/Page.tsx`. The page auto-updates as you edit the file.
 
-Prisma is an ORM (Object-Relational Mapping) tool used in this project to interact with the PostgreSQL database in a type-safe and efficient manner. It simplifies database schema management and data operations such as querying and updating.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-### Prisma Setup
-1. **Running Migrations**: 
-To apply changes to the database, run the following Prisma migration command. This will create tables in the database based on the schema.prisma file.
+### ESLint and Prettier
 
-```bash
-npx prisma migrate dev --name init
+```
+yarn run lint-fix
 ```
 
-This command will also generate the Prisma Client, allowing you to interact with the database through your code.
+## Supabase
 
-2. **Prisma Studio**: 
-Prisma Studio is a web-based UI that allows you to visually interact with your database. You can start Prisma Studio with the following command:
+This project uses Supabase as a backend. You can check the data on the dashboard.
 
-```bash
-npx prisma studio
-```
+https://supabase.com/dashboard/projects
 
-After running the command, open your browser and go to http://localhost:5555 to access Prisma Studio.
+### Vercel environment connected to Supabase
+※Your local environment is connected to `bill-split-app-develop` in Supabase.
+
+`bill-split-app-develop` in Supabase
+- development
+- preview
+
+`bill-split-app-prod` in Supabase
+- prod
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Production
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Primary project environment meant to serve qualified, promoted deployments to real users.
+To deploy to prod environment, push to the `main` branch.
+
+### Preview
+
+Standard environment — included with all Vercel projects — for previewing changes before promoting them to production.
+To deploy to preview environment, push to the some branch.
+
+### Development
+
+Standard environment — included with all Vercel projects — used to supply environment variables in local development.
+
+## Structure
+About "AppRouter" https://nextjs.org/docs/app/getting-started/layouts-and-pages
+
+```
+src/
+├── app/ // Using AppRouter
+│   ├── api/
+│   │   └── hello/
+│   │       └── route.ts
+│   ├── signup/
+│   │   └── page.tsx
+│   ├── layout.tsx
+│   └── page.tsx
+│
+├── components/
+│   └── common/
+│       ├── form/
+│       │   ├── inputField.tsx
+│       │   └── submitButton.tsx
+│       ├── header.tsx
+│       ├── error.tsx
+│       └── loading.tsx
+│
+├── lib/
+│   ├── db.ts
+│   └── utils.ts
+│
+├── styles/
+│   ├── globals.css
+│   └── theme.ts
+│
+└── types/
+    └── index.ts
+```
