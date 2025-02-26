@@ -63,7 +63,7 @@ export default function Page() {
     } catch (error) {
       setMessage(`保存に失敗しました\nError: ${error}`);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
