@@ -43,6 +43,7 @@ export default function PaymentDetail({
             精算未完了額: ¥{unpaidAmount}（{unpaidNumberOfPeople}人）
           </p>
           <p>{payer?.nickname} さんへの返済</p>
+          <p className="mt-1 text-[12px] text-gray-400">{payment?.note}</p>
           <div className="flex justify-center mt-4">
             <div
               className="text-sm border border-red-500 px-4 py-1 rounded hover:opacity-70 cursor-pointer"
