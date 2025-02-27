@@ -23,6 +23,7 @@
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/ban-types": "off",
     "no-constant-condition": "error",
+    "no-magic-numbers": ["error", { "ignore": [-1, 0, 1] }],
     "spaced-comment": ["error", "always"],
 
     // 複雑性を制限するルール
@@ -34,6 +35,9 @@
     "unicorn/filename-case": "off",
     "unicorn/prevent-abbreviations": "off",
     "storybook/prefer-pascal-case": "off",
+
+    // 配列操作に関するルール
+    "unicorn/prefer-includes": "error",
 
     // switchに関するルール
     "no-fallthrough": "error",
