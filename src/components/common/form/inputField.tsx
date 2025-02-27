@@ -1,10 +1,12 @@
 'use client';
 
+import { ChangeEvent } from 'react';
+
 interface InputFieldProps {
   type: 'email' | 'password' | 'text' | 'date' | 'number';
   placeholder?: string;
   value: string | number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>, value: string | number) => void;
   className?: string;
   label?: string;
   required?: boolean;
@@ -20,22 +22,41 @@ export default function InputField({
   label,
   required,
 }: InputFieldProps) {
+  const setType = () => (type === 'number' ? 'text' : type);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!onChange) return;
+
+    let newValue = e.target.value;
+
+    if (type === 'number') {
+      // 数値以外の文字を削除
+      newValue = newValue.replace(/\D/g, '');
+
+      // 先頭の `0` を削除（ただし `0` 単体は許可）
+      newValue = newValue.replace(/^0+(\d)/, '$1');
+
+      onChange(e, newValue === '' ? 0 : Number(newValue));
+    } else {
+      onChange(e, newValue);
+    }
+  };
+
   return (
     <div>
-      {label ? (
+      {label && (
         <div className="text-sm font-semibold mb-1">
           {label}
-          {required ? <span className="ml-1 text-red-500">*</span> : null}
+          {required && <span className="ml-1 text-red-500">*</span>}
         </div>
-      ) : null}
+      )}
       <input
-        type={type}
+        type={setType()}
         placeholder={placeholder}
         className={`border p-3 rounded-md w-full text-black ${className}`}
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         required={required}
-        {...(type === 'number' ? { min: '1', pattern: '^[1-9]\\d*$' } : {})}
       />
     </div>
   );
