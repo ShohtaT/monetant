@@ -2,26 +2,35 @@
 
 import { ChangeEvent } from 'react';
 
-interface InputFieldProps {
-  type: 'email' | 'password' | 'text' | 'date' | 'number';
+interface InputNumberFieldProps {
   placeholder?: string;
   value: string | number;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: string | number, e: ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   label?: string;
   required?: boolean;
   rows?: number;
 }
 
-export default function InputField({
-  type,
+export default function InputNumberField({
   placeholder,
   value,
   onChange,
   className,
   label,
   required,
-}: InputFieldProps) {
+}: InputNumberFieldProps) {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!onChange) return;
+
+    let newValue: string | number = e.target.value;
+
+    newValue = newValue.replace(/\D/g, ''); // Remove non-numeric characters
+    newValue = newValue === '' ? '' : Number(newValue.replace(/^0+(\d)/, '$1')); // Handle empty input
+
+    onChange(newValue, e);
+  };
+
   return (
     <div>
       {label && (
@@ -31,11 +40,11 @@ export default function InputField({
         </div>
       )}
       <input
-        type={type}
+        type="text"
         placeholder={placeholder}
         className={`border p-3 rounded-md w-full text-black ${className}`}
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         required={required}
       />
     </div>
