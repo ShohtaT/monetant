@@ -11,6 +11,7 @@ import { User } from '@/types/user';
 import { getUserByUserIdToSupabase } from '@/app/api/helper/userHelper';
 import PaymentDetail from '@/app/payments/[id]/paymentDetail';
 import Card from '@/app/payments/[id]/card';
+import {toast} from "react-toastify";
 
 export default function Page() {
   const router = useRouter();
@@ -58,25 +59,6 @@ export default function Page() {
     return debtRelations.filter((dr) => dr.status === 'awaiting').length;
   };
 
-  const updateDebtRelationStatus = async (
-    debtRelationId: number,
-    status: 'completed' | 'awaiting'
-  ) => {
-    // UI の即時更新
-    setDebtRelations(
-      (prev) =>
-        prev?.map((debtRelation) =>
-          debtRelation.id === debtRelationId ? { ...debtRelation, status } : debtRelation
-        ) ?? []
-    );
-
-    // DB の更新
-    await updateDebtRelations(debtRelationId, {
-      status,
-      paid_at: status === 'completed' ? new Date().toISOString() : null,
-    });
-  };
-
   const shouldCompletePayment = (debtRelationId: number): boolean => {
     if (!payment || !debtRelations) return false;
 
@@ -105,6 +87,30 @@ export default function Page() {
     if (payment?.status === 'completed') {
       setPayment((prev) => (prev ? { ...prev, status: 'awaiting' } : null));
       await updatePayments(paymentId, { status: 'awaiting' });
+    }
+  };
+
+  const updateDebtRelationStatus = async (
+    debtRelationId: number,
+    status: 'completed' | 'awaiting'
+  ) => {
+    // UI の即時更新
+    setDebtRelations(
+      (prev) =>
+        prev?.map((debtRelation) =>
+          debtRelation.id === debtRelationId ? { ...debtRelation, status } : debtRelation
+        ) ?? []
+    );
+
+    // DB の更新
+    try {
+      await updateDebtRelations(debtRelationId, {
+        status,
+        paid_at: status === 'completed' ? new Date().toISOString() : null,
+      });
+      toast(status === 'completed' ? '支払いを"完了"に変更しました' : '支払いを"未完了"に変更しました', { type: 'success' })
+    } catch (error) {
+      toast(`ステータスの更新に失敗しました\n${error}`, { type: 'error' })
     }
   };
 
