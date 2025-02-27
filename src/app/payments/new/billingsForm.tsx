@@ -1,8 +1,8 @@
 'use client';
 
 import { User } from '@/types/user';
-import InputField from '@/components/common/form/inputField';
 import { Billing } from '@/types/payment';
+import InputNumberField from "@/components/common/form/inputNumberField";
 
 interface BillingsFormProps {
   billings: Billing[];
@@ -50,10 +50,9 @@ export default function BillingsForm({ billings, optionUsers, onChange }: Billin
             </select>
 
             <div className="flex items-end">
-              <InputField
-                type="number"
+              <InputNumberField
                 value={billing.splitAmount}
-                onChange={(e) => handleAmountChange(index, Number(e.target.value))}
+                onChange={(value) => handleAmountChange(index, Number(value))}
                 className="w-24"
                 required
               />
