@@ -2,7 +2,7 @@
 
 import { User } from '@/types/user';
 import { Billing } from '@/types/payment';
-import InputNumberField from "@/components/common/form/inputNumberField";
+import InputNumberField from '@/components/common/form/inputNumberField';
 
 interface BillingsFormProps {
   billings: Billing[];
