@@ -17,7 +17,6 @@ export default function Page() {
   // 送信するデータ
   const [title, setTitle] = useState('');
   const [paymentDate, setPaymentDate] = useState(new Date().toISOString().slice(0, 10));
-  const [totalAmount, setTotalAmount] = useState(0);
   const [note, setNote] = useState('');
   const [billings, setBillings] = useState<Billing[]>([{ user: null, splitAmount: 0 }]);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,19 +39,13 @@ export default function Page() {
     }
   };
 
-  const remainingAmount =
-    totalAmount - billings.reduce((acc, billing) => acc + billing.splitAmount, 0);
-
-  const confirmMessage = () => {
-    if (remainingAmount === 0) return '一度登録したデータは編集できません。登録しますか？';
-    else if (remainingAmount > 0) return `あと${remainingAmount}円が未精算です。\n登録しますか？`;
-    else return `立替総額より${-remainingAmount}円多く請求しています。\n登録しますか？`;
-  };
+  const totalAmount =
+    billings.reduce((acc, billing) => acc + billing.splitAmount, 0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const confirmResult = window.confirm(confirmMessage());
+    const confirmResult = window.confirm('一度登録したデータは編集できません。登録しますか？');
     if (!confirmResult) return;
 
     setMessage('');
@@ -66,6 +59,8 @@ export default function Page() {
       setIsLoading(false);
     }
   };
+  
+  const isDisabledSubmitButton = isLoading || totalAmount === 0 || billings.some((billing) => billing.user === null);
 
   return (
     <div className="mt-6 flex flex-col justify-center font-geist">
@@ -99,14 +94,6 @@ export default function Page() {
           label="支払い日"
           required={true}
         />
-        <InputField
-          type="number"
-          value={totalAmount}
-          onChange={(e) => setTotalAmount(Number(e.target.value))}
-          className="w-36"
-          label="立替総額"
-          required={true}
-        />
         <Textarea
           placeholder="みんなへの備忘録など"
           value={note}
@@ -119,7 +106,7 @@ export default function Page() {
         <BillingsForm billings={billings} optionUsers={optionUsers} onChange={setBillings} />
 
         <div className="mt-6 w-full flex justify-center">
-          <SubmitButton label="登録する" disabled={isLoading} />
+          <SubmitButton label="登録する" disabled={isDisabledSubmitButton} />
         </div>
       </form>
 
