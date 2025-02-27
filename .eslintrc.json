@@ -36,9 +36,6 @@
     "unicorn/prevent-abbreviations": "off",
     "storybook/prefer-pascal-case": "off",
 
-    // 配列操作に関するルール
-    "unicorn/prefer-includes": "error",
-
     // switchに関するルール
     "no-fallthrough": "error",
 
