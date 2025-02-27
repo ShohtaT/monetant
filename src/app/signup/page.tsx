@@ -6,24 +6,25 @@ import SubmitButton from '@/components/common/form/submitButton';
 import { createUser } from '@/app/api/endpoints/auth';
 import { useUserStore } from '@/stores/users';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export default function Page() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
-  const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage('');
     setIsLoading(true);
     try {
       await createUser(email, password, nickname);
-      setMessage('メールを送信しました。メールに記載されているリンクからログインしてください！');
+      toast('メールを送信しました。\nメールに記載されているリンクからログインしてください。', {
+        type: 'success',
+      });
     } catch (error) {
-      setMessage(`エラー: ${error}`);
+      toast(`アカウントの作成に失敗しました\n${error}`, { type: 'error' });
     } finally {
       setIsLoading(false);
     }
@@ -68,8 +69,6 @@ export default function Page() {
           <SubmitButton label="サインアップ" disabled={isLoading} />
         </div>
       </form>
-
-      {message && <p className="mt-4 text-sm text-center text-red-500">{message}</p>}
     </div>
   );
 }

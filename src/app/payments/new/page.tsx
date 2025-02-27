@@ -10,6 +10,7 @@ import BillingsForm from '@/app/payments/new/billingsForm';
 import { createPayment } from '@/app/api/endpoints/payments';
 import { Billing } from '@/types/payment';
 import { getUsersList } from '@/app/api/endpoints/user';
+import { toast } from 'react-toastify';
 
 export default function Page() {
   const router = useRouter();
@@ -20,9 +21,6 @@ export default function Page() {
   const [note, setNote] = useState('');
   const [billings, setBillings] = useState<Billing[]>([{ user: null, splitAmount: 0 }]);
   const [isLoading, setIsLoading] = useState(false);
-
-  // エラーメッセージ
-  const [message, setMessage] = useState('');
 
   const [optionUsers, setOptionUsers] = useState<User[]>([]);
 
@@ -39,8 +37,7 @@ export default function Page() {
     }
   };
 
-  const totalAmount =
-    billings.reduce((acc, billing) => acc + billing.splitAmount, 0);
+  const totalAmount = billings.reduce((acc, billing) => acc + billing.splitAmount, 0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,19 +45,20 @@ export default function Page() {
     const confirmResult = window.confirm('一度登録したデータは編集できません。登録しますか？');
     if (!confirmResult) return;
 
-    setMessage('');
     setIsLoading(true);
     try {
       await createPayment(title, paymentDate, totalAmount, billings, note);
       router.push('/payments');
+      toast('新規請求を作成しました', { type: 'success' });
     } catch (error) {
-      setMessage(`保存に失敗しました\nError: ${error}`);
+      toast(`新規請求の作成に失敗しました\n${error}`, { type: 'error' });
     } finally {
       setIsLoading(false);
     }
   };
-  
-  const isDisabledSubmitButton = isLoading || totalAmount === 0 || billings.some((billing) => billing.user === null);
+
+  const isDisabledSubmitButton =
+    isLoading || totalAmount === 0 || billings.some((billing) => billing.user === null);
 
   return (
     <div className="mt-6 flex flex-col justify-center font-geist">
@@ -109,8 +107,6 @@ export default function Page() {
           <SubmitButton label="登録する" disabled={isDisabledSubmitButton} />
         </div>
       </form>
-
-      {message && <p className="mt-4 text-sm text-center text-red-500">{message}</p>}
     </div>
   );
 }
