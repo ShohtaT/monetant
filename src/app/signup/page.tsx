@@ -6,7 +6,7 @@ import SubmitButton from '@/components/common/form/submitButton';
 import { createUser } from '@/app/api/endpoints/auth';
 import { useUserStore } from '@/stores/users';
 import { useRouter } from 'next/navigation';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
 
 export default function Page() {
   const router = useRouter();
@@ -20,9 +20,11 @@ export default function Page() {
     setIsLoading(true);
     try {
       await createUser(email, password, nickname);
-      toast('メールを送信しました。\nメールに記載されているリンクからログインしてください。', { type: 'success' })
+      toast('メールを送信しました。\nメールに記載されているリンクからログインしてください。', {
+        type: 'success',
+      });
     } catch (error) {
-      toast(`アカウントの作成に失敗しました\n${error}`, { type: 'error' })
+      toast(`アカウントの作成に失敗しました\n${error}`, { type: 'error' });
     } finally {
       setIsLoading(false);
     }

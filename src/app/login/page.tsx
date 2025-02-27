@@ -6,7 +6,7 @@ import SubmitButton from '@/components/common/form/submitButton';
 import { signIn } from '@/app/api/endpoints/auth';
 import { useUserStore } from '@/stores/users';
 import { useRouter } from 'next/navigation';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
 
 export default function Page() {
   const router = useRouter();
@@ -21,9 +21,9 @@ export default function Page() {
       await signIn(email, password);
       useUserStore.getState().setIsLogin(true);
       router.push('/');
-      toast('ログインしました', { type: 'success' })
+      toast('ログインしました', { type: 'success' });
     } catch (error) {
-      toast(`ログインに失敗しました\n${error}`, { type: 'error' })
+      toast(`ログインに失敗しました\n${error}`, { type: 'error' });
     } finally {
       setIsLoading(false);
     }

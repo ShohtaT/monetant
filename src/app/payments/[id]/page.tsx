@@ -11,7 +11,7 @@ import { User } from '@/types/user';
 import { getUserByUserIdToSupabase } from '@/app/api/helper/userHelper';
 import PaymentDetail from '@/app/payments/[id]/paymentDetail';
 import Card from '@/app/payments/[id]/card';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
 
 export default function Page() {
   const router = useRouter();
@@ -108,9 +108,12 @@ export default function Page() {
         status,
         paid_at: status === 'completed' ? new Date().toISOString() : null,
       });
-      toast(status === 'completed' ? '支払いを"完了"に変更しました' : '支払いを"未完了"に変更しました', { type: 'success' })
+      toast(
+        status === 'completed' ? '支払いを"完了"に変更しました' : '支払いを"未完了"に変更しました',
+        { type: 'success' }
+      );
     } catch (error) {
-      toast(`ステータスの更新に失敗しました\n${error}`, { type: 'error' })
+      toast(`ステータスの更新に失敗しました\n${error}`, { type: 'error' });
     }
   };
 

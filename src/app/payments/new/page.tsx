@@ -10,7 +10,7 @@ import BillingsForm from '@/app/payments/new/billingsForm';
 import { createPayment } from '@/app/api/endpoints/payments';
 import { Billing } from '@/types/payment';
 import { getUsersList } from '@/app/api/endpoints/user';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
 
 export default function Page() {
   const router = useRouter();
@@ -49,9 +49,9 @@ export default function Page() {
     try {
       await createPayment(title, paymentDate, totalAmount, billings, note);
       router.push('/payments');
-      toast('新規請求を作成しました', { type: 'success' })
+      toast('新規請求を作成しました', { type: 'success' });
     } catch (error) {
-      toast(`新規請求の作成に失敗しました\n${error}`, { type: 'error' })
+      toast(`新規請求の作成に失敗しました\n${error}`, { type: 'error' });
     } finally {
       setIsLoading(false);
     }

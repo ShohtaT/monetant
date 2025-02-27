@@ -31,7 +31,7 @@ export default function RootLayout({
         <div className="flex justify-center mx-3 mb-20">
           <div className="w-[420px]">{children}</div>
         </div>
-        
+
         <ToastContainer
           position="top-center"
           autoClose={5000}
