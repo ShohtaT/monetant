@@ -30,13 +30,13 @@ export default function InputField({
     let newValue = e.target.value;
 
     if (type === 'number') {
-      // 数値以外の文字を削除
-      newValue = newValue.replace(/\D/g, '');
+      // 数字以外の文字の場合早は変更を無視
+      if (newValue.match(/\D/g)) return;
 
       // 先頭の `0` を削除（ただし `0` 単体は許可）
       newValue = newValue.replace(/^0+(\d)/, '$1');
 
-      onChange(e, newValue === '' ? 0 : Number(newValue));
+      onChange(e, Number(newValue));
     } else {
       onChange(e, newValue);
     }
