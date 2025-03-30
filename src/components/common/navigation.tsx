@@ -23,7 +23,7 @@ export const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg bg-white dark:bg-[#1a1a1a] border-t border-gray-200 dark:border-gray-700">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-around items-center">
           {navItems.map((item) => (
