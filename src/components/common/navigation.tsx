@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { FaListCheck } from "react-icons/fa6";
+import { IoPersonCircleOutline } from "react-icons/io5";
 
 export const Navigation = () => {
   const pathname = usePathname();
@@ -12,23 +14,23 @@ export const Navigation = () => {
   }
 
   const navItems = [
-    { label: 'Home', path: '/' },
-    { label: 'MyPage', path: '/mypage' },
+    { icon: <FaListCheck />, path: '/' },
+    { icon: <IoPersonCircleOutline />, path: '/mypage' },
   ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-around items-center h-14">
+        <div className="flex justify-around items-center">
           {navItems.map((item) => (
             <Link
               key={item.path}
               href={item.path}
-              className={`flex-1 py-3 px-3 text-center text-gray-700 hover:text-gray-900 ${
-                pathname === item.path ? 'text-blue-500 border-t-2 border-blue-500' : ''
+              className={`flex-1 py-3 flex justify-center items-center text-xl ${
+                pathname === item.path ? 'text-green-500 border-t-2 border-green-500' : 'border-t-2 border-transparent'
               }`}
             >
-              {item.label}
+              {item.icon}
             </Link>
           ))}
         </div>

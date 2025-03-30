@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { getPayments } from '@/app/api/endpoints/payments';
-import { signOut } from '@/app/api/endpoints/auth';
-import { useUserStore } from '@/stores/users';
 import { ExpandedPayment } from '@/types/payment';
 import Card from '@/app/payments/card';
 import { useRouter } from 'next/navigation';
@@ -29,12 +27,6 @@ export default function Page() {
 
   const create = async () => {
     router.push('/payments/new');
-  };
-
-  const logout = async () => {
-    await signOut();
-    useUserStore.getState().setIsLogin(false);
-    router.push('/login');
   };
 
   return (
@@ -86,15 +78,6 @@ export default function Page() {
           )}
         </>
       )}
-
-      <div className="flex justify-center mt-24">
-        <div
-          className="text-lg border border-red-500 px-4 py-2 rounded hover:opacity-70 cursor-pointer"
-          onClick={logout}
-        >
-          サインアウト
-        </div>
-      </div>
     </div>
   );
 }
