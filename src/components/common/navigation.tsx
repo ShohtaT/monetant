@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FaListCheck } from "react-icons/fa6";
-import { IoPersonCircleOutline } from "react-icons/io5";
+import { FaListCheck } from 'react-icons/fa6';
+import { IoPersonCircleOutline } from 'react-icons/io5';
 
 export const Navigation = () => {
   const pathname = usePathname();
@@ -14,8 +14,12 @@ export const Navigation = () => {
   }
 
   const navItems = [
-    { icon: <FaListCheck />, path: '/' },
-    { icon: <IoPersonCircleOutline />, path: '/mypage' },
+    {
+      icon: <FaListCheck />,
+      path: '/',
+      isActive: pathname === '/' || pathname.startsWith('/payments'),
+    },
+    { icon: <IoPersonCircleOutline />, path: '/mypage', isActive: pathname === '/mypage' },
   ];
 
   return (
@@ -27,7 +31,9 @@ export const Navigation = () => {
               key={item.path}
               href={item.path}
               className={`flex-1 py-3 flex justify-center items-center text-xl ${
-                pathname === item.path ? 'text-green-500 border-t-2 border-green-500' : 'border-t-2 border-transparent'
+                item.isActive
+                  ? 'text-green-500 border-t-2 border-green-500'
+                  : 'border-t-2 border-transparent'
               }`}
             >
               {item.icon}
