@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useUserStore } from '@/stores/users';
+import { useAuth } from '@/hooks/useAuth';
 import { getOthersAwaitingDebtRelations } from '@/app/api/endpoints/debtRelations';
 import { DebtRelation } from '@/types/debtRelation';
 import { toast } from 'react-toastify';
@@ -10,8 +9,7 @@ import Card from './card';
 import Loading from '@/components/common/loading';
 
 export default function Page() {
-  const router = useRouter();
-  const isLogin = useUserStore((state) => state.isLogin);
+  const { isAuthChecking, isLogin } = useAuth();
   const [debtRelations, setDebtRelations] = useState<DebtRelation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,15 +26,12 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (!isLogin) {
-      router.push('/login');
-      return;
+    if (!isAuthChecking && isLogin) {
+      fetchDebtRelations();
     }
+  }, [isAuthChecking, isLogin]);
 
-    fetchDebtRelations();
-  }, [isLogin, router]);
-
-  if (!isLogin) return <Loading />;
+  if (isAuthChecking || !isLogin) return <Loading />;
 
   if (isLoading) return <Loading />;
 
