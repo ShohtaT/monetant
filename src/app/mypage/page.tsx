@@ -74,7 +74,7 @@ export default function MyPage() {
           </div>
         </Link>
 
-        <Link href="/payments" className="block">
+        <Link href="/payments/fromme" className="block">
           <div className="bg-white dark:bg-[#1a1a1a] shadow-sm border border-gray-100 dark:border-gray-800 p-4 rounded-lg flex items-center justify-between hover:bg-gray-50 dark:hover:bg-[#252525] transition-colors">
             <span className="text-gray-700 dark:text-gray-300">あなたが請求中の支払い</span>
             <IoIosArrowForward className="text-gray-400 dark:text-gray-500 text-xl" />
