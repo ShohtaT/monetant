@@ -1,33 +1,35 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { getPayments } from '@/app/api/endpoints/payments';
-import { ExpandedPayment } from '@/types/payment';
-import Card from '@/app/payments/card';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/common/loading';
+import { useAuth } from '@/hooks/useAuth';
+import { usePaymentsStore } from '@/stores/payments';
+import Card from '@/app/payments/card';
+import { toast } from 'react-toastify';
 
 export default function Page() {
   const router = useRouter();
-  const [awaitingPayments, setAwaitingPayments] = useState<ExpandedPayment[] | null>(null);
-  const [completedPayments, setCompletedPayments] = useState<ExpandedPayment[] | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const fetchExpandedPayments = async () => {
-    setIsLoading(true);
-    const payments = await getPayments();
-    setAwaitingPayments(payments?.awaiting_payments as ExpandedPayment[]);
-    setCompletedPayments(payments?.completed_payments as ExpandedPayment[]);
-    setIsLoading(false);
-  };
+  const { isAuthChecking, isLogin } = useAuth();
+  const { awaitingPayments, completedPayments, isLoading, isInitialized, fetchPayments } =
+    usePaymentsStore();
 
   useEffect(() => {
-    fetchExpandedPayments().then();
-  }, []);
+    if (!isAuthChecking && isLogin && !isInitialized) {
+      fetchPayments().catch((error) => {
+        console.error('Error fetching payments:', error);
+        toast('支払い情報の取得に失敗しました', { type: 'error' });
+      });
+    }
+  }, [isAuthChecking, isLogin, isInitialized, fetchPayments]);
 
-  const create = async () => {
+  const create = () => {
     router.push('/payments/new');
   };
+
+  if (isAuthChecking || !isLogin) return <Loading />;
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-6 flex flex-col justify-center font-geist">
@@ -42,42 +44,36 @@ export default function Page() {
         </div>
       </div>
 
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <>
-          {/* 未完了 */}
-          <p className="text-2xl font-bold mt-4 text-orange-500">未完了</p>
-          {awaitingPayments?.length === 0 ? (
-            <p className="text-center">
-              未完了の支払いはありません！
-              <br />
-              その調子です！🎉
-            </p>
-          ) : (
-            <p className="mt-1 text-[12px]">
-              あなたが貸しているか借りている未完了のやりとりが表示されます。
-              <br />
-              「未完了」がなくなることを目指して管理しましょう！
-            </p>
-          )}
-          <ul className="mt-4">
-            {awaitingPayments?.map((payment: ExpandedPayment) => (
-              <Card key={payment.id} payment={payment} />
-            ))}
-          </ul>
+      <>
+        {/* 未完了 */}
+        <p className="text-2xl font-bold mt-4 text-orange-500">未完了</p>
+        {awaitingPayments?.length === 0 ? (
+          <p className="text-center">
+            未完了の支払いはありません！
+            <br />
+            その調子です！🎉
+          </p>
+        ) : (
+          <p className="mt-1 text-[12px]">
+            あなたが貸しているか借りている未完了のやりとりが表示されます。
+            <br />
+            「未完了」がなくなることを目指して管理しましょう！
+          </p>
+        )}
+        <ul className="mt-4">
+          {awaitingPayments?.map((payment) => <Card key={payment.id} payment={payment} />)}
+        </ul>
 
-          {/* 完了 */}
-          {completedPayments?.length !== 0 && (
-            <>
-              <p className="text-2xl font-bold mt-4 text-green-500">完了</p>
-              <ul className="mt-4">
-                {completedPayments?.map((payment) => <Card key={payment.id} payment={payment} />)}
-              </ul>
-            </>
-          )}
-        </>
-      )}
+        {/* 完了 */}
+        {completedPayments?.length !== 0 && (
+          <>
+            <p className="text-2xl font-bold mt-4 text-green-500">完了</p>
+            <ul className="mt-4">
+              {completedPayments?.map((payment) => <Card key={payment.id} payment={payment} />)}
+            </ul>
+          </>
+        )}
+      </>
     </div>
   );
 }
