@@ -4,6 +4,7 @@ import { Payment } from '@/types/payment';
 export interface DebtRelation {
   id: number;
   payment_id: number;
+  payment?: Payment & { creator?: User };
   payee_id: number;
   payee?: User;
   status: 'awaiting' | 'completed';

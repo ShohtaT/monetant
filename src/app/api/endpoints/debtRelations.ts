@@ -66,3 +66,33 @@ export async function updateDebtRelations(id: number, params: Partial<DebtRelati
     throw error;
   }
 }
+
+/**
+ * Retrieve DebtRelations that the current user needs to pay
+ *
+ * @return Promise<DebtRelation[]>
+ */
+export async function getMyAwaitingDebtRelations(): Promise<DebtRelation[]> {
+  const currentUser = await getCurrentUser();
+  if (currentUser === null) return [];
+
+  const { data, error } = await supabaseClient
+    .from('DebtRelations')
+    .select(
+      `
+      *,
+      payment:Payments(*),
+      payee:Users!DebtRelations_payee_id_fkey(*)
+    `
+    )
+    .eq('payee_id', currentUser.id)
+    .eq('status', 'awaiting')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching my debt relations:', error);
+    throw error;
+  }
+
+  return data ?? [];
+}
