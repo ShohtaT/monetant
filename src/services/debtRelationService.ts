@@ -18,27 +18,30 @@ export class DebtRelationService {
 
     const { data, error } = await this.debtRelationRepository.supabaseClient
       .from('Payments')
-      .select(`
+      .select(
+        `
         *,
         DebtRelations (
           *,
           payee:Users!DebtRelations_payee_id_fkey(*)
         )
-      `)
+      `
+      )
       .eq('id', paymentId)
       .limit(1);
 
     if (error || !data?.[0]) return null;
 
     const payment = data[0];
-    const debtRelations = payment.DebtRelations?.map((dr: { payee: User }) => ({
-      ...dr,
-      payee: dr.payee
-    })) ?? [];
+    const debtRelations =
+      payment.DebtRelations?.map((dr: { payee: User }) => ({
+        ...dr,
+        payee: dr.payee,
+      })) ?? [];
 
     return {
       payment: payment,
-      debt_relations: debtRelations
+      debt_relations: debtRelations,
     };
   }
 
@@ -61,18 +64,22 @@ export class DebtRelationService {
     if (!currentUser) return [];
 
     const data = await this.debtRelationRepository.getOthersAwaitingDebtRelations(currentUser.id);
-    
-    return data?.flatMap(payment =>
-      payment.DebtRelations.map(dr => ({
-        ...dr,
-        payment: {
-          ...payment,
-          DebtRelations: undefined,
-        },
-      }))
-    ).sort((a, b) =>
-      new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime()
-    ) ?? [];
+
+    return (
+      data
+        ?.flatMap((payment) =>
+          payment.DebtRelations.map((dr) => ({
+            ...dr,
+            payment: {
+              ...payment,
+              DebtRelations: undefined,
+            },
+          }))
+        )
+        .sort(
+          (a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime()
+        ) ?? []
+    );
   }
 
   private async getCurrentUser() {
