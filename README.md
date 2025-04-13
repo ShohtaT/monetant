@@ -1,90 +1,78 @@
-# bill-split-app
+# 割り勘アプリ (bill-split-app)
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+このプロジェクトは [Next.js](https://nextjs.org) を使用し、[`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app)で構築されています。
 
-## Getting Started
+## アーキテクチャ
 
-First, run the development server:
+本アプリケーションはクリーンアーキテクチャの原則に基づいて設計されています。
+詳細な設計思想とアーキテクチャの説明については [アーキテクチャドキュメント](./docs/architecture.md) を参照してください。
+
+## プロジェクトの主要ディレクトリ
+
+主要なディレクトリ構成は以下の通りです：
+
+- `/src/app`: Next.js App Routerベースのページコンポーネント
+- `/src/components`: 再利用可能なUIコンポーネント
+- `/src/services`: ビジネスロジック層
+- `/src/repositories`: データアクセス層（Supabase連携）
+- `/src/stores`: アプリケーションの状態管理（Zustand）
+- `/src/types`: TypeScript型定義
+
+詳細なディレクトリ構造と各層の責務については [アーキテクチャドキュメント](./docs/architecture.md) を参照してください。
+
+## 開発を始める
+
+開発サーバーを起動するには：
 
 ```bash
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで [http://localhost:3000](http://localhost:3000) を開いて結果を確認できます。
 
-You can start editing the page by modifying `app/Page.tsx`. The page auto-updates as you edit the file.
+`app/page.tsx` を編集することでページの編集を開始できます。ファイルを編集すると、ページは自動的に更新されます。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+このプロジェクトでは、Vercelの新しいフォントファミリーである [Geist](https://vercel.com/font) を自動的に最適化して読み込むために [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) を使用しています。
 
-### ESLint and Prettier
+### コード整形とリント
 
-```
+コードの整形とリントを実行するには：
+
+```bash
 yarn run lint-fix
 ```
 
-## Supabase
+## バックエンド (Supabase)
 
-This project uses Supabase as a backend. You can check the data on the dashboard.
+このプロジェクトはバックエンドとしてSupabaseを使用しています。データはダッシュボードで確認できます：
 
 https://supabase.com/dashboard/projects
 
-### Vercel environment connected to Supabase
-※Your local environment is connected to `bill-split-app-develop` in Supabase.
+### Supabaseと連携するVercel環境
 
-`bill-split-app-develop` in Supabase
-- development
-- preview
+※ローカル環境はSupabaseの`bill-split-app-develop`に接続されています。
 
-`bill-split-app-prod` in Supabase
-- prod
+Supabaseの`bill-split-app-develop`環境：
 
-## Deploy on Vercel
+- 開発環境
+- プレビュー環境
 
-### Production
+Supabaseの`bill-split-app-prod`環境：
 
-Primary project environment meant to serve qualified, promoted deployments to real users.
-To deploy to prod environment, push to the `main` branch.
+- 本番環境
 
-### Preview
+## Vercelへのデプロイ
 
-Standard environment — included with all Vercel projects — for previewing changes before promoting them to production.
-To deploy to preview environment, push to the some branch.
+### 本番環境（Production）
 
-### Development
+実際のユーザーに提供するための主要なプロジェクト環境です。
+本番環境にデプロイするには、`main`ブランチにプッシュします。
 
-Standard environment — included with all Vercel projects — used to supply environment variables in local development.
+### プレビュー環境（Preview）
 
-## Structure
-About "AppRouter" https://nextjs.org/docs/app/getting-started/layouts-and-pages
+本番環境に反映する前に変更を確認するための標準環境です。
+プレビュー環境にデプロイするには、任意のブランチにプッシュします。
 
-```
-src/
-├── app/ // Using AppRouter
-│   ├── api/
-│   │   └── hello/
-│   │       └── route.ts
-│   ├── signup/
-│   │   └── page.tsx
-│   ├── layout.tsx
-│   └── page.tsx
-│
-├── components/
-│   └── common/
-│       ├── form/
-│       │   ├── inputField.tsx
-│       │   └── submitButton.tsx
-│       ├── header.tsx
-│       ├── error.tsx
-│       └── loading.tsx
-│
-├── lib/
-│   ├── db.ts
-│   └── utils.ts
-│
-├── styles/
-│   ├── globals.css
-│   └── theme.ts
-│
-└── types/
-    └── index.ts
-```
+### 開発環境（Development）
+
+ローカル開発で環境変数を提供するために使用される標準環境です。

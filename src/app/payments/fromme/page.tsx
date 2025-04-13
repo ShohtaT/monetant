@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { getOthersAwaitingDebtRelations } from '@/app/api/endpoints/debtRelations';
+import { DebtRelationService } from '@/services/debtRelationService';
 import { DebtRelation } from '@/types/debtRelation';
 import { toast } from 'react-toastify';
 import Card from './card';
@@ -15,7 +15,8 @@ export default function Page() {
 
   const fetchDebtRelations = async () => {
     try {
-      const data = await getOthersAwaitingDebtRelations();
+      const debtRelationService = new DebtRelationService();
+      const data = await debtRelationService.getOthersAwaitingDebtRelations();
       setDebtRelations(data);
     } catch (error) {
       console.error('Error fetching debt relations:', error);

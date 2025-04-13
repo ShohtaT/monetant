@@ -3,8 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/users';
-import { signOut } from '@/app/api/endpoints/auth';
-import { getCurrentUser } from '@/app/api/helper/authHelper';
+import { AuthService } from '@/services/authService';
 import { toast } from 'react-toastify';
 import { IoIosArrowForward } from 'react-icons/io';
 import { FiPlus } from 'react-icons/fi';
@@ -25,7 +24,8 @@ export default function MyPage() {
     if (!user) {
       const fetchUser = async () => {
         try {
-          const userData = await getCurrentUser();
+          const authService = new AuthService();
+          const userData = await authService.getCurrentUser();
           if (userData) {
             setUser(userData);
           }
@@ -41,7 +41,8 @@ export default function MyPage() {
 
   const handleSignOut = async () => {
     try {
-      await signOut();
+      const authService = new AuthService();
+      await authService.signOut();
       useUserStore.getState().logout();
       router.push('/login');
       toast('ログアウトしました', { type: 'success' });
