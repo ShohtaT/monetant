@@ -41,7 +41,9 @@ export default function Page() {
 
   return (
     <div className="mt-6 flex flex-col justify-center px-4 max-w-md mx-auto w-full font-geist mb-20">
-      <h1 className="mt-8 mb-4 text-center text-2xl font-bold dark:text-white">あなたが請求中の支払い</h1>
+      <h1 className="mt-8 mb-4 text-center text-2xl font-bold dark:text-white">
+        あなたが請求中の支払い
+      </h1>
 
       {debtRelations.length > 0 ? (
         <>

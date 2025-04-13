@@ -1,11 +1,6 @@
 import { Resend } from 'resend';
 
-// 環境変数のチェック
-if (!process.env.RESEND_API_KEY) {
-  throw new Error('Missing RESEND_API_KEY environment variable');
-}
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.NEXT_PUBLIC_RESNED_API_KEY!);
 
 export type EmailPayload = {
   to: string;
@@ -14,10 +9,11 @@ export type EmailPayload = {
   html?: string;
 };
 
+// TODO: CORS エラーが出るので、API経由で送信するようにする
 export const sendEmail = async (payload: EmailPayload) => {
   try {
     const data = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL!,
+      from: process.env.NEXT_PUBLIC_RESEND_FROM_EMAIL!,
       to: payload.to,
       subject: payload.subject,
       text: payload.text,
