@@ -3,7 +3,7 @@
 import { Payment } from '@/types/payment';
 import { useRouter } from 'next/navigation';
 import { User } from '@/types/user';
-import { deletePayment } from '@/app/api/endpoints/payments';
+import { PaymentService } from '@/services/paymentService';
 import { toast } from 'react-toastify';
 
 interface PaymentDetailProps {
@@ -30,7 +30,8 @@ export default function PaymentDetail({
     if (!result) return;
 
     router.push('/payments');
-    await deletePayment(payment.id);
+    const paymentService = new PaymentService();
+    await paymentService.deletePayment(payment.id);
     toast('支払いデータを削除しました', { type: 'success' });
   };
 

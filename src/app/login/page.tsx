@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import InputField from '@/components/common/form/inputField';
 import SubmitButton from '@/components/common/form/submitButton';
-import { signIn } from '@/app/api/endpoints/auth';
+import { AuthService } from '@/services/authService';
 import { useUserStore } from '@/stores/users';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -18,7 +18,8 @@ export default function Page() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await signIn(email, password);
+      const authService = new AuthService();
+      await authService.signIn(email, password);
       useUserStore.getState().setIsLogin(true);
       router.push('/');
       toast('ログインしました', { type: 'success' });

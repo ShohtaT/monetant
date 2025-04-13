@@ -7,9 +7,9 @@ import Textarea from '@/components/common/form/textarea';
 import { useRouter } from 'next/navigation';
 import { User } from '@/types/user';
 import BillingsForm from '@/app/payments/new/billingsForm';
-import { createPayment } from '@/app/api/endpoints/payments';
+import { PaymentService } from '@/services/paymentService';
 import { Billing } from '@/types/payment';
-import { getUsersList } from '@/app/api/endpoints/user';
+import { UserRepository } from '@/repositories/userRepository';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/hooks/useAuth';
 import Loading from '@/components/common/loading';
@@ -31,7 +31,8 @@ export default function Page() {
     const fetchUsers = async () => {
       if (!isAuthChecking && isLogin) {
         try {
-          const users = await getUsersList();
+          const userRepository = new UserRepository();
+          const users = await userRepository.getUsersList();
           setUsers(users || []);
         } catch (error) {
           console.error('Error fetching users:', error);
@@ -54,7 +55,8 @@ export default function Page() {
 
     setIsSubmitting(true);
     try {
-      await createPayment(
+      const paymentService = new PaymentService();
+      await paymentService.createPayment(
         title,
         new Date().toISOString(),
         totalAmount,
