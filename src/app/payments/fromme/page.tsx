@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { getOthersAwaitingDebtRelations } from '@/app/api/endpoints/debtRelations';
+import { DebtRelationService } from '@/services/debtRelationService';
 import { DebtRelation } from '@/types/debtRelation';
 import { toast } from 'react-toastify';
 import Card from './card';
@@ -15,7 +15,8 @@ export default function Page() {
 
   const fetchDebtRelations = async () => {
     try {
-      const data = await getOthersAwaitingDebtRelations();
+      const debtRelationService = new DebtRelationService();
+      const data = await debtRelationService.getOthersAwaitingDebtRelations();
       setDebtRelations(data);
     } catch (error) {
       console.error('Error fetching debt relations:', error);
@@ -41,7 +42,9 @@ export default function Page() {
 
   return (
     <div className="mt-6 flex flex-col justify-center px-4 max-w-md mx-auto w-full font-geist mb-20">
-      <h1 className="mt-8 mb-4 text-center text-2xl font-bold dark:text-white">あなたが請求中の支払い</h1>
+      <h1 className="mt-8 mb-4 text-center text-2xl font-bold dark:text-white">
+        あなたが請求中の支払い
+      </h1>
 
       {debtRelations.length > 0 ? (
         <>
