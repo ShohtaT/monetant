@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { User } from '@/types/user';
+import { useNavigationStore } from './navigation';
 
 interface UserState {
   isLogin: boolean;
@@ -21,7 +22,10 @@ export const useUserStore = create<UserState>()(
       setIsLogin: (value: boolean) => set({ isLogin: value }),
       getUser: () => get().user,
       setUser: (user: User) => set({ user }),
-      logout: () => set({ isLogin: false, user: null }),
+      logout: () => {
+        set({ isLogin: false, user: null });
+        useNavigationStore.getState().reset();
+      },
     }),
     {
       name: 'auth-store',

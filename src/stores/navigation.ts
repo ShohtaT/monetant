@@ -6,6 +6,7 @@ type NavType = 'payments' | 'mypage';
 interface NavigationState {
   activeNav: NavType;
   setActiveNav: (nav: NavType) => void;
+  reset: () => void;
 }
 
 export const useNavigationStore = create<NavigationState>()(
@@ -13,6 +14,7 @@ export const useNavigationStore = create<NavigationState>()(
     (set) => ({
       activeNav: 'payments',
       setActiveNav: (nav: NavType) => set({ activeNav: nav }),
+      reset: () => set({ activeNav: 'payments' }),
     }),
     {
       name: 'navigation-store',
