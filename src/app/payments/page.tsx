@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { usePaymentsStore } from '@/stores/payments';
 import Card from '@/app/payments/card';
 import { toast } from 'react-toastify';
+import { sendEmail } from '@/lib/email/emailClient';
 
 export default function Page() {
   const router = useRouter();
@@ -23,7 +24,12 @@ export default function Page() {
     }
   }, [isAuthChecking, isLogin, isInitialized, fetchPayments]);
 
-  const create = () => {
+  const create = async () => {
+    await sendEmail({
+      to: 'shohh6119@gmail.com',
+      subject: 'Test Email',
+      text: 'This is a test email sent from Next.js!',
+    });
     router.push('/payments/new');
   };
 
