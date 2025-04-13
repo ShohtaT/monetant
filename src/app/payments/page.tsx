@@ -25,6 +25,7 @@ export default function Page() {
   }, [isAuthChecking, isLogin, isInitialized, fetchPayments]);
 
   const create = async () => {
+    // FIXME: ここでメールを送信するのは良くない（検証用で一時的に置いている）
     await sendEmail({
       to: 'shohh6119@gmail.com',
       subject: 'Test Email',
