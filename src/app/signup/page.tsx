@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import InputField from '@/components/common/form/inputField';
 import SubmitButton from '@/components/common/form/submitButton';
-import { createUser } from '@/app/api/endpoints/auth';
+import { AuthService } from '@/services/authService';
 import { useUserStore } from '@/stores/users';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -19,7 +19,8 @@ export default function Page() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await createUser(email, password, nickname);
+      const authService = new AuthService();
+      await authService.createUser(email, password, nickname);
       toast('メールを送信しました。\nメールに記載されているリンクからログインしてください。', {
         type: 'success',
       });

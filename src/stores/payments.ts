@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { ExpandedPayment } from '@/types/payment';
-import { getPayments } from '@/app/api/endpoints/payments';
+import { PaymentService } from '@/services/paymentService';
 
 type PaymentsStore = {
   awaitingPayments: ExpandedPayment[] | null;
@@ -21,7 +21,8 @@ export const usePaymentsStore = create<PaymentsStore>((set) => ({
   fetchPayments: async () => {
     set({ isLoading: true, error: null });
     try {
-      const payments = await getPayments();
+      const paymentService = new PaymentService();
+      const payments = await paymentService.getPayments();
       set({
         awaitingPayments: payments?.awaiting_payments || null,
         completedPayments: payments?.completed_payments || null,

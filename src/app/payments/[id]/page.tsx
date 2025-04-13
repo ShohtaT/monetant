@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/components/common/loading';
-import { getDebtRelations, updateDebtRelations } from '@/app/api/endpoints/debtRelations';
 import { DebtRelation, DebtRelationsResponse } from '@/types/debtRelation';
 import { Payment } from '@/types/payment';
-import { updatePayments } from '@/app/api/endpoints/payments';
 import { User } from '@/types/user';
-import { getUserByUserIdToSupabase } from '@/app/api/helper/userHelper';
+import { DebtRelationService } from '@/services/debtRelationService';
+import { PaymentService } from '@/services/paymentService';
+import { UserRepository } from '@/repositories/userRepository';
 import PaymentDetail from '@/app/payments/[id]/paymentDetail';
 import Card from '@/app/payments/[id]/card';
 import { toast } from 'react-toastify';
@@ -25,7 +25,9 @@ export default function Page() {
 
   const fetchDebtRelations = async () => {
     setIsLoading(true);
-    const debtRelations: DebtRelationsResponse | null = await getDebtRelations(paymentId);
+    const debtRelationService = new DebtRelationService();
+    const debtRelations: DebtRelationsResponse | null =
+      await debtRelationService.getDebtRelations(paymentId);
     setPayment(debtRelations?.payment);
     setDebtRelations(debtRelations?.debt_relations ?? []);
     setIsLoading(false);
@@ -37,7 +39,8 @@ export default function Page() {
   const fetchPayer = async () => {
     if (!payment) return;
 
-    await getUserByUserIdToSupabase(payment?.creator_id).then((data) => {
+    const userRepository = new UserRepository();
+    await userRepository.getUserById(payment?.creator_id).then((data) => {
       setPayer(data);
     });
   };
@@ -76,7 +79,8 @@ export default function Page() {
     // すべての debtRelation が `completed` なら、payment も `completed` に変更
     if (shouldCompletePayment(debtRelationId)) {
       setPayment((prev) => (prev ? { ...prev, status: 'completed' } : null));
-      await updatePayments(paymentId, { status: 'completed' });
+      const paymentService = new PaymentService();
+      await paymentService.updatePayment(paymentId, { status: 'completed' });
     }
   };
 
@@ -86,7 +90,8 @@ export default function Page() {
     // `payment` が `completed` なら `awaiting` に戻す
     if (payment?.status === 'completed') {
       setPayment((prev) => (prev ? { ...prev, status: 'awaiting' } : null));
-      await updatePayments(paymentId, { status: 'awaiting' });
+      const paymentService = new PaymentService();
+      await paymentService.updatePayment(paymentId, { status: 'awaiting' });
     }
   };
 
@@ -104,7 +109,8 @@ export default function Page() {
 
     // DB の更新
     try {
-      await updateDebtRelations(debtRelationId, {
+      const debtRelationService = new DebtRelationService();
+      await debtRelationService.updateDebtRelation(debtRelationId, {
         status,
         paid_at: status === 'completed' ? new Date().toISOString() : null,
       });
