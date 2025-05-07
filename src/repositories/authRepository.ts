@@ -30,10 +30,10 @@ export class AuthRepository {
     return data;
   }
 
-  async createUserProfile(authId: string, nickname: string) {
+  async createUserProfile(authId: string, nickname: string, email: string) {
     const { data, error } = await this.supabaseClient
       .from('Users')
-      .insert([{ auth_id: authId, nickname: nickname }]);
+      .insert([{ auth_id: authId, nickname: nickname, email: email }]);
 
     if (error) throw error;
     return data;

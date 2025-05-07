@@ -352,6 +352,13 @@
   dependencies:
     undici-types "~6.19.2"
 
+"@types/nodemailer@^6.4.17":
+  version "6.4.17"
+  resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-6.4.17.tgz#5c82a42aee16a3dd6ea31446a1bd6a447f1ac1a4"
+  integrity sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==
+  dependencies:
+    "@types/node" "*"
+
 "@types/phoenix@^1.5.4":
   version "1.6.6"
   resolved "https://registry.npmjs.org/@types/phoenix/-/phoenix-1.6.6.tgz"
@@ -2049,6 +2056,11 @@ next@14.2.13:
     "@next/swc-win32-arm64-msvc" "14.2.13"
     "@next/swc-win32-ia32-msvc" "14.2.13"
     "@next/swc-win32-x64-msvc" "14.2.13"
+
+nodemailer@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-7.0.2.tgz#29d2bf5a54898f1967174d8a050466e2ae8aa6dd"
+  integrity sha512-SYsisPeLFYli5Q+BCGSyHT5CVvezPmQjHgINV9KVvVLV1aktuoD4E0Np9Q3ND9I481qIHzUQzVT+Tl/Tw7Ivdg==
 
 normalize-path@^3.0.0, normalize-path@~3.0.0:
   version "3.0.0"
