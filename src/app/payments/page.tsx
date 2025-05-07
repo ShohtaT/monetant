@@ -1,16 +1,14 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Loading from '@/components/common/loading';
 import { useAuth } from '@/hooks/useAuth';
 import { usePaymentsStore } from '@/stores/payments';
 import Card from '@/app/payments/card';
 import { toast } from 'react-toastify';
-import { sendEmail } from '@/lib/email/emailClient';
 
 export default function Page() {
-  const router = useRouter();
+  // const router = useRouter();
   const { isAuthChecking, isLogin } = useAuth();
   const { awaitingPayments, completedPayments, isLoading, isInitialized, fetchPayments } =
     usePaymentsStore();
@@ -23,15 +21,23 @@ export default function Page() {
       });
     }
   }, [isAuthChecking, isLogin, isInitialized, fetchPayments]);
-
+  
+  // FIXME: ここでメールを送信するのは良くない（検証用で一時的に置いている）
   const create = async () => {
-    // FIXME: ここでメールを送信するのは良くない（検証用で一時的に置いている）
-    await sendEmail({
-      to: 'shohh6119@gmail.com',
-      subject: 'Test Email',
-      text: 'This is a test email sent from Next.js!',
+    const response = await fetch('/api/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: 'shohh6119@gmail.com',
+        subject: 'Test Email',
+        text: 'This is a test email sent from Next.js!',
+      }),
     });
-    router.push('/payments/new');
+
+    const result = await response.json();
+    console.log('Email sent successfully:', result);
   };
 
   if (isAuthChecking || !isLogin) return <Loading />;
