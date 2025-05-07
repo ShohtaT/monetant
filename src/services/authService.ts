@@ -15,7 +15,7 @@ export class AuthService {
     const user = await this.authRepository.signUp(email, password);
     if (!user) throw new Error('User cannot be created');
 
-    await this.authRepository.createUserProfile(user.id, nickname);
+    await this.authRepository.createUserProfile(user.id, nickname, email);
   }
 
   async signIn(email: string, password: string) {

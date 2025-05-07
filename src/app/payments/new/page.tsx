@@ -15,6 +15,7 @@ import { useAuth } from '@/hooks/useAuth';
 import Loading from '@/components/common/loading';
 import { usePaymentsStore } from '@/stores/payments';
 import { useUserStore } from '@/stores/users';
+import { sendEmail } from '@/lib/email/sendEmail';
 
 export default function Page() {
   const router = useRouter();
@@ -66,6 +67,16 @@ export default function Page() {
       await fetchPayments();
       toast('支払い情報を作成しました', { type: 'success' });
       router.push('/payments');
+
+      // 非同期でメールを送信
+      billings.forEach((billing) => {
+        if (!billing.user?.email) return;
+        sendEmail({
+          to: billing.user.email,
+          subject: '【monetant】新しい請求が届きました💸',
+          text: `新しい請求が届きました。\n\n＜内容＞\n請求元：${currentUser.nickname} さん\n金額：${billing.splitAmount}円\n${description}\n\n詳細はアプリで確認しましょう！\n🔗${process.env.MONETANT_LINK}\n\n\n※このメールは自動送信です。`,
+        });
+      });
     } catch (error) {
       console.error('Error creating payment:', error);
       toast('支払い情報の作成に失敗しました', { type: 'error' });
