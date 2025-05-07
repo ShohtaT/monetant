@@ -6,9 +6,10 @@ import { useAuth } from '@/hooks/useAuth';
 import { usePaymentsStore } from '@/stores/payments';
 import Card from '@/app/payments/card';
 import { toast } from 'react-toastify';
+import {useRouter} from "next/navigation";
 
 export default function Page() {
-  // const router = useRouter();
+  const router = useRouter();
   const { isAuthChecking, isLogin } = useAuth();
   const { awaitingPayments, completedPayments, isLoading, isInitialized, fetchPayments } =
     usePaymentsStore();
@@ -23,30 +24,7 @@ export default function Page() {
   }, [isAuthChecking, isLogin, isInitialized, fetchPayments]);
 
   const create = async () => {
-    try {
-      const response = await fetch('/api/email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          to: 'shohh6119@gmail.com', // 送信先メールアドレス
-          subject: '新規請求が作成されました', // 件名
-          text: '新しい請求が作成されました。詳細はアプリで確認してください。', // テキスト形式の本文
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('メール送信に失敗しました');
-      }
-
-      const result = await response.json();
-      console.log('メールが正常に送信されました:', result);
-      toast('メールが正常に送信されました', { type: 'success' });
-    } catch (error) {
-      console.error('メール送信エラー:', error);
-      toast('メール送信に失敗しました', { type: 'error' });
-    }
+    router.push('/payments/new');
   };
 
   if (isAuthChecking || !isLogin) return <Loading />;
