@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { usePaymentsStore } from '@/stores/payments';
 import Card from '@/app/payments/card';
 import { toast } from 'react-toastify';
-import {useRouter} from "next/navigation";
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const router = useRouter();
