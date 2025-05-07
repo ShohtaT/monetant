@@ -17,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'お金のやりとり管理',
-  description: 'お金のやりとり管理',
+  title: 'monetant',
+  description: 'お金のやりとりを管理するアプリ【monetant】',
 };
 
 export default function RootLayout({
