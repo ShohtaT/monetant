@@ -1,26 +1,34 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 import { NextResponse } from 'next/server';
-import { EmailTemplate } from '@/components/common/email/emailTemplate';
 
-const resend = new Resend('re_W61NTfGt_LQpHmHQPVurNCscaMiLhJb8V');
-
-// @see https://resend.com/docs/send-with-nextjs#3-send-email-using-react
-export async function POST() {
+export async function POST(request: Request) {
   try {
-    const { data, error } = await resend.emails.send({
-      from: "shohta.tak22@gmail.com",
-      to: ['shohh6119@gmail.com'],
-      subject: 'Hello world',
-      react: EmailTemplate({ firstName: 'John' }),
+    const { to, subject, text, html } = await request.json();
+
+    // SMTPトランスポートの設定
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+      auth: {
+        user: process.env.SMTP_USER, // SMTPユーザー名
+        pass: process.env.SMTP_PASS, // SMTPパスワード
+      },
     });
 
-    if (error) {
-      return NextResponse.json({ error }, { status: 500 });
-    }
+    // メール送信
+    const info = await transporter.sendMail({
+      from: process.env.SMTP_FROM_EMAIL, // 送信元メールアドレス
+      to, // 送信先メールアドレス
+      subject, // 件名
+      text, // テキスト形式の本文
+      html, // HTML形式の本文
+    });
 
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('Error sending email:', error);
-    return NextResponse.json({ error }, { status: 500 });
+    console.log('Message sent: %s', info.messageId);
+    return NextResponse.json({ success: true, messageId: info.messageId });
+  } catch (error: unknown) {
+    console.error('Error in email API route:', error);
+    return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
   }
 }
