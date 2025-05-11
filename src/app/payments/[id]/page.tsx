@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/components/common/loading';
 import { DebtRelation, DebtRelationsResponse } from '@/types/debtRelation';
@@ -23,7 +23,7 @@ export default function Page() {
 
   const paymentId = Number(params.id);
 
-  const fetchDebtRelations = async () => {
+  const fetchDebtRelations = useCallback(async () => {
     setIsLoading(true);
     const debtRelationService = new DebtRelationService();
     const debtRelations: DebtRelationsResponse | null =
@@ -31,22 +31,22 @@ export default function Page() {
     setPayment(debtRelations?.payment);
     setDebtRelations(debtRelations?.debt_relations ?? []);
     setIsLoading(false);
-  };
+  }, [paymentId]);
   useEffect(() => {
-    fetchDebtRelations().then();
-  }, []);
+    fetchDebtRelations();
+  }, [fetchDebtRelations]);
 
-  const fetchPayer = async () => {
+  const fetchPayer = useCallback(async () => {
     if (!payment) return;
 
     const userRepository = new UserRepository();
     await userRepository.getUserById(payment?.creator_id).then((data) => {
       setPayer(data);
     });
-  };
-  useEffect(() => {
-    if (payment) fetchPayer().then();
   }, [payment]);
+  useEffect(() => {
+    if (payment) fetchPayer();
+  }, [payment, fetchPayer]);
 
   const unpaidAmount = (): number => {
     if (!debtRelations) return -1;

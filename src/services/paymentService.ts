@@ -61,26 +61,20 @@ export class PaymentService {
       currentUser.id
     );
 
-    const myPaymentIds = Array.from(
-      new Set([
+    const myPaymentIds = [
+      ...new Set([
         ...myPayments.map((payment) => payment.id),
         ...debtRelations.map((dr) => dr.payment_id),
-      ])
-    );
+      ]),
+    ];
 
     const allPayments = await Promise.all(
       myPaymentIds.map((id) => this.paymentRepository.getPaymentWithDebtRelations(id))
     );
 
     return {
-      awaiting_payments: await this.expandPayments(
-        allPayments.filter((p) => p),
-        'awaiting'
-      ),
-      completed_payments: await this.expandPayments(
-        allPayments.filter((p) => p),
-        'completed'
-      ),
+      awaiting_payments: await this.expandPayments(allPayments.filter(Boolean), 'awaiting'),
+      completed_payments: await this.expandPayments(allPayments.filter(Boolean), 'completed'),
     };
   }
 

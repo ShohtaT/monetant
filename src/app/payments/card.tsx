@@ -7,6 +7,8 @@ interface CardProps {
   payment: ExpandedPayment;
 }
 
+const DATE_SLICE_LENGTH = 10;
+
 export default function Card({ payment }: CardProps) {
   const isAwaiting = payment.status === 'awaiting';
 
@@ -30,7 +32,7 @@ export default function Card({ payment }: CardProps) {
           {isAwaiting ? '未完了' : '完了'}
         </div>
       </div>
-      <p className="mt-1 text-sm">{payment.payment_at?.slice(0, 10)}</p>
+      <p className="mt-1 text-sm">{payment.payment_at?.slice(0, DATE_SLICE_LENGTH)}</p>
     </li>
   );
 }

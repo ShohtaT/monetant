@@ -69,14 +69,14 @@ export default function Page() {
       router.push('/payments');
 
       // 非同期でメールを送信
-      billings.forEach((billing) => {
-        if (!billing.user?.email) return;
+      for (const billing of billings) {
+        if (!billing.user?.email) continue;
         sendEmail({
           to: billing.user.email,
           subject: '【monetant】新しい請求が届きました💸',
           text: `新しい請求が届きました。\n\n＜内容＞\n請求元：${currentUser.nickname} さん\n金額：${billing.splitAmount}円\n${description}\n\n詳細はアプリで確認しましょう！\n🔗${process.env.NEXT_PUBLIC_MONETANT_LINK}\n\n\n※このメールは自動送信です。`,
         });
-      });
+      }
     } catch (error) {
       console.error('Error creating payment:', error);
       toast('支払い情報の作成に失敗しました', { type: 'error' });
