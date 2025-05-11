@@ -25,7 +25,7 @@ export default function InputNumberField({
 
     let newValue: string | number = e.target.value;
 
-    newValue = newValue.replace(/\D/g, ''); // Remove non-numeric characters
+    newValue = newValue.replaceAll(/\D/g, ''); // Remove non-numeric characters
     newValue = newValue === '' ? '' : Number(newValue.replace(/^0+(\d)/, '$1')); // Handle empty input
 
     onChange(newValue, e);

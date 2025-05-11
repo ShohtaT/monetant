@@ -13,6 +13,8 @@ interface PaymentDetailProps {
   unpaidNumberOfPeople: number;
 }
 
+const DATE_SLICE_LENGTH = 10;
+
 export default function PaymentDetail({
   payment,
   payer,
@@ -41,7 +43,7 @@ export default function PaymentDetail({
         <div className="my-2 text-center">データの取得に失敗しました</div>
       ) : (
         <>
-          <p>支払い日: {payment?.payment_at?.slice(0, 10)}</p>
+          <p>支払い日: {payment?.payment_at?.slice(0, DATE_SLICE_LENGTH)}</p>
           <p>
             精算未完了額: ¥{unpaidAmount}（{unpaidNumberOfPeople}人）
           </p>

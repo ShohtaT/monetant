@@ -44,36 +44,34 @@ export default function Page() {
         </div>
       </div>
 
-      <>
-        {/* 未完了 */}
-        <p className="text-2xl font-bold mt-4 text-orange-500">未完了</p>
-        {awaitingPayments?.length === 0 ? (
-          <p className="text-center">
-            未完了の支払いはありません！
-            <br />
-            その調子です！🎉
-          </p>
-        ) : (
-          <p className="mt-1 text-[12px]">
-            あなたが貸しているか借りている未完了のやりとりが表示されます。
-            <br />
-            「未完了」がなくなることを目指して管理しましょう！
-          </p>
-        )}
-        <ul className="mt-4">
-          {awaitingPayments?.map((payment) => <Card key={payment.id} payment={payment} />)}
-        </ul>
+      {/* 未完了 */}
+      <p className="text-2xl font-bold mt-4 text-orange-500">未完了</p>
+      {awaitingPayments?.length === 0 ? (
+        <p className="text-center">
+          未完了の支払いはありません！
+          <br />
+          その調子です！🎉
+        </p>
+      ) : (
+        <p className="mt-1 text-[12px]">
+          あなたが貸しているか借りている未完了のやりとりが表示されます。
+          <br />
+          「未完了」がなくなることを目指して管理しましょう！
+        </p>
+      )}
+      <ul className="mt-4">
+        {awaitingPayments?.map((payment) => <Card key={payment.id} payment={payment} />)}
+      </ul>
 
-        {/* 完了 */}
-        {completedPayments?.length !== 0 && (
-          <>
-            <p className="text-2xl font-bold mt-4 text-green-500">完了</p>
-            <ul className="mt-4">
-              {completedPayments?.map((payment) => <Card key={payment.id} payment={payment} />)}
-            </ul>
-          </>
-        )}
-      </>
+      {/* 完了 */}
+      {completedPayments?.length !== 0 && (
+        <>
+          <p className="text-2xl font-bold mt-4 text-green-500">完了</p>
+          <ul className="mt-4">
+            {completedPayments?.map((payment) => <Card key={payment.id} payment={payment} />)}
+          </ul>
+        </>
+      )}
     </div>
   );
 }
