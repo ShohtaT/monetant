@@ -22,10 +22,21 @@
 
 ## 開発を始める
 
-開発サーバーを起動するには：
+### 前提条件
+
+- Node.js 20.15.0以上
+- pnpm 8.15.4以上
+
+### インストール
 
 ```bash
-yarn dev
+pnpm install
+```
+
+### 開発サーバーの起動
+
+```bash
+pnpm dev
 ```
 
 ブラウザで [http://localhost:3000](http://localhost:3000) を開いて結果を確認できます。
@@ -39,7 +50,17 @@ yarn dev
 コードの整形とリントを実行するには：
 
 ```bash
-yarn run lint-fix
+pnpm lint-fix
+```
+
+### ビルドとデプロイ
+
+```bash
+# プロダクションビルド
+pnpm build
+
+# プロダクションサーバーの起動
+pnpm start
 ```
 
 ## バックエンド (Supabase)
