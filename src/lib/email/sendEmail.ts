@@ -6,7 +6,7 @@ export interface EmailPayload {
 
 export async function sendEmail(payload: EmailPayload): Promise<void> {
   try {
-    const response = await fetch('/api/email', {
+    const response = await fetch('/api/v1/email', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

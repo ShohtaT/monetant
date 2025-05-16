@@ -43,7 +43,6 @@ export default function Page() {
     router.push('/payments/new');
   };
 
-
   if (isLoading) return <Loading />;
 
   return (

@@ -1,4 +1,4 @@
-// ユーザー情報取得API（GET /api/user）
+// ユーザー情報取得API（GET /api/v1/user）
 import { NextRequest } from 'next/server';
 import { UserRepository } from '@/repositories/userRepository';
 
