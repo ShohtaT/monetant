@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import InputField from '@/components/common/form/inputField';
 import SubmitButton from '@/components/common/form/submitButton';
-import { useUserStore } from '@/stores/users';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
@@ -26,7 +25,8 @@ export default function Page() {
         const { error } = await res.json();
         throw new Error(error || 'ログインに失敗しました');
       }
-      useUserStore.getState().setIsLogin(true);
+      // ログイン状態はlocalStorage等で管理する場合はここで保存
+      // localStorage.setItem('user', JSON.stringify(await res.json()));
       router.push('/');
       toast('ログインしました', { type: 'success' });
     } catch (error) {
@@ -37,9 +37,7 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (useUserStore.getState().getIsLogin()) {
-      router.push('/');
-    }
+    // ログイン状態の判定はlocalStorage等で行う場合はここで実装
   }, [router]);
 
   return (

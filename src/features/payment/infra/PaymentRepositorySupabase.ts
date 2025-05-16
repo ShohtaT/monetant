@@ -25,5 +25,14 @@ export const paymentRepository = {
     if (error) throw error;
     return data?.[0];
   },
+  async getPaymentWithDebtRelations(paymentId: number) {
+    const { data, error } = await supabaseClient
+      .from('Payments')
+      .select('*')
+      .eq('id', paymentId)
+      .single();
+    if (error) throw error;
+    return data;
+  },
   // 必要に応じて他のメソッドも移植
 };

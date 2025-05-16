@@ -7,5 +7,12 @@ export const debtRelationRepository = {
     const { error } = await supabaseClient.from('DebtRelations').insert([debtRelation]);
     if (error) throw error;
   },
-  // 必要に応じて他のメソッドも移植
+  async getDebtRelationsByPaymentId(paymentId: number) {
+    const { data, error } = await supabaseClient
+      .from('DebtRelations')
+      .select('*')
+      .eq('payment_id', paymentId);
+    if (error) throw error;
+    return data as DebtRelation[];
+  },
 };
