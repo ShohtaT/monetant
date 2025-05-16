@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { ExpandedPayment } from '@/types/payment';
-import { PaymentService } from '@/services/paymentService';
 
 type PaymentsStore = {
   awaitingPayments: ExpandedPayment[] | null;
@@ -21,8 +20,9 @@ export const usePaymentsStore = create<PaymentsStore>((set) => ({
   fetchPayments: async () => {
     set({ isLoading: true, error: null });
     try {
-      const paymentService = new PaymentService();
-      const payments = await paymentService.getPayments();
+      // API経由で取得
+      const res = await fetch('/api/payment', { method: 'GET' });
+      const payments = await res.json();
       set({
         awaitingPayments: payments?.awaiting_payments || null,
         completedPayments: payments?.completed_payments || null,

@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import InputField from '@/components/common/form/inputField';
 import SubmitButton from '@/components/common/form/submitButton';
-import { AuthService } from '@/services/authService';
 import { useUserStore } from '@/stores/users';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -18,8 +17,15 @@ export default function Page() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const authService = new AuthService();
-      await authService.signIn(email, password);
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error || 'ログインに失敗しました');
+      }
       useUserStore.getState().setIsLogin(true);
       router.push('/');
       toast('ログインしました', { type: 'success' });

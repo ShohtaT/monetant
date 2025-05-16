@@ -7,7 +7,7 @@ import Textarea from '@/components/common/form/textarea';
 import { useRouter } from 'next/navigation';
 import { User } from '@/types/user';
 import BillingsForm from '@/app/payments/new/billingsForm';
-import { PaymentService } from '@/services/paymentService';
+// PaymentServiceは使わずAPI経由でデータ操作
 import { Billing } from '@/types/payment';
 import { UserRepository } from '@/repositories/userRepository';
 import { toast } from 'react-toastify';
@@ -56,14 +56,18 @@ export default function Page() {
 
     setIsSubmitting(true);
     try {
-      const paymentService = new PaymentService();
-      await paymentService.createPayment(
-        title,
-        new Date().toISOString(),
-        totalAmount,
-        billings,
-        description || undefined
-      );
+      await fetch('/api/payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          amount: totalAmount,
+          paymentDate: new Date().toISOString(),
+          billings,
+          note: description || undefined,
+          creator_id: currentUser.id,
+        }),
+      });
       await fetchPayments();
       toast('支払い情報を作成しました', { type: 'success' });
       router.push('/payments');
