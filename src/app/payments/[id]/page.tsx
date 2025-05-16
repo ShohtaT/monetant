@@ -3,15 +3,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/components/common/loading';
-import { DebtRelation, DebtRelationsResponse } from '@/types/debtRelation';
+import { DebtRelation } from '@/types/debtRelation';
 import { Payment } from '@/types/payment';
 import { User } from '@/types/user';
-import { DebtRelationService } from '@/services/debtRelationService';
-import { PaymentService } from '@/services/paymentService';
 import { UserRepository } from '@/repositories/userRepository';
+
 import PaymentDetail from '@/app/payments/[id]/paymentDetail';
 import Card from '@/app/payments/[id]/card';
-import { toast } from 'react-toastify';
+import { getPaymentDetailUseCase } from '@/features/payment/application/getPaymentDetail';
 
 export default function Page() {
   const router = useRouter();
@@ -25,11 +24,9 @@ export default function Page() {
 
   const fetchDebtRelations = useCallback(async () => {
     setIsLoading(true);
-    const debtRelationService = new DebtRelationService();
-    const debtRelations: DebtRelationsResponse | null =
-      await debtRelationService.getDebtRelations(paymentId);
-    setPayment(debtRelations?.payment);
-    setDebtRelations(debtRelations?.debt_relations ?? []);
+    const detail = await getPaymentDetailUseCase(paymentId);
+    setPayment(detail?.payment ?? null);
+    setDebtRelations(detail?.debt_relations ?? []);
     setIsLoading(false);
   }, [paymentId]);
   useEffect(() => {
@@ -40,9 +37,8 @@ export default function Page() {
     if (!payment) return;
 
     const userRepository = new UserRepository();
-    await userRepository.getUserById(payment?.creator_id).then((data) => {
-      setPayer(data);
-    });
+    const data = await userRepository.getUserById(payment?.creator_id);
+    setPayer(data);
   }, [payment]);
   useEffect(() => {
     if (payment) fetchPayer();
@@ -62,66 +58,16 @@ export default function Page() {
     return debtRelations.filter((dr) => dr.status === 'awaiting').length;
   };
 
-  const shouldCompletePayment = (debtRelationId: number): boolean => {
-    if (!payment || !debtRelations) return false;
-
-    return (
-      payment?.status === 'awaiting' &&
-      debtRelations
-        ?.filter((dr) => dr.id !== debtRelationId)
-        .every((dr) => dr.status === 'completed')
-    );
-  };
-
+  // 完了・未完了操作は未実装。必要に応じてAPI経由で実装してください。
   const completeRepayment = async (debtRelationId: number) => {
-    await updateDebtRelationStatus(debtRelationId, 'completed');
-
-    // すべての debtRelation が `completed` なら、payment も `completed` に変更
-    if (shouldCompletePayment(debtRelationId)) {
-      setPayment((prev) => (prev ? { ...prev, status: 'completed' } : null));
-      const paymentService = new PaymentService();
-      await paymentService.updatePayment(paymentId, { status: 'completed' });
-    }
+    // TODO: API経由で支払い完了処理を実装
   };
 
   const rollbackRepayment = async (debtRelationId: number) => {
-    await updateDebtRelationStatus(debtRelationId, 'awaiting');
-
-    // `payment` が `completed` なら `awaiting` に戻す
-    if (payment?.status === 'completed') {
-      setPayment((prev) => (prev ? { ...prev, status: 'awaiting' } : null));
-      const paymentService = new PaymentService();
-      await paymentService.updatePayment(paymentId, { status: 'awaiting' });
-    }
+    // TODO: API経由で支払い未完了処理を実装
   };
 
-  const updateDebtRelationStatus = async (
-    debtRelationId: number,
-    status: 'completed' | 'awaiting'
-  ) => {
-    // UI の即時更新
-    setDebtRelations(
-      (prev) =>
-        prev?.map((debtRelation) =>
-          debtRelation.id === debtRelationId ? { ...debtRelation, status } : debtRelation
-        ) ?? []
-    );
-
-    // DB の更新
-    try {
-      const debtRelationService = new DebtRelationService();
-      await debtRelationService.updateDebtRelation(debtRelationId, {
-        status,
-        paid_at: status === 'completed' ? new Date().toISOString() : null,
-      });
-      toast(
-        status === 'completed' ? '支払いを"完了"に変更しました' : '支払いを"未完了"に変更しました',
-        { type: 'success' }
-      );
-    } catch (error) {
-      toast(`ステータスの更新に失敗しました\n${error}`, { type: 'error' });
-    }
-  };
+  // updateDebtRelationStatusは未実装。必要に応じてAPI経由で実装してください。
 
   return (
     <div className="mt-6 flex flex-col justify-center font-geist">
