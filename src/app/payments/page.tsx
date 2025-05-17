@@ -5,7 +5,7 @@ import Loading from '@/components/common/loading';
 import Card from '@/app/payments/card';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-import { ExpandedPayment } from '@/types/payment';
+import { ExpandedPayment } from '@/shared/types/payment';
 import { getPaymentsUseCase } from '@/features/payment/application/getPayments';
 
 export default function Page() {

@@ -1,7 +1,7 @@
 // 支払い作成ユースケース（アプリケーション層）
 import { paymentRepository } from '../infra/PaymentRepositorySupabase';
 import { debtRelationRepository } from '../infra/DebtRelationRepositorySupabase';
-import { PaymentCreate, Billing } from '@/shared/types/payment';
+// import { PaymentCreate, Billing } from '@/shared/types/payment';
 
 export async function createPaymentUseCase(input: {
   title: string;

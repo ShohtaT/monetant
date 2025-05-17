@@ -17,10 +17,10 @@ export async function getPaymentsUseCase(currentUserId: number): Promise<Payment
 
   // 簡易実装: 自分が作成した支払いのみ返す
   const awaiting_payments: ExpandedPayment[] = myPayments
-    .filter((p: any) => p.status === 'awaiting')
-    .map((p: any) => ({ ...p, creator_name: 'Unknown' }));
+    .filter((p: ExpandedPayment) => p.status === 'awaiting')
+    .map((p: ExpandedPayment) => ({ ...p, creator_name: 'Unknown' }));
   const completed_payments: ExpandedPayment[] = myPayments
-    .filter((p: any) => p.status === 'completed')
-    .map((p: any) => ({ ...p, creator_name: 'Unknown' }));
+    .filter((p: ExpandedPayment) => p.status === 'completed')
+    .map((p: ExpandedPayment) => ({ ...p, creator_name: 'Unknown' }));
   return { awaiting_payments, completed_payments };
 }

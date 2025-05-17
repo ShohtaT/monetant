@@ -1,8 +1,8 @@
 // 支払い詳細取得ユースケース
 import { paymentRepository } from '../infra/PaymentRepositorySupabase';
 import { DebtRelationRepositorySupabase } from '../infra/DebtRelationRepositorySupabase';
-import { Payment } from '@/shared/types/payment';
-import { DebtRelation, DebtRelationsResponse } from '@/shared/types/debtRelation';
+// import { Payment } from '@/shared/types/payment';
+// import { DebtRelation, DebtRelationsResponse } from '@/shared/types/debtRelation';
 
 export async function getPaymentDetailUseCase(
   paymentId: number

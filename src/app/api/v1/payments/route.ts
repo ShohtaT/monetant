@@ -1,4 +1,3 @@
-// 支払い作成APIエンドポイント（API層）
 import { createPaymentUseCase } from '@/features/payment/application';
 
 export async function POST(req: Request) {

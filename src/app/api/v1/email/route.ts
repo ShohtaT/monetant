@@ -1,9 +1,9 @@
 import nodemailer from 'nodemailer';
 import { NextResponse } from 'next/server';
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const { to, subject, text, html } = await request.json();
+    const { to, subject, text, html } = await req.json();
 
     // SMTPトランスポートの設定
     const transporter = nodemailer.createTransport({
