@@ -1,15 +1,9 @@
 import { NextRequest } from 'next/server';
-import { cookies } from 'next/headers';
-import { createServerClient } from '@supabase/ssr';
+import { supabaseClient } from '@/shared/lib/supabaseClient';
 
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { cookies }
-  );
-  const { error, data } = await supabase.auth.signInWithPassword({ email, password });
+  const { error, data } = await supabaseClient.auth.signInWithPassword({ email, password });
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 401 });
   }

@@ -1,20 +1,10 @@
-// src/app/api/auth/session/route.ts
-import { cookies } from 'next/headers';
-import { createServerClient } from '@supabase/ssr';
+import { supabaseClient } from "@/shared/lib/supabaseClient";
 
 export async function GET() {
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies,
-    }
-  );
-  
   const {
     data: { session },
     error,
-  } = await supabase.auth.getSession();
+  } = await supabaseClient.auth.getSession();
   
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 401 });
