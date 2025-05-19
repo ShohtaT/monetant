@@ -7,6 +7,7 @@ export interface Payment {
   note?: string;
   status: 'awaiting' | 'completed';
   creator_id: number;
+  creator?: User;
   payment_at?: string;
   created_at?: string;
   updated_at?: string;
