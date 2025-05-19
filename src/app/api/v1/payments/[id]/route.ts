@@ -1,5 +1,5 @@
-import {getPaymentDetailUseCase} from "@/features/payment/application";
-import {deletePaymentUseCase} from "@/features/payment/application/deletePayment";
+import {getPaymentDetailUseCase} from "src/features/payment/usecase";
+import {deletePaymentUseCase} from "@/features/payment/usecase/deletePayment";
 
 export async function GET({ params }: { params: { id: string } }) {
   const paymentId = Number(params.id);

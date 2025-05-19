@@ -6,7 +6,7 @@ import Card from '@/app/payments/card';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { ExpandedPayment } from '@/shared/types/payment';
-import { getPaymentsUseCase } from '@/features/payment/application/getPayments';
+import { getPaymentsUseCase } from '@/features/payment/usecase/getPayments';
 
 export default function Page() {
   const router = useRouter();

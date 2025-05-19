@@ -4,7 +4,7 @@
 // import { useParams, useRouter } from 'next/navigation';
 // import Loading from '@/components/common/loading';
 // import Card from '@/app/payments/[id]/card';
-// import { getPaymentDetailUseCase } from '@/features/payment/application/getPaymentDetail';
+// import { getPaymentDetailUseCase } from '@/features/payment/usecase/getPaymentDetail';
 
 export default function Page() {
   // const router = useRouter();

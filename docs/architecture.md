@@ -38,9 +38,9 @@ src/
 │
 ├── features/           # 機能単位でまとめたユースケース・ドメイン
 │   └── payment/
-│       ├── application/ # ユースケース（サービス）
-│       ├── domain/      # エンティティ・ドメインサービス
-│       └── infra/       # リポジトリ実装（Supabase等）
+│       ├── usecase/    # ユースケース（サービス）
+│       ├── domain/     # エンティティ・ドメインサービス
+│       └── infra/      # リポジトリ実装（Supabase等）
 │
 ├── shared/             # 共通型・ユーティリティ
 │   ├── types/
@@ -99,7 +99,7 @@ export default function NewPaymentPage() {
 
 ```typescript
 // src/app/api/payment/route.ts
-import { createPaymentUseCase } from '@/features/payment/application/createPayment';
+import { createPaymentUseCase } from '@/features/payment/usecase/createPayment';
 
 export async function POST(req: Request) {
   const { title, amount } = await req.json();
@@ -108,7 +108,7 @@ export async function POST(req: Request) {
 }
 ```
 
-### 3.3 Application層（UseCase, `src/features/*/application/`）
+### 3.3 Application層（UseCase, `src/features/*/usecase/`）
 
 - ユースケース（アプリケーションサービス）を実装
 - ドメイン層とインフラ層の橋渡し
@@ -117,7 +117,7 @@ export async function POST(req: Request) {
 **例：支払い作成ユースケース**
 
 ```typescript
-// src/features/payment/application/createPayment.ts
+// src/features/payment/usecase/createPayment.ts
 import { Payment } from '../domain/Payment';
 import { paymentRepository } from '../infra/PaymentRepositorySupabase';
 

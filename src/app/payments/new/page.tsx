@@ -53,7 +53,7 @@ export default function Page() {
     try {
       await fetch('/api/v1/payments', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'usecase/json' },
         body: JSON.stringify({
           title,
           amount: totalAmount,

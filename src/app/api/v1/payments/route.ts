@@ -1,4 +1,4 @@
-import { createPaymentUseCase, getPaymentsUseCase } from '@/features/payment/application';
+import { createPaymentUseCase, getPaymentsUseCase } from 'src/features/payment/usecase';
 
 export async function POST(req: Request) {
   const { title, amount, paymentDate, billings, note, creator_id } = await req.json();
