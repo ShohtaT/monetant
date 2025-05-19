@@ -21,15 +21,6 @@ export interface PaymentCreate {
   creator_id: number;
 }
 
-export interface ExpandedPayment extends Payment {
-  creator_name: string;
-}
-
-export interface PaymentList {
-  awaiting_payments: ExpandedPayment[];
-  completed_payments: ExpandedPayment[];
-}
-
 export interface Billing {
   user: User | null;
   splitAmount: number;
