@@ -1,37 +1,18 @@
-// 支払い作成ユースケース（アプリケーション層）
-import { paymentRepository } from '../infra/PaymentRepositorySupabase';
-import { debtRelationRepository } from '../infra/DebtRelationRepositorySupabase';
-// import { PaymentCreate, Billing } from '@/shared/types/payment';
+import {supabaseClient} from "@/shared/lib/supabaseClient";
 
-export async function createPaymentUseCase(input: {
+type CreatePayment = {
   title: string;
   amount: number;
-  paymentDate: string;
-  billings: Billing[];
   note?: string;
+  status: 'awaiting' | 'completed';
+  payment_at: string;
   creator_id: number;
-}) {
-  // Payment作成
-  await paymentRepository.createPayment({
-    title: input.title,
-    amount: input.amount,
-    note: input.note,
-    status: 'awaiting',
-    creator_id: input.creator_id,
-    payment_at: input.paymentDate,
-  });
-  const newPayment = await paymentRepository.getLastPayment();
-  if (!newPayment) throw new Error('Payment作成失敗');
+}
 
-  // DebtRelation作成
-  for (const billing of input.billings) {
-    if (!billing.user) continue;
-    await debtRelationRepository.createDebtRelation({
-      payment_id: newPayment.id,
-      payee_id: billing.user.id,
-      status: 'awaiting',
-      split_amount: billing.splitAmount,
-    });
-  }
-  return newPayment;
+export async function createPaymentUseCase(input: CreatePayment) {
+  const { data, error } = await supabaseClient.from('Payments').insert([]);
+  if (error) throw error;
+
+  const { data, error } = await supabaseClient.from('DebtRelation').insert([]);
+  if (error) throw error;
 }
