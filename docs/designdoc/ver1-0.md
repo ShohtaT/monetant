@@ -42,10 +42,11 @@
 
 ## アプリケーション構成
 
-| supabase | 認証 |
-| --- | --- |
-| postgreSQL | DB |
-| vercel | インフラ |
+| 技術                  | 用途       |
+|---------------------|----------|
+| supabase            | 認証       |
+| postgreSQL          | DB       |
+| vercel              | インフラ     |
 | Nextjs（+ AppRouter） | アプリケーション |
 
 ```mermaid
@@ -104,8 +105,9 @@
 - Users：ユーザー
 
 
-    | id | PK | int |  |
+    | column | | type |  |
     | --- | --- | --- | --- |
+    | id | PK | int |  |
     | auth_id | unique | int | supabaseのauthenticationのIDを保持する |
     | email | unique | string |  |
     | nickname |  | string |  |
@@ -114,8 +116,9 @@
 - Payments：1回の支払い
 
 
-    | id | PK | int |  |
+    | column | | type |  |
     | --- | --- | --- | --- |
+    | id | PK | int |  |
     | title |  | string |  |
     | amount |  | int | 支払いの総額 |
     | note |  | text |  |
@@ -128,8 +131,9 @@
 - DebtRelations：分割された請求情報
 
 
-    | id | PK | int |  |
+    | column | | type |  |
     | --- | --- | --- | --- |
+    | id | PK | int |  |
     | split_amount |  | int |  |
     | status |  | string |  |
     | payment_id |  | int |  |
@@ -141,15 +145,17 @@
 - Group：ワークスペース的な概念
 
 
-    | id | PK | int |  |
+    | column | | type |  |
     | --- | --- | --- | --- |
+    | id | PK | int |  |
     | uid | unique |  |  |
     | name |  |  |  |
 - GroupUser：グループに所属しているユーザー
 
 
-    | id | PK | int |  |
+    | column | | type |  |
     | --- | --- | --- | --- |
+    | id | PK | int |  |
     | group_id | FK |  |  |
     | user_id | FK |  |  |
     | nickname |  |  |  |
