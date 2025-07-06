@@ -11,12 +11,6 @@
 ```
 src/
 ├── app/                           # Next.js App Router（ページ呼び出しのみ）
-│   ├── (app)/
-│   │   ├── dashboard/
-│   │   │   └── page.tsx
-│   │   ├── settings/
-│   │   │   └── page.tsx
-│   │   └── layout.tsx
 │   └── auth/
 │       ├── signin/
 │       │   └── page.tsx
