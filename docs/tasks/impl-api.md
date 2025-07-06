@@ -141,8 +141,8 @@
 - [ ] GroupUserRepository interface
 
 #### コマンド実装 (`backend/domains/*/commands/`)
-- [x] signupUserCommand（Supabase認証 + DB保存統合）
-- [x] CreateUserCommand（DB保存のみ）
+- [x] signup（Supabase認証 + DB保存統合）
+  - `src/backend/domains/user/commands/signup.ts` - メイン実装
 - [ ] CreatePaymentCommand
 - [ ] UpdatePaymentCommand
 - [ ] CreateGroupCommand
@@ -195,8 +195,14 @@
 ### テスト
 
 #### ユニットテスト
-- [ ] ドメインエンティティのテスト
-- [ ] コマンド/クエリのテスト
+- [x] ドメインエンティティのテスト
+  - [x] User Entity バリデーションテスト
+- [x] コマンド/クエリのテスト
+  - [x] signup コマンドテスト（Vitest使用）
+    - `src/backend/domains/user/commands/signup.test.ts` - 包括的テストカバレッジ
+    - 正常系：ユーザー作成、レスポンス形式検証
+    - 異常系：重複email、Supabase認証エラー、バリデーションエラー
+    - エッジケース：空白nickname、長すぎるnickname、無効auth_id
 - [ ] バリデーションのテスト
 
 #### 統合テスト
@@ -204,10 +210,13 @@
 - [ ] データベース操作のテスト
 - [ ] 認証フローのテスト
 
-#### E2Eテスト
-- [ ] 支払い作成フロー
-- [ ] グループ作成・招待フロー
-- [ ] 認証フロー
+### 開発環境・ツール
+
+#### テスティングフレームワーク
+- [x] Vitestセットアップ（Jest代替）
+  - より高速で現代的なテスティング環境
+  - TypeScript完全サポート
+  - ESM対応
 
 ### ドキュメント
 - [ ] API仕様書更新（OpenAPI）
