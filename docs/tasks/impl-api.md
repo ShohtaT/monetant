@@ -1,140 +1,203 @@
 # API実装タスクリスト
 
+## アーキテクチャアプローチ
+
+このAPIは**Domain-Driven Design (DDD)**と**CQRS**パターンを採用し、以下の層で構成されます：
+
+- **API Layer**: Next.js API Routesによるリクエスト処理
+- **Domain Layer**: Commands/Queries/Entities/Repository interfaces
+- **Infrastructure Layer**: リポジトリ実装とデータベースアクセス
+
 ## 認証API
 
-### POST /v1/auth/signup
-- [ ] Supabase認証統合
-- [ ] ユーザーレコード作成（auth_id, email, nickname）
+### POST /api/v1/auth/signup
 - [ ] バリデーション（email形式、パスワード強度）
+- [ ] Supabase認証統合（sign up）
+- [ ] ユーザーエンティティ作成（auth_id, email, nickname）
+- [ ] UserRepository保存処理
 - [ ] エラーハンドリング（重複email等）
 
-### POST /v1/auth/login
-- [ ] Supabase認証統合
-- [ ] セッション管理
+### POST /api/v1/auth/login  
 - [ ] バリデーション（必須項目チェック）
+- [ ] Supabase認証統合（sign in）
+- [ ] セッション管理
 - [ ] エラーハンドリング（認証失敗等）
 
-### GET /v1/auth/session
+### GET /api/v1/auth/session
 - [ ] セッション検証
-- [ ] ユーザー情報取得
+- [ ] ユーザー情報取得クエリ
 - [ ] エラーハンドリング（無効セッション等）
 
 ## 支払いAPI
 
-### POST /v1/payments
-- [ ] グループメンバーシップ認可チェック
-- [ ] Payment作成（title, amount, note, creator_id, group_id）
-- [ ] DebtRelations作成（複数レコード一括処理）
+### POST /api/v1/payments
 - [ ] バリデーション（amount > 0、split_amount合計チェック等）
+- [ ] グループメンバーシップ認可チェック
+- [ ] Payment作成コマンド（title, amount, note, creator_id, group_id）
+- [ ] DebtRelations作成コマンド（複数レコード一括処理）
 - [ ] トランザクション処理（Payment + DebtRelations）
 - [ ] エラーハンドリング
 
-### GET /v1/payments/group/:group_id
+### GET /api/v1/payments/group/[group_id]
 - [ ] グループメンバーシップ認可チェック
-- [ ] グループの支払い一覧取得
+- [ ] グループの支払い一覧取得クエリ
 - [ ] 古い順ソート（created_at ASC）
 - [ ] 関連データ取得（creator情報等）
 - [ ] エラーハンドリング
 
-### GET /v1/payments/unpaid
-- [ ] 認証ユーザーの未払い請求取得
-- [ ] DebtRelationsテーブルから抽出（status = unpaid）
+### GET /api/v1/payments/unpaid
+- [ ] 認証ユーザーの未払い請求取得クエリ
+- [ ] DebtRelationsテーブルから抽出（status = AWAITING）
 - [ ] 古い順ソート（created_at ASC）
 - [ ] 関連データ取得（Payment, creator情報等）
 - [ ] エラーハンドリング
 
-### GET /v1/payments/:id
+### GET /api/v1/payments/[id]
 - [ ] グループメンバーシップ認可チェック
-- [ ] Payment詳細取得
-- [ ] DebtDetails一覧取得
+- [ ] Payment詳細取得クエリ
+- [ ] DebtRelations一覧取得
 - [ ] 関連データ取得（creator, repayer情報等）
 - [ ] エラーハンドリング
 
-### PUT /v1/payments/:id
-- [ ] グループメンバーシップ認可チェック
-- [ ] Payment更新（title, amount, note）
-- [ ] DebtRelations更新/削除/追加処理
+### PUT /api/v1/payments/[id]
 - [ ] バリデーション（amount > 0、split_amount合計チェック等）
+- [ ] グループメンバーシップ認可チェック
+- [ ] Payment更新コマンド（title, amount, note）
+- [ ] DebtRelations更新/削除/追加処理
 - [ ] トランザクション処理
 - [ ] エラーハンドリング
 
 ## グループAPI
 
-### POST /v1/groups
-- [ ] Group作成（name, uid生成）
-- [ ] GroupUser作成（作成者を自動追加）
+### POST /api/v1/groups
 - [ ] バリデーション（name必須等）
+- [ ] Group作成コマンド（name, uid生成）
+- [ ] GroupUser作成コマンド（作成者を自動追加）
 - [ ] トランザクション処理
 - [ ] エラーハンドリング
 
-### GET /v1/groups
-- [ ] 認証ユーザーの所属グループ一覧取得
+### GET /api/v1/groups
+- [ ] 認証ユーザーの所属グループ一覧取得クエリ
 - [ ] GroupUserテーブルから抽出
 - [ ] 関連データ取得（Group情報）
 - [ ] エラーハンドリング
 
-### PUT /v1/groups/:id
-- [ ] グループメンバーシップ認可チェック
-- [ ] Group更新（name）
+### PUT /api/v1/groups/[id]
 - [ ] バリデーション（name必須等）
+- [ ] グループメンバーシップ認可チェック
+- [ ] Group更新コマンド（name）
 - [ ] エラーハンドリング
 
-### DELETE /v1/groups/:id/users/:user_id
+### DELETE /api/v1/groups/[id]/users/[user_id]
 - [ ] グループメンバーシップ認可チェック
-- [ ] GroupUserレコード削除
 - [ ] 自分自身の削除防止チェック
+- [ ] GroupUserレコード削除コマンド
 - [ ] エラーハンドリング
 
 ## グループ招待・加入API
 
-### POST /v1/groups/:id/invite
+### POST /api/v1/groups/[id]/invite
 - [ ] グループメンバーシップ認可チェック
 - [ ] 招待トークン生成（JWT or UUID）
 - [ ] 招待URL生成
 - [ ] トークン有効期限設定
 - [ ] エラーハンドリング
 
-### POST /v1/groups/join
+### POST /api/v1/groups/join
 - [ ] 招待トークン検証
 - [ ] グループ存在チェック
 - [ ] 重複参加チェック
-- [ ] GroupUserレコード作成
+- [ ] GroupUserレコード作成コマンド
 - [ ] エラーハンドリング
 
 ## 共通実装タスク
 
-### ドメインエンティティ
-- [ ] User Entity
-- [ ] Payment Entity
-- [ ] DebtRelation Entity
-- [ ] Group Entity
-- [ ] GroupUser Entity
+### ドメインレイヤー実装（DDD）
 
-### リポジトリ実装
-- [ ] UserRepository (Supabase)
-- [ ] PaymentRepository (Supabase)
-- [ ] DebtRelationRepository (Supabase)
-- [ ] GroupRepository (Supabase)
-- [ ] GroupUserRepository (Supabase)
+#### エンティティ (`backend/domains/*/entities/`)
+- [ ] User Entity（ビジネスルール含む）
+- [ ] Payment Entity（支払い総額バリデーション）
+- [ ] DebtRelation Entity（分割金額バリデーション）
+- [ ] Group Entity（UID生成ロジック）
+- [ ] GroupUser Entity（メンバーシップ管理）
 
-### ユースケース実装
-- [ ] 認証関連ユースケース
-- [ ] 支払い関連ユースケース
-- [ ] グループ関連ユースケース
-- [ ] グループ招待・加入ユースケース
+#### リポジトリインタフェース (`backend/domains/*/repositories/`)
+- [ ] UserRepository interface
+- [ ] PaymentRepository interface
+- [ ] DebtRelationRepository interface
+- [ ] GroupRepository interface
+- [ ] GroupUserRepository interface
 
-### インフラ設定
-- [ ] Supabase設定確認
-- [ ] データベーススキーマ確認/更新
+#### コマンド実装 (`backend/domains/*/commands/`)
+- [ ] CreateUserCommand
+- [ ] CreatePaymentCommand
+- [ ] UpdatePaymentCommand
+- [ ] CreateGroupCommand
+- [ ] CreateGroupUserCommand
+- [ ] DeleteGroupUserCommand
+
+#### クエリ実装 (`backend/domains/*/queries/`)
+- [ ] GetUserByIdQuery
+- [ ] GetPaymentsByGroupQuery
+- [ ] GetUnpaidPaymentsQuery
+- [ ] GetPaymentByIdQuery
+- [ ] GetGroupsByUserQuery
+
+### インフラストラクチャレイヤー実装
+
+#### リポジトリ実装 (`backend/infrastructure/database/repositories/`)
+- [ ] PrismaUserRepository
+- [ ] PrismaPaymentRepository
+- [ ] PrismaDebtRelationRepository
+- [ ] PrismaGroupRepository
+- [ ] PrismaGroupUserRepository
+
+#### データベース設定
+- [ ] Prismaスキーマ確認/更新
+- [ ] データベース接続確認（Supabase PostgreSQL）
 - [ ] 環境変数設定
-- [ ] CORS設定
+
+#### 外部サービス統合
+- [ ] Supabase認証クライアント設定
+- [ ] セッション管理設定
+
+### API層実装
+
+#### バリデーション (`backend/utils/validation.ts`)
+- [ ] 認証リクエストバリデーション
+- [ ] 支払い作成バリデーション
+- [ ] グループ作成バリデーション
+- [ ] 共通バリデーションヘルパー
+
+#### エラーハンドリング (`backend/utils/errors.ts`)
+- [ ] ドメインエラー定義
+- [ ] HTTPエラーレスポンス標準化
+- [ ] エラーロギング設定
+
+#### 認可機能
+- [ ] セッション検証ミドルウェア
+- [ ] グループメンバーシップチェック
+- [ ] 権限チェックヘルパー
 
 ### テスト
-- [ ] ユニットテスト（ユースケース層）
-- [ ] 統合テスト（API層）
-- [ ] E2Eテスト（主要フロー）
+
+#### ユニットテスト
+- [ ] ドメインエンティティのテスト
+- [ ] コマンド/クエリのテスト
+- [ ] バリデーションのテスト
+
+#### 統合テスト
+- [ ] API エンドポイントのテスト
+- [ ] データベース操作のテスト
+- [ ] 認証フローのテスト
+
+#### E2Eテスト
+- [ ] 支払い作成フロー
+- [ ] グループ作成・招待フロー
+- [ ] 認証フロー
 
 ### ドキュメント
-- [ ] API仕様書更新
+- [ ] API仕様書更新（OpenAPI）
 - [ ] エラーコード定義
 - [ ] 認証・認可仕様書
+- [ ] DDDアーキテクチャドキュメント
