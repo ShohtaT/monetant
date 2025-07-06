@@ -1,24 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { signup } from '@/backend/domains/user/commands/signup';
+import { PrismaUserRepository } from '@/backend/infrastructure/database/repositories/PrismaUserRepository';
 import { authSignupSchema } from '@/backend/utils/validation';
 import { handleApiError } from '@/backend/utils/errors';
-import { supabaseClient } from '@/backend/infrastructure/external/supabase';
+import { AuthSignupResponse, toUserResponse } from '@/backend/domains/user/entities/UserResponse';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    const userRepository = new PrismaUserRepository();
+    
     const body = await request.json();
     const validatedData = authSignupSchema.parse(body);
-    
-    // Supabaseクライアントのテスト（実際の認証は行わない）
-    const supabaseTest = supabaseClient ? 'Supabase client available' : 'Supabase client not available';
-    
-    return NextResponse.json(
-      {
-        message: 'Signup endpoint with Supabase is working',
-        validatedData,
-        supabaseTest
-      },
-      { status: 200 }
-    );
+    const result = await signup(validatedData, userRepository);
+
+    const response: AuthSignupResponse = {
+      user: toUserResponse(result.user),
+    };
+
+    return NextResponse.json(response, { status: 201 });
   } catch (error) {
     const errorResponse = handleApiError(error);
     return NextResponse.json(
