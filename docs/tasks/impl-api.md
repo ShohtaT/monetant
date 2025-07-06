@@ -10,12 +10,22 @@
 
 ## 認証API
 
-### POST /api/v1/auth/signup
-- [ ] バリデーション（email形式、パスワード強度）
-- [ ] Supabase認証統合（sign up）
-- [ ] ユーザーエンティティ作成（auth_id, email, nickname）
-- [ ] UserRepository保存処理
-- [ ] エラーハンドリング（重複email等）
+### POST /api/v1/auth/signup ✅ 完了
+- [x] バリデーション（email形式、パスワード強度）
+  - `src/backend/utils/validation.ts` - zodを使用したスキーマ検証（型安全）
+- [x] Supabase認証統合（sign up）
+  - `src/backend/infrastructure/external/supabase.ts` - Supabaseクライアント設定
+- [x] ユーザーエンティティ作成（auth_id, email, nickname）
+  - `src/backend/domains/user/entities/User.ts` - Userドメインエンティティ
+  - `src/backend/domains/user/entities/UserRequest.ts` - リクエスト型定義
+  - `src/backend/domains/user/entities/UserResponse.ts` - レスポンス型定義
+- [x] UserRepository保存処理
+  - `src/backend/domains/user/repositories/UserRepository.ts` - リポジトリインターフェース
+  - `src/backend/infrastructure/database/repositories/PrismaUserRepository.ts` - Prisma実装
+- [x] エラーハンドリング（重複email等）
+  - `src/backend/utils/errors.ts` - エラークラス定義（Zod統合）
+  - `src/backend/domains/user/commands/createUser.ts` - signupUserコマンド実装
+  - `src/app/api/v1/auth/signup/route.ts` - 薄いAPI Route実装（型安全）
 
 ### POST /api/v1/auth/login  
 - [ ] バリデーション（必須項目チェック）
@@ -115,21 +125,24 @@
 ### ドメインレイヤー実装（DDD）
 
 #### エンティティ (`backend/domains/*/entities/`)
-- [ ] User Entity（ビジネスルール含む）
+- [x] User Entity（ビジネスルール含む）
+- [x] UserRequest（AuthSignupRequest, AuthLoginRequest）
+- [x] UserResponse（UserResponse, AuthSignupResponse, toUserResponse関数）
 - [ ] Payment Entity（支払い総額バリデーション）
 - [ ] DebtRelation Entity（分割金額バリデーション）
 - [ ] Group Entity（UID生成ロジック）
 - [ ] GroupUser Entity（メンバーシップ管理）
 
 #### リポジトリインタフェース (`backend/domains/*/repositories/`)
-- [ ] UserRepository interface
+- [x] UserRepository interface
 - [ ] PaymentRepository interface
 - [ ] DebtRelationRepository interface
 - [ ] GroupRepository interface
 - [ ] GroupUserRepository interface
 
 #### コマンド実装 (`backend/domains/*/commands/`)
-- [ ] CreateUserCommand
+- [x] signupUserCommand（Supabase認証 + DB保存統合）
+- [x] CreateUserCommand（DB保存のみ）
 - [ ] CreatePaymentCommand
 - [ ] UpdatePaymentCommand
 - [ ] CreateGroupCommand
@@ -146,33 +159,33 @@
 ### インフラストラクチャレイヤー実装
 
 #### リポジトリ実装 (`backend/infrastructure/database/repositories/`)
-- [ ] PrismaUserRepository
+- [x] PrismaUserRepository
 - [ ] PrismaPaymentRepository
 - [ ] PrismaDebtRelationRepository
 - [ ] PrismaGroupRepository
 - [ ] PrismaGroupUserRepository
 
 #### データベース設定
-- [ ] Prismaスキーマ確認/更新
-- [ ] データベース接続確認（Supabase PostgreSQL）
-- [ ] 環境変数設定
+- [x] Prismaスキーマ確認/更新
+- [x] データベース接続確認（Supabase PostgreSQL）
+- [x] 環境変数設定
 
 #### 外部サービス統合
-- [ ] Supabase認証クライアント設定
+- [x] Supabase認証クライアント設定
 - [ ] セッション管理設定
 
 ### API層実装
 
 #### バリデーション (`backend/utils/validation.ts`)
-- [ ] 認証リクエストバリデーション
+- [x] 認証リクエストバリデーション（signup/login）- 型安全なZodスキーマ
 - [ ] 支払い作成バリデーション
 - [ ] グループ作成バリデーション
 - [ ] 共通バリデーションヘルパー
 
 #### エラーハンドリング (`backend/utils/errors.ts`)
-- [ ] ドメインエラー定義
-- [ ] HTTPエラーレスポンス標準化
-- [ ] エラーロギング設定
+- [x] ドメインエラー定義
+- [x] HTTPエラーレスポンス標準化
+- [x] エラーロギング設定
 
 #### 認可機能
 - [ ] セッション検証ミドルウェア
