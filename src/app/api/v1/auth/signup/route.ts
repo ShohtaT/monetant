@@ -1,30 +1,28 @@
-import { NextRequest } from 'next/server';
-import { supabaseClient } from '@/shared/lib/supabaseClient';
+import { NextRequest, NextResponse } from 'next/server';
+import { signup } from '@/backend/domains/user/commands/signup';
+import { PrismaUserRepository } from '@/backend/infrastructure/database/repositories/PrismaUserRepository';
+import { authSignupSchema } from '@/backend/utils/validation';
+import { handleApiError } from '@/backend/utils/errors';
+import { AuthSignupResponse, toUserResponse } from '@/backend/domains/user/entities/UserResponse';
 
-export async function POST(req: NextRequest) {
-  const { email, password, nickname } = await req.json();
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  try {
+    const userRepository = new PrismaUserRepository();
+    
+    const body = await request.json();
+    const validatedData = authSignupSchema.parse(body);
+    const result = await signup(validatedData, userRepository);
 
-  // SignUp @ref https://supabase.com/docs/reference/javascript/auth-signup
-  const { error: signUpError, data: signUpData } = await supabaseClient.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { nickname },
-    },
-  });
-  if (signUpError || !signUpData.user) {
-    return new Response(JSON.stringify({ error: signUpError?.message || 'Sign up failed' }), {
-      status: 400,
-    });
+    const response: AuthSignupResponse = {
+      user: toUserResponse(result.user),
+    };
+
+    return NextResponse.json(response, { status: 201 });
+  } catch (error) {
+    const errorResponse = handleApiError(error);
+    return NextResponse.json(
+      { error: errorResponse.error, code: errorResponse.code },
+      { status: errorResponse.status }
+    );
   }
-
-  // Create User
-  const { error: insertError } = await supabaseClient
-    .from('Users')
-    .insert([{ auth_id: signUpData.user.id, nickname, email }]);
-  if (insertError) {
-    return new Response(JSON.stringify({ error: insertError.message }), { status: 400 });
-  }
-
-  return new Response(JSON.stringify({ user: signUpData.user }), { status: 200 });
 }
