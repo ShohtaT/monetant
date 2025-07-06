@@ -24,7 +24,7 @@
   - `src/backend/infrastructure/database/repositories/PrismaUserRepository.ts` - Prisma実装
 - [x] エラーハンドリング（重複email等）
   - `src/backend/utils/errors.ts` - エラークラス定義（Zod統合）
-  - `src/backend/domains/user/commands/createUser.ts` - signupUserコマンド実装
+  - `src/backend/domains/user/commands/signup.ts` - signupUserコマンド実装
   - `src/app/api/v1/auth/signup/route.ts` - 薄いAPI Route実装（型安全）
 
 ### POST /api/v1/auth/login  

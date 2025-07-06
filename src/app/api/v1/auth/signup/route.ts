@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { signupUser } from '@/backend/domains/user/commands/createUser';
+import { signup } from '@/backend/domains/user/commands/signup';
 import { PrismaUserRepository } from '@/backend/infrastructure/database/repositories/PrismaUserRepository';
 import { authSignupSchema } from '@/backend/utils/validation';
 import { handleApiError } from '@/backend/utils/errors';
@@ -11,7 +11,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json();
     const validatedData = authSignupSchema.parse(body);
-    const result = await signupUser(validatedData, userRepository);
+    const result = await signup(validatedData, userRepository);
     
     const response: AuthSignupResponse = { 
       user: toUserResponse(result.user) 

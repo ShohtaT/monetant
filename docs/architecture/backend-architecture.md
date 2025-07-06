@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
 - ビジネスルール検証
 
 ```typescript
-// backend/domains/user/commands/createUser.ts
+// backend/domains/user/commands/signup.ts
 import { User } from '../entities/User';
 import { UserRepository } from '../repositories/UserRepository';
 

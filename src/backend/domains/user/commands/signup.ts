@@ -4,7 +4,7 @@ import { AuthSignupRequest } from '../entities/UserRequest';
 import { DomainError, AuthError } from '../../../utils/errors';
 import { supabaseClient } from '../../../infrastructure/external/supabase';
 
-export async function signupUser(
+export async function signup(
   input: AuthSignupRequest,
   userRepository: UserRepository
 ): Promise<{
