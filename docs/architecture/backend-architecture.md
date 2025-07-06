@@ -25,7 +25,7 @@ src/
     │   ├── user/
     │   │   ├── commands/
     │   │   ├── queries/
-    │   │   ├── entities/
+    │   │   ├── entities/          # User, UserRequest, UserResponse
     │   │   └── repositories/
     │   └── transaction/
     │       ├── commands/
@@ -39,11 +39,9 @@ src/
     │   │   └── repositories/      # リポジトリ実装
     │   └── external/
     │       └── supabase.ts
-    ├── utils/
-    │   ├── errors.ts
-    │   └── validation.ts
-    └── types/
-        └── api.ts
+    └── utils/
+        ├── errors.ts
+        └── validation.ts
 ```
 
 ## 2. 各層の責務
@@ -74,7 +72,7 @@ export async function POST(request: NextRequest) {
 - ビジネスルール検証
 
 ```typescript
-// backend/domains/user/commands/createUser.ts
+// backend/domains/user/commands/signup.ts
 import { User } from '../entities/User';
 import { UserRepository } from '../repositories/UserRepository';
 
@@ -108,31 +106,46 @@ export async function getUserById(
 #### Entities（ドメインエンティティ）
 - ビジネスルール・不変条件
 - ドメインオブジェクト
+- API Request/Response型（DTO）
 
 ```typescript
 // backend/domains/user/entities/User.ts
 export class User {
   private constructor(
-    public readonly id: string,
+    public readonly id: number,
+    public readonly auth_id: string,
     public readonly email: string,
-    public readonly name: string,
+    public readonly nickname: string,
     public readonly createdAt: Date,
     public readonly updatedAt: Date
   ) {}
   
-  static create(input: CreateUserInput): User {
-    if (!input.email || !input.name) {
-      throw new DomainError('Email and name are required');
+  static create(input: CreateUserInput): Omit<User, 'id' | 'createdAt' | 'updatedAt'> {
+    if (!input.auth_id || !input.email || !input.nickname) {
+      throw new DomainError('Auth ID, email and nickname are required');
     }
     
-    return new User(
-      crypto.randomUUID(),
-      input.email,
-      input.name,
-      new Date(),
-      new Date()
-    );
+    return {
+      auth_id: input.auth_id,
+      email: input.email,
+      nickname: input.nickname.trim(),
+    };
   }
+}
+
+// backend/domains/user/entities/UserResponse.ts
+export interface UserResponse {
+  id: number;
+  email: string;
+  nickname: string;
+}
+
+export function toUserResponse(user: User): UserResponse {
+  return {
+    id: user.id,
+    email: user.email,
+    nickname: user.nickname,
+  };
 }
 ```
 
@@ -181,17 +194,45 @@ export interface UserRepository {
 
 ## 4. 型定義とバリデーション
 
+### ドメインエンティティと型定義
+
 ```typescript
-// backend/types/api.ts
-export interface CreateUserInput {
-  email: string;
-  name: string;
+// backend/domains/user/entities/User.ts
+export class User {
+  // ドメインエンティティの実装
 }
 
+// backend/domains/user/entities/UserRequest.ts
+export interface AuthSignupRequest {
+  email: string;
+  password: string;
+  nickname: string;
+}
+
+// backend/domains/user/entities/UserResponse.ts
+export interface UserResponse {
+  id: number;
+  email: string;
+  nickname: string;
+}
+
+export function toUserResponse(user: User): UserResponse {
+  return {
+    id: user.id,
+    email: user.email,
+    nickname: user.nickname,
+  };
+}
+```
+
+### バリデーション
+
+```typescript
 // backend/utils/validation.ts
-export const userCreateSchema = z.object({
+export const authSignupSchema = z.object({
   email: z.string().email(),
-  name: z.string().min(1).max(100)
+  password: z.string().min(8),
+  nickname: z.string().min(1).max(50)
 });
 ```
 

@@ -164,13 +164,13 @@
 
 ### 認証
 - POST /v1/auth/signup
-  - Request: { email: string, password: string }
-  - Response: { user: User, session: Session }
+  - Request: { email: string, password: string, nickname: string }
+  - Response: { user: User }
 - POST /v1/auth/login
   - Request: { email: string, password: string }
-  - Response: { user: User, session: Session }
+  - Response: { user: User }
 - GET /v1/auth/session
-  - Response: { user: User, session: Session }
+  - Response: { user: User }
 
 ### 支払い
 - POST /v1/payments

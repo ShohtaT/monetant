@@ -1,7 +1,8 @@
-'use client';
-
-import Home from '@/app/payments/page';
-
 export default function Page() {
-  return <Home />;
+  return (
+    <div>
+      <h1>Welcome to Monetant</h1>
+      <p>Split bill application</p>
+    </div>
+  );
 }
