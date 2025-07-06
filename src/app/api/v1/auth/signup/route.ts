@@ -7,7 +7,7 @@ import { AuthSignupResponse, toUserResponse } from '@/backend/domains/user/entit
 
 const userRepository = new PrismaUserRepository();
 
-export async function POST(request: NextRequest): Promise<NextResponse<AuthSignupResponse>> {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json();
     const validatedData = authSignupSchema.parse(body);

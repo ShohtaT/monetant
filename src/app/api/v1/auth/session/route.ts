@@ -1,4 +1,4 @@
-import { supabaseClient } from "@/shared/lib/supabaseClient";
+import { supabaseClient } from "@/backend/infrastructure/external/supabase";
 
 export async function GET() {
   const {
