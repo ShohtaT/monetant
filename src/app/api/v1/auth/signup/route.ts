@@ -5,10 +5,10 @@ import { authSignupSchema } from '@/backend/utils/validation';
 import { handleApiError } from '@/backend/utils/errors';
 import { AuthSignupResponse, toUserResponse } from '@/backend/domains/user/entities/UserResponse';
 
-const userRepository = new PrismaUserRepository();
-
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    const userRepository = new PrismaUserRepository();
+    
     const body = await request.json();
     const validatedData = authSignupSchema.parse(body);
     const result = await signup(validatedData, userRepository);
