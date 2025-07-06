@@ -9,9 +9,9 @@ export class PrismaUserRepository implements UserRepository {
       const user = await prisma.user.findUnique({
         where: { id },
       });
-      
+
       if (!user) return null;
-      
+
       return User.fromDatabase(user);
     } catch {
       throw new DatabaseError('Failed to find user by ID');
@@ -23,9 +23,9 @@ export class PrismaUserRepository implements UserRepository {
       const user = await prisma.user.findUnique({
         where: { auth_id },
       });
-      
+
       if (!user) return null;
-      
+
       return User.fromDatabase(user);
     } catch {
       throw new DatabaseError('Failed to find user by auth ID');
@@ -37,9 +37,9 @@ export class PrismaUserRepository implements UserRepository {
       const user = await prisma.user.findUnique({
         where: { email },
       });
-      
+
       if (!user) return null;
-      
+
       return User.fromDatabase(user);
     } catch {
       throw new DatabaseError('Failed to find user by email');
@@ -51,7 +51,7 @@ export class PrismaUserRepository implements UserRepository {
       const count = await prisma.user.count({
         where: { email },
       });
-      
+
       return count > 0;
     } catch {
       throw new DatabaseError('Failed to check email existence');
@@ -67,7 +67,7 @@ export class PrismaUserRepository implements UserRepository {
           nickname: userInput.nickname,
         },
       });
-      
+
       return User.fromDatabase(user);
     } catch (error) {
       if (error instanceof Error && error.message.includes('Unique constraint')) {

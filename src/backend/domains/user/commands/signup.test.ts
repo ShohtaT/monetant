@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { UserRepository } from '../repositories/UserRepository';
 import { User } from '../entities/User';
+import { AuthSignupRequest } from '../entities/UserRequest';
 import { DomainError, AuthError } from '../../../utils/errors';
 import { signup } from './signup';
 import { supabaseClient } from '../../../infrastructure/external/supabase';
@@ -48,7 +49,7 @@ describe('signup', () => {
 
   it('正常にユーザーを作成できる', async () => {
     // Arrange
-    const input = {
+    const input: AuthSignupRequest = {
       email: 'test@example.com',
       password: 'password123',
       nickname: 'testuser',
@@ -69,9 +70,9 @@ describe('signup', () => {
     vi.mocked(mockUserRepository.save).mockResolvedValue(mockUser);
     mockSignUp.mockResolvedValue({
       error: null,
-      data: { 
+      data: {
         user: mockSupabaseUser,
-        session: null
+        session: null,
       },
     });
 
@@ -92,12 +93,12 @@ describe('signup', () => {
       email: 'test@example.com',
       nickname: 'testuser',
     });
-    expect(result.user).toEqual(mockUser);
+    expect(result).toEqual({ user: mockUser });
   });
 
   it('重複するemailの場合はDomainErrorを投げる', async () => {
     // Arrange
-    const input = {
+    const input: AuthSignupRequest = {
       email: 'test@example.com',
       password: 'password123',
       nickname: 'testuser',
@@ -117,7 +118,7 @@ describe('signup', () => {
 
   it('Supabase認証エラーの場合はAuthErrorを投げる', async () => {
     // Arrange
-    const input = {
+    const input: AuthSignupRequest = {
       email: 'test@example.com',
       password: 'password123',
       nickname: 'testuser',
@@ -128,9 +129,9 @@ describe('signup', () => {
       error: {
         message: 'Invalid email format',
       } as any,
-      data: { 
+      data: {
         user: null,
-        session: null
+        session: null,
       },
     });
 
@@ -146,7 +147,7 @@ describe('signup', () => {
 
   it('Supabaseでユーザーがnullの場合はAuthErrorを投げる', async () => {
     // Arrange
-    const input = {
+    const input: AuthSignupRequest = {
       email: 'test@example.com',
       password: 'password123',
       nickname: 'testuser',
@@ -155,9 +156,9 @@ describe('signup', () => {
     vi.mocked(mockUserRepository.existsByEmail).mockResolvedValue(false);
     mockSignUp.mockResolvedValue({
       error: null,
-      data: { 
+      data: {
         user: null,
-        session: null
+        session: null,
       },
     });
 
@@ -173,7 +174,7 @@ describe('signup', () => {
 
   it('無効なauth_idの場合はDomainErrorを投げる', async () => {
     // Arrange
-    const input = {
+    const input: AuthSignupRequest = {
       email: 'test@example.com',
       password: 'password123',
       nickname: 'testuser',
@@ -193,9 +194,9 @@ describe('signup', () => {
     vi.mocked(mockUserRepository.existsByEmail).mockResolvedValue(false);
     mockSignUp.mockResolvedValue({
       error: null,
-      data: { 
+      data: {
         user: mockSupabaseUser,
-        session: null
+        session: null,
       },
     });
 
@@ -211,7 +212,7 @@ describe('signup', () => {
 
   it('空のnicknameの場合はDomainErrorを投げる', async () => {
     // Arrange
-    const input = {
+    const input: AuthSignupRequest = {
       email: 'test@example.com',
       password: 'password123',
       nickname: '   ', // 空白のみ
@@ -231,9 +232,9 @@ describe('signup', () => {
     vi.mocked(mockUserRepository.existsByEmail).mockResolvedValue(false);
     mockSignUp.mockResolvedValue({
       error: null,
-      data: { 
+      data: {
         user: mockSupabaseUser,
-        session: null
+        session: null,
       },
     });
 
@@ -250,7 +251,7 @@ describe('signup', () => {
   it('長すぎるnicknameの場合はDomainErrorを投げる', async () => {
     // Arrange
     const longNickname = 'a'.repeat(51); // 51文字
-    const input = {
+    const input: AuthSignupRequest = {
       email: 'test@example.com',
       password: 'password123',
       nickname: longNickname,
@@ -270,9 +271,9 @@ describe('signup', () => {
     vi.mocked(mockUserRepository.existsByEmail).mockResolvedValue(false);
     mockSignUp.mockResolvedValue({
       error: null,
-      data: { 
+      data: {
         user: mockSupabaseUser,
-        session: null
+        session: null,
       },
     });
 
@@ -288,7 +289,7 @@ describe('signup', () => {
 
   it('nicknameの前後の空白を除去して保存する', async () => {
     // Arrange
-    const input = {
+    const input: AuthSignupRequest = {
       email: 'test@example.com',
       password: 'password123',
       nickname: '  testuser  ', // 前後に空白
@@ -309,9 +310,9 @@ describe('signup', () => {
     vi.mocked(mockUserRepository.save).mockResolvedValue(mockUser);
     mockSignUp.mockResolvedValue({
       error: null,
-      data: { 
+      data: {
         user: mockSupabaseUser,
-        session: null
+        session: null,
       },
     });
 
@@ -324,6 +325,6 @@ describe('signup', () => {
       email: 'test@example.com',
       nickname: 'testuser', // 空白が除去されている
     });
-    expect(result.user).toEqual(mockUser);
+    expect(result).toEqual({ user: mockUser });
   });
 });

@@ -18,15 +18,15 @@ export class User {
     if (!input.auth_id) {
       throw new DomainError('Auth ID is required', 'INVALID_AUTH_ID');
     }
-    
+
     if (!input.email) {
       throw new DomainError('Email is required', 'INVALID_EMAIL');
     }
-    
+
     if (!input.nickname || input.nickname.trim().length === 0) {
       throw new DomainError('Nickname is required', 'INVALID_NICKNAME');
     }
-    
+
     if (input.nickname.length > 50) {
       throw new DomainError('Nickname must be less than 50 characters', 'INVALID_NICKNAME_LENGTH');
     }

@@ -12,11 +12,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const body = await request.json();
     const validatedData = authSignupSchema.parse(body);
     const result = await signup(validatedData, userRepository);
-    
-    const response: AuthSignupResponse = { 
-      user: toUserResponse(result.user) 
+
+    const response: AuthSignupResponse = {
+      user: toUserResponse(result.user),
     };
-    
+
     return NextResponse.json(response, { status: 201 });
   } catch (error) {
     const errorResponse = handleApiError(error);
