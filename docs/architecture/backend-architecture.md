@@ -52,16 +52,27 @@ src/
 - ドメインレイヤーのCommands/Queriesへの直接呼び出し
 
 ```typescript
-// app/api/v1/users/route.ts
-import { createUser } from '@/backend/domains/user/commands/createUser';
-import { userRepository } from '@/backend/infrastructure/database/repositories/userRepository';
-import { userCreateSchema } from '@/backend/utils/validation';
+// app/api/v1/auth/signup/route.ts
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  try {
+    const userRepository = new PrismaUserRepository();
+    
+    const body = await request.json();
+    const validatedData = authSignupSchema.parse(body);
+    const result = await signup(validatedData, userRepository);
 
-export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const validatedData = userCreateSchema.parse(body);
-  const user = await createUser(validatedData, userRepository);
-  return NextResponse.json({ data: user }, { status: 201 });
+    const response: AuthSignupResponse = {
+      user: toUserResponse(result.user),
+    };
+
+    return NextResponse.json(response, { status: 201 });
+  } catch (error) {
+    const errorResponse = handleApiError(error);
+    return NextResponse.json(
+      { error: errorResponse.error, code: errorResponse.code },
+      { status: errorResponse.status }
+    );
+  }
 }
 ```
 
