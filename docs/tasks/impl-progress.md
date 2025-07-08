@@ -61,22 +61,28 @@
 - Loading.tsxを使った統一されたローディング表示
 - リニューアルされたUIコンポーネントの統合
 - Tailwind CSSの設定修正
+- アーキテクチャ再構成：auth削除、login/signup分離
+- API再構成：/api/v1/auth/{login,signup} → /api/v1/{login,signup}
 
 ## ログイン機能
 
-### API: POST /api/v1/auth/login
-- [ ] バリデーション（必須項目チェック）
-- [ ] Supabase認証統合（sign in）
-- [ ] セッション管理
-- [ ] エラーハンドリング（認証失敗等）
+### API: POST /api/v1/login ✅ 完了
+- [x] バリデーション（必須項目チェック）
+- [x] Supabase認証統合（sign in）
+- [x] セッション管理
+- [x] エラーハンドリング（認証失敗等）
+  - `src/backend/domains/user/commands/login.ts` - loginコマンド実装
+  - `src/app/api/v1/login/route.ts` - API Route実装
 
-### Frontend: ログイン画面
-- [ ] ログインフォーム実装
-  - [ ] react-hook-form + Zod
-  - [ ] 既存UIコンポーネント使用
-- [ ] API連携
-- [ ] エラーハンドリング
-- [ ] ルーティング設定
+### Frontend: ログイン画面 ✅ 完了
+- [x] ログインフォーム実装
+  - [x] react-hook-form + Zod
+  - [x] 既存UIコンポーネント使用
+- [x] API連携
+- [x] エラーハンドリング
+- [x] ルーティング設定
+  - `src/frontend/features/login/` - ログイン機能ディレクトリ
+  - `src/app/login/page.tsx` - Next.js App Router
 
 ### API: GET /api/v1/auth/session
 - [ ] セッション検証
@@ -188,6 +194,8 @@
 #### コマンド実装 (`backend/domains/*/commands/`)
 - [x] signup（Supabase認証 + DB保存統合）
   - `src/backend/domains/user/commands/signup.ts` - メイン実装
+- [x] login（Supabase認証 + DBユーザー取得）
+  - `src/backend/domains/user/commands/login.ts` - メイン実装
 - [ ] CreatePaymentCommand
 - [ ] UpdatePaymentCommand
 - [ ] CreateGroupCommand

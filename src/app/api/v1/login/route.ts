@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { signup } from '@/backend/domains/user/commands/signup';
+import { login } from '@/backend/domains/user/commands/login';
 import { PrismaUserRepository } from '@/backend/infrastructure/database/repositories/PrismaUserRepository';
-import { authSignupSchema } from '@/backend/utils/validation';
+import { authLoginSchema } from '@/backend/utils/validation';
 import { handleApiError } from '@/backend/utils/errors';
-import { AuthSignupResponse, toUserResponse } from '@/backend/domains/user/entities/UserResponse';
+import { AuthLoginResponse, toUserResponse } from '@/backend/domains/user/entities/UserResponse';
 
 /**
- * POST /api/v1/auth/signup
+ * POST /api/v1/login
  * @param request - The incoming Next.js request object.
  * @returns A JSON response containing the user data or an error message.
  */
@@ -15,14 +15,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const userRepository = new PrismaUserRepository();
     
     const body = await request.json();
-    const validatedData = authSignupSchema.parse(body);
-    const result = await signup(validatedData, userRepository);
+    const validatedData = authLoginSchema.parse(body);
+    const result = await login(validatedData, userRepository);
 
-    const response: AuthSignupResponse = {
+    const response: AuthLoginResponse = {
       user: toUserResponse(result.user),
     };
 
-    return NextResponse.json(response, { status: 201 });
+    return NextResponse.json(response, { status: 200 });
   } catch (error) {
     const errorResponse = handleApiError(error);
     return NextResponse.json(

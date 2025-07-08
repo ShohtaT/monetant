@@ -13,7 +13,7 @@
 ## 要件・設計
 
 - **機能要件・技術仕様**: [Version 1.0 設計書](./docs/designdoc/ver1-0.md)
-- **API実装**: [API実装タスク](./docs/tasks/impl-api.md)
+- **API実装**: [API実装タスク](./docs/tasks/impl-progress)
 
 ## 開発を始める
 
