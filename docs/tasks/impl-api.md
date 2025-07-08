@@ -8,9 +8,9 @@
 - **Domain Layer**: Commands/Queries/Entities/Repository interfaces
 - **Infrastructure Layer**: リポジトリ実装とデータベースアクセス
 
-## 認証API
+## サインアップ機能
 
-### POST /api/v1/auth/signup ✅ 完了
+### API: POST /api/v1/auth/signup ✅ 完了
 - [x] バリデーション（email形式、パスワード強度）
   - `src/backend/utils/validation.ts` - zodを使用したスキーマ検証（型安全）
 - [x] Supabase認証統合（sign up）
@@ -26,14 +26,59 @@
   - `src/backend/utils/errors.ts` - エラークラス定義（Zod統合）
   - `src/backend/domains/user/commands/signup.ts` - signupUserコマンド実装
   - `src/app/api/v1/auth/signup/route.ts` - 薄いAPI Route実装（型安全）
+- [x] テスト実装
+  - `src/backend/domains/user/commands/signup.test.ts` - 包括的テストカバレッジ
 
-### POST /api/v1/auth/login  
+### Frontend: サインアップ画面 ✅ 完了
+- [x] フロントエンドアーキテクチャ設定
+  - `src/frontend/features/auth/` - 認証機能専用ディレクトリ
+  - `src/frontend/shared/ui/` - 共通UIコンポーネント
+  - `src/frontend/types/` - 型定義
+- [x] react-hook-form導入
+  - `react-hook-form@7.60.0` - フォーム管理ライブラリ
+  - `@hookform/resolvers@5.1.1` - Zodリゾルバー
+- [x] UIコンポーネント実装
+  - `src/frontend/shared/ui/InputField.tsx` - 入力フィールド（forwardRef対応）
+  - `src/frontend/shared/ui/Button.tsx` - 送信ボタン
+  - `src/frontend/shared/ui/Loading.tsx` - ローディング表示
+- [x] バリデーション実装
+  - `src/frontend/features/auth/validation.ts` - Zodスキーマ（サーバーと同期）
+- [x] API連携
+  - `src/frontend/features/auth/api.ts` - signup API呼び出し
+  - `src/frontend/types/auth.ts` - 型定義
+- [x] フォームコンポーネント実装
+  - `src/frontend/features/auth/components/SignupForm.tsx` - メインフォーム
+  - `src/frontend/features/auth/components/SignupPage.tsx` - ページレイアウト
+- [x] ルーティング設定
+  - `src/app/auth/signup/page.tsx` - Next.js App Router
+- [x] Tailwind CSS設定
+  - `src/app/globals.css` - Tailwindディレクティブ
+  - `tailwind.config.ts` - frontendディレクトリ対応
+
+### やったこと
+- フロントエンドアーキテクチャドキュメントに従った実装
+- react-hook-formとZodを使った型安全なフォーム
+- Loading.tsxを使った統一されたローディング表示
+- リニューアルされたUIコンポーネントの統合
+- Tailwind CSSの設定修正
+
+## ログイン機能
+
+### API: POST /api/v1/auth/login
 - [ ] バリデーション（必須項目チェック）
 - [ ] Supabase認証統合（sign in）
 - [ ] セッション管理
 - [ ] エラーハンドリング（認証失敗等）
 
-### GET /api/v1/auth/session
+### Frontend: ログイン画面
+- [ ] ログインフォーム実装
+  - [ ] react-hook-form + Zod
+  - [ ] 既存UIコンポーネント使用
+- [ ] API連携
+- [ ] エラーハンドリング
+- [ ] ルーティング設定
+
+### API: GET /api/v1/auth/session
 - [ ] セッション検証
 - [ ] ユーザー情報取得クエリ
 - [ ] エラーハンドリング（無効セッション等）
