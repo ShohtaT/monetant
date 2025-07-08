@@ -73,7 +73,7 @@ src/
 // app/(app)/dashboard/page.tsx
 import { DashboardPage } from '@/frontend/features/dashboard/components/DashboardPage';
 
-export const metadata = { title: 'Dashboard | Monetant' };
+export const metadata = { title: 'Dashboard | monetant' };
 export default function Dashboard() {
   return <DashboardPage />;
 }

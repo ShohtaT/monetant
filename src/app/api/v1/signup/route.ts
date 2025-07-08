@@ -6,7 +6,7 @@ import { handleApiError } from '@/backend/utils/errors';
 import { AuthSignupResponse, toUserResponse } from '@/backend/domains/user/entities/UserResponse';
 
 /**
- * POST /api/v1/auth/signup
+ * POST /api/v1/signup
  * @param request - The incoming Next.js request object.
  * @returns A JSON response containing the user data or an error message.
  */
