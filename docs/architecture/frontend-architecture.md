@@ -11,11 +11,10 @@
 ```
 src/
 ├── app/                           # Next.js App Router（ページ呼び出しのみ）
-│   └── auth/
-│       ├── signin/
-│       │   └── page.tsx
-│       └── signup/
-│           └── page.tsx
+│   ├── login/
+│   │   └── page.tsx
+│   └── signup/
+│       └── page.tsx
 └── frontend/                      # フロントエンド専用
     ├── features/                  # 機能別実装
     │   ├── dashboard/
@@ -35,14 +34,20 @@ src/
     │   │   ├── hooks/
     │   │   │   └── useSettings.ts
     │   │   └── api.ts             # 設定機能のAPI関数
-    │   └── auth/
+    │   ├── login/
+    │   │   ├── components/
+    │   │   │   ├── LoginPage.tsx
+    │   │   │   └── LoginForm.tsx
+    │   │   ├── hooks/
+    │   │   │   └── useLogin.ts
+    │   │   └── api.ts             # ログイン機能のAPI関数
+    │   └── signup/
     │       ├── components/
-    │       │   ├── SignInPage.tsx
-    │       │   ├── SignUpPage.tsx
-    │       │   └── SignInForm.tsx
+    │       │   ├── SignupPage.tsx
+    │       │   └── SignupForm.tsx
     │       ├── hooks/
-    │       │   └── useAuth.ts
-    │       └── api.ts             # 認証機能のAPI関数
+    │       │   └── useSignup.ts
+    │       └── api.ts             # サインアップ機能のAPI関数
     ├── shared/                    # 共通コンポーネント・ユーティリティ
     │   ├── ui/                    # Button, Input, Card...
     │   ├── layout/                # Header, Sidebar...
@@ -70,12 +75,12 @@ src/
 - **実装はfrontend/features/配下に移譲**
 
 ```typescript
-// app/(app)/dashboard/page.tsx
-import { DashboardPage } from '@/frontend/features/dashboard/components/DashboardPage';
+// app/login/page.tsx
+import { LoginPage } from '@/frontend/features/login/components/LoginPage';
 
-export const metadata = { title: 'Dashboard | monetant' };
-export default function Dashboard() {
-  return <DashboardPage />;
+export const metadata = { title: 'Sign In | monetant' };
+export default function Login() {
+  return <LoginPage />;
 }
 ```
 
@@ -86,7 +91,8 @@ export default function Dashboard() {
 
 各機能の`api.ts`例：
 - `frontend/features/dashboard/api.ts` - ダッシュボード機能で使用するAPI関数
-- `frontend/features/auth/api.ts` - 認証機能で使用するAPI関数
+- `frontend/features/login/api.ts` - ログイン機能で使用するAPI関数
+- `frontend/features/signup/api.ts` - サインアップ機能で使用するAPI関数
 - `frontend/features/settings/api.ts` - 設定機能で使用するAPI関数
 
 ```typescript

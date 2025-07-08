@@ -163,13 +163,13 @@
 ## API設計
 
 ### 認証
-- POST /v1/auth/signup
+- POST /v1/signup
   - Request: { email: string, password: string, nickname: string }
   - Response: { user: User }
-- POST /v1/auth/login
+- POST /v1/login
   - Request: { email: string, password: string }
   - Response: { user: User }
-- GET /v1/auth/session
+- GET /v1/session
   - Response: { user: User }
 
 ### 支払い
