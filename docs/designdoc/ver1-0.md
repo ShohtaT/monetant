@@ -102,8 +102,7 @@
 
 ## テーブル設計
 
-- Users：ユーザー
-
+-  Users：ユーザー
 
     | column | | type |  |
     | --- | --- | --- | --- |
@@ -111,10 +110,11 @@
     | auth_id | unique | int | supabaseのauthenticationのIDを保持する |
     | email | unique | string |  |
     | nickname |  | string |  |
+    | last_login_at |  | timestamptz | 最後にログインした日時 |
     | created_at |  | timestamptz |  |
     | updated_at |  | timestamptz |  |
-- Payments：1回の支払い
 
+- Payments：1回の支払い
 
     | column | | type |  |
     | --- | --- | --- | --- |
@@ -128,30 +128,29 @@
     | paid_at |  | timestamptz |  |
     | created_at |  | timestamptz |  |
     | updated_at |  | timestamptz |  |
+
 - DebtRelations：分割された請求情報
 
-
-    | column | | type |  |
-    | --- | --- | --- | --- |
-    | id | PK | int |  |
+    | column       | | type |  |
+    |--------------| --- | --- | --- |
+    | id           | PK | int |  |
     | split_amount |  | int |  |
-    | status |  | string |  |
-    | payment_id |  | int |  |
-    | repayer_id | FK | int | ⚠️ payee_id から renameする
-    返済する人。Userとの外部キー。 |
-    | paid_at |  | timestamptz |  |
-    | created_at |  | timestamptz |  |
-    | updated_at |  | timestamptz |  |
-- Group：ワークスペース的な概念
+    | status       |  | string |  |
+    | payment_id   |  | int |  |
+    | debtor_id    | FK | int | ⚠️ 以前の仕様 payee_id から renameする返済する人。Userとの外部キー。 |
+    | paid_at      |  | timestamptz |  |
+    | created_at   |  | timestamptz |  |
+    | updated_at   |  | timestamptz |  |
 
+- Group：ワークスペース的な概念（セカンドスコープで実装する）
 
     | column | | type |  |
     | --- | --- | --- | --- |
     | id | PK | int |  |
     | uid | unique |  |  |
     | name |  |  |  |
-- GroupUser：グループに所属しているユーザー
 
+- GroupUser：グループに所属しているユーザー（セカンドスコープで実装する）
 
     | column | | type |  |
     | --- | --- | --- | --- |
@@ -172,7 +171,7 @@
 
 ### 支払い
 - POST /v1/payments
-  - Request: { title: string, amount: number, note?: string, payer_id: number, group_id: number, debt_details: { repayer_id: number, split_amount: number }[] }
+  - Request: { title: string, amount: number, note?: string, payer_id: number, group_id: number, debt_details: { debtor_id: number, split_amount: number }[] }
   - Response: { payment: Payment }
 - GET /v1/payments/group/:group_id
   - Response: { payments: Payment[] }
@@ -183,7 +182,7 @@
 - GET /v1/payments/:id
   - Response: { payment: Payment, debt_details: DebtDetail[] }
 - PUT /v1/payments/:id
-  - Request: { title?: string, amount?: number, note?: string, debt_details?: { id?: number, repayer_id: number, split_amount: number }[] }
+  - Request: { title?: string, amount?: number, note?: string, debt_details?: { id?: number, debtor_id: number, split_amount: number }[] }
   - Response: { payment: Payment }
 
 ### グループ

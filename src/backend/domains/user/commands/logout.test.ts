@@ -33,9 +33,7 @@ describe('logout', () => {
     (supabaseClient.auth.signOut as any).mockResolvedValue({ error: mockError });
 
     // Act & Assert
-    await expect(logout()).rejects.toThrow(
-      new AuthError('Network error', 'LOGOUT_FAILED')
-    );
+    await expect(logout()).rejects.toThrow(new AuthError('Network error', 'LOGOUT_FAILED'));
     expect(supabaseClient.auth.signOut).toHaveBeenCalledOnce();
   });
 
@@ -46,9 +44,7 @@ describe('logout', () => {
     (supabaseClient.auth.signOut as any).mockResolvedValue({ error: mockError });
 
     // Act & Assert
-    await expect(logout()).rejects.toThrow(
-      new AuthError('Logout failed', 'LOGOUT_FAILED')
-    );
+    await expect(logout()).rejects.toThrow(new AuthError('Logout failed', 'LOGOUT_FAILED'));
     expect(supabaseClient.auth.signOut).toHaveBeenCalledOnce();
   });
 });

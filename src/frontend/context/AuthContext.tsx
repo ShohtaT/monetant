@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { useRouter, usePathname } from 'next/navigation';
 import { supabaseClient } from '@/backend/infrastructure/external/supabase';
 import type { User } from '@supabase/supabase-js';
-import Loading from "@/frontend/shared/ui/Loading";
+import Loading from '@/frontend/shared/ui/Loading';
 import { logout as logoutApi } from '@/frontend/features/logout/api';
 
 interface AuthContextType {
@@ -39,7 +39,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     // Get initial session
     const getInitialSession = async () => {
-      const { data: { session } } = await supabaseClient.auth.getSession();
+      const {
+        data: { session },
+      } = await supabaseClient.auth.getSession();
       setUser(session?.user ?? null);
       setLoading(false);
     };
@@ -47,12 +49,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     getInitialSession();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
-      async (event, session) => {
-        setUser(session?.user ?? null);
-        setLoading(false);
-      }
-    );
+    const {
+      data: { subscription },
+    } = supabaseClient.auth.onAuthStateChange(async (event, session) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
 
     return () => subscription.unsubscribe();
   }, []);
@@ -61,7 +63,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Redirect logic
     if (!loading) {
       const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
-      
+
       if (!user && !isPublicRoute) {
         // User is not authenticated and trying to access a protected route
         router.push('/login');
@@ -101,28 +103,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Don't render children until authentication check is complete and redirects are handled
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
-  
+
   // If user is not authenticated and trying to access protected route, show loading
   if (!user && !isPublicRoute) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loading/>
+        <Loading />
       </div>
     );
   }
-  
+
   // If user is authenticated and on a public route, show loading during redirect
   if (user && isPublicRoute) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loading/>
+        <Loading />
       </div>
     );
   }
-  
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -15,10 +15,10 @@ export const SignupPage: React.FC = () => {
             Join monetant to start tracking your finances
           </p>
         </div>
-        
+
         <div className="mt-8 space-y-6">
           <SignupForm />
-          
+
           <div className="text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{' '}

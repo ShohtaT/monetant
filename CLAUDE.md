@@ -93,20 +93,47 @@ src/
 
 ### Domain Entity Pattern
 ```typescript
-export class User {
+export interface CreatePaymentInput {
+  title: string;
+  amount: number;
+  note?: string;
+  status?: string;      // Optional, defaults to 'AWAITING'
+  creatorId: number;
+  paidAt?: Date;        // Optional, defaults to current time
+}
+
+export class Payment {
   private constructor(
     public readonly id: number,
-    public readonly authId: string,
-    public readonly email: string,
-    public readonly nickname: string,
-    public readonly lastLoginAt: Date | null,
+    public readonly title: string,
+    public readonly amount: number,
+    public readonly note: string | null,
+    public readonly status: string,
+    public readonly creatorId: number,
+    public readonly paidAt: Date,
     public readonly createdAt: Date,
     public readonly updatedAt: Date
   ) {}
 
-  static create(data: CreateUserData): User {
+  static create(input: CreatePaymentInput): Omit<Payment, 'id' | 'paidAt' | 'createdAt' | 'updatedAt'> {
     // Validation and business rules
-    return new User(...);
+    if (!input.title.trim()) {
+      throw new Error('Title is required');
+    }
+    if (input.amount <= 0) {
+      throw new Error('Amount must be greater than 0');
+    }
+    return {
+      title: input.title.trim(),
+      amount: input.amount,
+      note: input.note?.trim() || null,
+      status: input.status || 'AWAITING',
+      creatorId: input.creatorId,
+    };
+  }
+
+  static fromDatabase(data: any): Payment {
+    return new Payment(...data);
   }
 }
 ```
@@ -125,11 +152,25 @@ export async function commandName(params: CommandParams): Promise<Result> {
 ### Repository Pattern
 ```typescript
 export interface UserRepository {
-  create(user: CreateUserData): Promise<User>;
-  findByAuthId(authId: string): Promise<User | null>;
-  updateLastLogin(authId: string): Promise<void>;
+  save(user: CreateUserInput): Promise<User>;
+  findById(id: number): Promise<User | null>;        // Single record
+  findByAuthId(authId: string): Promise<User | null>; // Single record
+  updateLastLogin(id: number): Promise<User>;
+}
+
+export interface DebtRelationRepository {
+  saveMany(debtRelations: CreateDebtRelationInput[]): Promise<DebtRelation[]>;
+  fetchByPaymentId(paymentId: number): Promise<DebtRelation[]>; // Multiple records
 }
 ```
+
+### Repository Naming Conventions
+- **Single record retrieval**: `findById`, `findByEmail`, etc.
+- **Multiple record retrieval**: `fetchByPaymentId`, `fetchByUserId`, etc.
+- **Existence check**: `existsByEmail`, `existsById`, etc.
+- **Create operations**: `save`, `saveMany`
+- **Update operations**: `update`, `updateLastLogin`, etc.
+- **Delete operations**: `delete`, `deleteById`, etc.
 
 ### API Route Pattern
 ```typescript
@@ -301,6 +342,48 @@ const ErrorMessage = () => (
   </div>
 );
 ```
+
+## Implementation Status
+
+### Completed Features ✅
+- User registration and login with Supabase integration
+- Authentication context with automatic redirects
+- Last login tracking (updated on each login)
+- Logout API with fallback mechanism
+- Transaction-based signup for data consistency
+- Feature separation (login/signup/logout directories)
+- **Payment creation API** (POST /api/v1/payments)
+- **Debt relation tracking** with split amount validation
+- **Payment validation** ensuring split total equals payment amount
+- **Database transactions** for payment and debt creation consistency
+
+### Current API Endpoints
+- `POST /api/v1/signup` - User registration
+- `POST /api/v1/login` - User authentication  
+- `POST /api/v1/logout` - User logout
+- `POST /api/v1/payments` - Create payment with debt relations
+
+### Pending Features 📋
+- Session validation API (`GET /api/v1/auth/session`)
+- Payment retrieval APIs:
+  - `GET /api/v1/payments/group/[group_id]` - Group payments
+  - `GET /api/v1/payments/unpaid` - User's unpaid debts
+  - `GET /api/v1/payments/[id]` - Payment details
+- Payment management:
+  - `PUT /api/v1/payments/[id]` - Update payment
+  - Payment cancellation functionality
+- Debt settlement:
+  - Mark debts as paid
+  - Payment history tracking
+- Group management (future scope)
+- Group invitations (future scope)
+
+### Database Schema
+- `users` - User profiles with Supabase auth integration
+- `payments` - Payment records with creator relationship
+  - Status: `AWAITING` (default), `COMPLETED`
+- `debt_relations` - Individual debt tracking with debtor relationship  
+  - Status: `AWAITING` (default), `COMPLETED`
 
 ## Notes for Claude
 

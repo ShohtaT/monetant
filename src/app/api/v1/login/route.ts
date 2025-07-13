@@ -13,7 +13,7 @@ import { AuthLoginResponse, toUserResponse } from '@/backend/domains/user/entiti
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const userRepository = new PrismaUserRepository();
-    
+
     const body = await request.json();
     const validatedData = authLoginSchema.parse(body);
     const result = await login(validatedData, userRepository);

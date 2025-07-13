@@ -100,13 +100,24 @@
 
 ## 支払いAPI
 
-### POST /api/v1/payments
-- [ ] バリデーション（amount > 0、split_amount合計チェック等）
-- [ ] グループメンバーシップ認可チェック
-- [ ] Payment作成コマンド（title, amount, note, creator_id, group_id）
-- [ ] DebtRelations作成コマンド（複数レコード一括処理）
-- [ ] トランザクション処理（Payment + DebtRelations）
-- [ ] エラーハンドリング
+### POST /api/v1/payments ✅ 完了
+- [x] バリデーション（amount > 0、split_amount合計チェック等）
+  - `src/backend/domains/payment/entities/PaymentRequest.ts` - Zodスキーマ検証
+- [x] Payment作成コマンド（title, amount, note, creator_id）
+  - `src/backend/domains/payment/entities/Payment.ts` - Paymentエンティティ
+  - `src/backend/domains/payment/repositories/PaymentRepository.ts` - リポジトリインターフェース
+  - `src/backend/infrastructure/database/repositories/PrismaPaymentRepository.ts` - Prisma実装
+- [x] DebtRelations作成コマンド（複数レコード一括処理）
+  - `src/backend/domains/payment/entities/DebtRelation.ts` - DebtRelationエンティティ
+  - `src/backend/domains/payment/repositories/DebtRelationRepository.ts` - リポジトリインターフェース
+  - `src/backend/infrastructure/database/repositories/PrismaDebtRelationRepository.ts` - Prisma実装
+- [x] トランザクション処理（Payment + DebtRelations）
+  - `src/backend/domains/payment/commands/createPayment.ts` - 支払い作成コマンド実装
+- [x] エラーハンドリング
+  - `src/app/api/v1/payments/route.ts` - API Route実装
+- [x] データベーススキーマ実装
+  - `prisma/schema.prisma` - PaymentとDebtRelationモデル
+  - `prisma/migrations/20250713064055_add_payments_and_debt_relations/migration.sql` - マイグレーション
 
 ### GET /api/v1/payments/group/[group_id]
 - [ ] グループメンバーシップ認可チェック
@@ -126,7 +137,7 @@
 - [ ] グループメンバーシップ認可チェック
 - [ ] Payment詳細取得クエリ
 - [ ] DebtRelations一覧取得
-- [ ] 関連データ取得（creator, repayer情報等）
+- [ ] 関連データ取得（creator, debtor情報等）
 - [ ] エラーハンドリング
 
 ### PUT /api/v1/payments/[id]
@@ -188,15 +199,16 @@
 - [x] User Entity（ビジネスルール含む）
 - [x] UserRequest（AuthSignupRequest, AuthLoginRequest）
 - [x] UserResponse（UserResponse, AuthSignupResponse, toUserResponse関数）
-- [ ] Payment Entity（支払い総額バリデーション）
-- [ ] DebtRelation Entity（分割金額バリデーション）
+- [x] Payment Entity（支払い総額バリデーション）
+- [x] DebtRelation Entity（分割金額バリデーション）
+- [x] PaymentRequest（CreatePaymentRequest）
 - [ ] Group Entity（UID生成ロジック）
 - [ ] GroupUser Entity（メンバーシップ管理）
 
 #### リポジトリインタフェース (`backend/domains/*/repositories/`)
 - [x] UserRepository interface
-- [ ] PaymentRepository interface
-- [ ] DebtRelationRepository interface
+- [x] PaymentRepository interface
+- [x] DebtRelationRepository interface
 - [ ] GroupRepository interface
 - [ ] GroupUserRepository interface
 
@@ -207,7 +219,8 @@
   - `src/backend/domains/user/commands/login.ts` - メイン実装
 - [x] logout（Supabase認証からのサインアウト）
   - `src/backend/domains/user/commands/logout.ts` - メイン実装
-- [ ] CreatePaymentCommand
+- [x] CreatePaymentCommand
+  - `src/backend/domains/payment/commands/createPayment.ts` - 支払い作成コマンド
 - [ ] UpdatePaymentCommand
 - [ ] CreateGroupCommand
 - [ ] CreateGroupUserCommand
@@ -224,8 +237,8 @@
 
 #### リポジトリ実装 (`backend/infrastructure/database/repositories/`)
 - [x] PrismaUserRepository
-- [ ] PrismaPaymentRepository
-- [ ] PrismaDebtRelationRepository
+- [x] PrismaPaymentRepository
+- [x] PrismaDebtRelationRepository
 - [ ] PrismaGroupRepository
 - [ ] PrismaGroupUserRepository
 
@@ -242,7 +255,8 @@
 
 #### バリデーション (`backend/utils/validation.ts`)
 - [x] 認証リクエストバリデーション（signup/login）- 型安全なZodスキーマ
-- [ ] 支払い作成バリデーション
+- [x] 支払い作成バリデーション
+  - `src/backend/domains/payment/entities/PaymentRequest.ts` - 支払い作成リクエスト
 - [ ] グループ作成バリデーション
 - [ ] 共通バリデーションヘルパー
 

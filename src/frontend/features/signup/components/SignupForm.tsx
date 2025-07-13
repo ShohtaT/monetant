@@ -19,10 +19,10 @@ export const SignupForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    setError
+    setError,
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
-    mode: 'onBlur'
+    mode: 'onBlur',
   });
 
   const onSubmit = async (data: SignupFormData) => {
@@ -30,18 +30,18 @@ export const SignupForm: React.FC = () => {
     setGeneralError(null);
 
     try {
-      const response = await signup(data);
+      await signup(data);
       toast.success('Account created successfully!');
       reset();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred';
-      
+
       if (errorMessage.includes('Email already exists')) {
         setError('email', { message: 'This email is already registered' });
       } else {
         setGeneralError(errorMessage);
       }
-      
+
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -88,10 +88,7 @@ export const SignupForm: React.FC = () => {
       )}
 
       <div className="flex justify-center">
-        <SubmitButton
-          label="Create Account"
-          disabled={isLoading}
-        />
+        <SubmitButton label="Create Account" disabled={isLoading} />
       </div>
     </form>
   );
