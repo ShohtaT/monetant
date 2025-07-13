@@ -26,5 +26,8 @@ export async function login(
     throw new DomainError('User not found', 'USER_NOT_FOUND');
   }
 
-  return { user };
+  // Update last login timestamp
+  const updatedUser = await userRepository.updateLastLogin(user.id);
+
+  return { user: updatedUser };
 }

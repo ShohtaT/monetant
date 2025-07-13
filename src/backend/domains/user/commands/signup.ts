@@ -31,7 +31,7 @@ export async function signup(
 
   // Create user in database
   const userData: CreateUserInput = {
-    auth_id: signUpData.user.id,
+    authId: signUpData.user.id,
     email: input.email,
     nickname: input.nickname,
   };

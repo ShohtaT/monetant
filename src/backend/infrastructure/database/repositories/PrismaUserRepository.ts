@@ -18,10 +18,10 @@ export class PrismaUserRepository implements UserRepository {
     }
   }
 
-  async findByAuthId(auth_id: string): Promise<User | null> {
+  async findByAuthId(authId: string): Promise<User | null> {
     try {
       const user = await prisma.user.findUnique({
-        where: { auth_id },
+        where: { auth_id: authId },
       });
 
       if (!user) return null;
@@ -62,7 +62,7 @@ export class PrismaUserRepository implements UserRepository {
     try {
       const user = await prisma.user.create({
         data: {
-          auth_id: userInput.auth_id,
+          auth_id: userInput.authId,
           email: userInput.email,
           nickname: userInput.nickname,
         },
@@ -74,6 +74,21 @@ export class PrismaUserRepository implements UserRepository {
         throw new DatabaseError('Email already exists');
       }
       throw new DatabaseError('Failed to save user');
+    }
+  }
+
+  async updateLastLogin(id: number): Promise<User> {
+    try {
+      const user = await prisma.user.update({
+        where: { id },
+        data: {
+          last_login_at: new Date(),
+        },
+      });
+
+      return User.fromDatabase(user);
+    } catch {
+      throw new DatabaseError('Failed to update last login');
     }
   }
 

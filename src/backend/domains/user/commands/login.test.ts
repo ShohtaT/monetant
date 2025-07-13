@@ -20,6 +20,7 @@ describe('login', () => {
     auth_id: 'test-auth-id',
     email: 'test@example.com',
     nickname: 'testuser',
+    last_login_at: null,
     created_at: new Date(),
     updated_at: new Date(),
   });
@@ -31,6 +32,7 @@ describe('login', () => {
       findByEmail: vi.fn(),
       existsByEmail: vi.fn(),
       save: vi.fn(),
+      updateLastLogin: vi.fn(),
       delete: vi.fn(),
     };
     vi.clearAllMocks();
@@ -53,6 +55,7 @@ describe('login', () => {
     const { supabaseClient } = await import('../../../infrastructure/external/supabase');
     (supabaseClient.auth.signInWithPassword as any).mockResolvedValue(mockSupabaseResponse);
     (mockUserRepository.findByAuthId as any).mockResolvedValue(mockUser);
+    (mockUserRepository.updateLastLogin as any).mockResolvedValue(mockUser);
 
     // Act
     const result = await login(input, mockUserRepository);
@@ -64,6 +67,7 @@ describe('login', () => {
       password: input.password,
     });
     expect(mockUserRepository.findByAuthId).toHaveBeenCalledWith('test-auth-id');
+    expect(mockUserRepository.updateLastLogin).toHaveBeenCalledWith(1);
   });
 
   it('Supabase認証が失敗した場合はAuthErrorを投げること', async () => {
