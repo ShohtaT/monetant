@@ -126,7 +126,7 @@
 - [ ] グループメンバーシップ認可チェック
 - [ ] Payment詳細取得クエリ
 - [ ] DebtRelations一覧取得
-- [ ] 関連データ取得（creator, repayer情報等）
+- [ ] 関連データ取得（creator, debtor情報等）
 - [ ] エラーハンドリング
 
 ### PUT /api/v1/payments/[id]

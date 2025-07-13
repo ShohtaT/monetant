@@ -11,7 +11,7 @@ export default function Page() {
         <h1 className="text-2xl font-bold">Welcome to monetant</h1>
         <p className="text-gray-600">Split bill application</p>
       </div>
-      
+
       {user && (
         <div className="bg-gray-50 p-4 rounded-lg">
           <h2 className="text-lg font-semibold mb-2">User Information</h2>

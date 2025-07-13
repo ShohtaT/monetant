@@ -23,5 +23,44 @@ model User {
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
 
+  // Relations
+  created_payments Payment[]     @relation("PaymentCreator")
+  debt_relations   DebtRelation[]
+
   @@map("users")
+}
+
+model Payment {
+  id         Int      @id @default(autoincrement())
+  title      String
+  amount     Int      // 支払いの総額（単位：円）
+  note       String?  @db.Text
+  status     String   @default("AWAITING") // AWAITING, COMPLETED
+  creator_id Int
+  paid_at    DateTime @default(now())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Relations
+  creator        User           @relation("PaymentCreator", fields: [creator_id], references: [id])
+  debt_relations DebtRelation[]
+
+  @@map("payments")
+}
+
+model DebtRelation {
+  id           Int       @id @default(autoincrement())
+  split_amount Int       // 分割された金額（単位：円）
+  status       String    @default("AWAITING") // AWAITING, COMPLETED
+  payment_id   Int
+  debtor_id    Int
+  paid_at      DateTime?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+
+  // Relations
+  payment Payment @relation(fields: [payment_id], references: [id])
+  debtor User    @relation(fields: [debtor_id], references: [id])
+
+  @@map("debt_relations")
 }

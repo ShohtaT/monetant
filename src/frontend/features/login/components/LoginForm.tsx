@@ -19,10 +19,10 @@ export const LoginForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    setError
+    setError,
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-    mode: 'onBlur'
+    mode: 'onBlur',
   });
 
   const onSubmit = async (data: LoginFormData) => {
@@ -35,7 +35,7 @@ export const LoginForm: React.FC = () => {
       reset();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred';
-      
+
       if (errorMessage.includes('Invalid email or password')) {
         setError('email', { message: 'Invalid email or password' });
       } else if (errorMessage.includes('Invalid login credentials')) {
@@ -43,7 +43,7 @@ export const LoginForm: React.FC = () => {
       } else {
         setGeneralError(errorMessage);
       }
-      
+
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -81,10 +81,7 @@ export const LoginForm: React.FC = () => {
       )}
 
       <div className="flex justify-center">
-        <SubmitButton
-          label="Sign In"
-          disabled={isLoading}
-        />
+        <SubmitButton label="Sign In" disabled={isLoading} />
       </div>
     </form>
   );
