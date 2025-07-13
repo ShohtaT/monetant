@@ -169,8 +169,6 @@
 - POST /v1/login
   - Request: { email: string, password: string }
   - Response: { user: User }
-- GET /v1/session
-  - Response: { user: User }
 
 ### 支払い
 - POST /v1/payments

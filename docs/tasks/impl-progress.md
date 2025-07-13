@@ -84,6 +84,15 @@
   - `src/frontend/features/login/` - ログイン機能ディレクトリ
   - `src/app/login/page.tsx` - Next.js App Router
 
+### API: POST /api/v1/logout ✅ 完了
+- [x] Supabase認証からのサインアウト
+- [x] エラーハンドリング（ログアウト失敗等）
+  - `src/backend/domains/user/commands/logout.ts` - logoutコマンド実装
+  - `src/app/api/v1/logout/route.ts` - API Route実装
+- [x] フロントエンド統合
+  - `src/frontend/features/logout/api.ts` - logout API呼び出し
+  - `src/frontend/context/AuthContext.tsx` - API経由でのログアウト実装（フォールバック付き）
+
 ### API: GET /api/v1/auth/session
 - [ ] セッション検証
 - [ ] ユーザー情報取得クエリ
@@ -196,6 +205,8 @@
   - `src/backend/domains/user/commands/signup.ts` - メイン実装
 - [x] login（Supabase認証 + DBユーザー取得）
   - `src/backend/domains/user/commands/login.ts` - メイン実装
+- [x] logout（Supabase認証からのサインアウト）
+  - `src/backend/domains/user/commands/logout.ts` - メイン実装
 - [ ] CreatePaymentCommand
 - [ ] UpdatePaymentCommand
 - [ ] CreateGroupCommand
@@ -256,6 +267,10 @@
     - 正常系：ユーザー作成、レスポンス形式検証
     - 異常系：重複email、Supabase認証エラー、バリデーションエラー
     - エッジケース：空白nickname、長すぎるnickname、無効auth_id
+  - [x] logout コマンドテスト（Vitest使用）
+    - `src/backend/domains/user/commands/logout.test.ts` - テストカバレッジ
+    - 正常系：ログアウト成功
+    - 異常系：Supabaseエラー、エラーメッセージ処理
 - [ ] バリデーションのテスト
 
 #### 統合テスト
