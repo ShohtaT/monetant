@@ -168,9 +168,7 @@ describe('PrismaPaymentRepository', () => {
       mockCreate.mockRejectedValue(foreignKeyError);
 
       // Act & Assert
-      await expect(repository.save(input)).rejects.toThrow(
-        new DatabaseError('Creator not found')
-      );
+      await expect(repository.save(input)).rejects.toThrow(new DatabaseError('Creator not found'));
     });
 
     it('その他のデータベースエラーの場合は一般的なエラーメッセージを投げる', async () => {

@@ -349,7 +349,7 @@ describe('PrismaUserRepository', () => {
   describe('delete', () => {
     it('正常にユーザーを削除できる', async () => {
       // Arrange
-      mockDelete.mockResolvedValue({ 
+      mockDelete.mockResolvedValue({
         id: 1,
         auth_id: 'test-auth-id',
         email: 'test@example.com',

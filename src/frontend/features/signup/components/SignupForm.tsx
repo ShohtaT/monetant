@@ -30,7 +30,7 @@ export const SignupForm: React.FC = () => {
     setGeneralError(null);
 
     try {
-      const response = await signup(data);
+      await signup(data);
       toast.success('Account created successfully!');
       reset();
     } catch (error) {

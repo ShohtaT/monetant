@@ -30,7 +30,7 @@ export const LoginForm: React.FC = () => {
     setGeneralError(null);
 
     try {
-      const response = await login(data);
+      await login(data);
       toast.success('Login successful!');
       reset();
     } catch (error) {

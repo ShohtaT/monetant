@@ -65,7 +65,7 @@ describe('PrismaDebtRelationRepository', () => {
         },
       ];
 
-      mockTransaction.mockImplementation(async (callback) => {
+      mockTransaction.mockImplementation(async () => {
         const mockTx = {
           debtRelation: {
             create: vi.fn(),
@@ -129,7 +129,7 @@ describe('PrismaDebtRelationRepository', () => {
         },
       ];
 
-      mockTransaction.mockImplementation(async (callback) => {
+      mockTransaction.mockImplementation(async () => {
         const mockTx = {
           debtRelation: {
             create: vi.fn().mockResolvedValue(mockDbResults[0]),
@@ -226,7 +226,8 @@ describe('PrismaDebtRelationRepository', () => {
         transactionCallback = callback;
         const mockTx = {
           debtRelation: {
-            create: vi.fn()
+            create: vi
+              .fn()
               .mockResolvedValueOnce({
                 id: 1,
                 split_amount: 500,
