@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { supabaseClient } from '@/backend/infrastructure/external/supabase';
 import type { User } from '@supabase/supabase-js';
 import Loading from "@/frontend/shared/ui/Loading";
+import { logout as logoutApi } from '@/frontend/features/logout/api';
 
 interface AuthContextType {
   user: User | null;
@@ -72,8 +73,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [user, loading, pathname, router]);
 
   const signOut = async () => {
-    await supabaseClient.auth.signOut();
-    router.push('/login');
+    try {
+      await logoutApi();
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Fallback: force logout even if API call fails
+      await supabaseClient.auth.signOut();
+      router.push('/login');
+    }
   };
 
   const value = {
