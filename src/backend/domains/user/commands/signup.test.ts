@@ -30,6 +30,7 @@ describe('signup', () => {
       findByEmail: vi.fn(),
       existsByEmail: vi.fn(),
       save: vi.fn(),
+      updateLastLogin: vi.fn(),
       delete: vi.fn(),
     };
 
@@ -39,6 +40,7 @@ describe('signup', () => {
       auth_id: 'test-auth-id',
       email: 'test@example.com',
       nickname: 'testuser',
+      last_login_at: null,
       created_at: new Date('2023-01-01'),
       updated_at: new Date('2023-01-01'),
     });
@@ -89,7 +91,7 @@ describe('signup', () => {
       },
     });
     expect(mockUserRepository.save).toHaveBeenCalledWith({
-      auth_id: 'test-auth-id',
+      authId: 'test-auth-id',
       email: 'test@example.com',
       nickname: 'testuser',
     });
@@ -321,7 +323,7 @@ describe('signup', () => {
 
     // Assert
     expect(mockUserRepository.save).toHaveBeenCalledWith({
-      auth_id: 'test-auth-id',
+      authId: 'test-auth-id',
       email: 'test@example.com',
       nickname: 'testuser', // 空白が除去されている
     });

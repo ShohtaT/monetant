@@ -3,19 +3,20 @@ import { DomainError } from '../../../utils/errors';
 export class User {
   private constructor(
     public readonly id: number,
-    public readonly auth_id: string,
+    public readonly authId: string,
     public readonly email: string,
     public readonly nickname: string,
+    public readonly lastLoginAt: Date | null,
     public readonly createdAt: Date,
     public readonly updatedAt: Date
   ) {}
 
   static create(input: {
-    auth_id: string;
+    authId: string;
     email: string;
     nickname: string;
-  }): Omit<User, 'id' | 'createdAt' | 'updatedAt'> {
-    if (!input.auth_id) {
+  }): Omit<User, 'id' | 'createdAt' | 'updatedAt' | 'lastLoginAt'> {
+    if (!input.authId) {
       throw new DomainError('Auth ID is required', 'INVALID_AUTH_ID');
     }
 
@@ -32,7 +33,7 @@ export class User {
     }
 
     return {
-      auth_id: input.auth_id,
+      authId: input.authId,
       email: input.email,
       nickname: input.nickname.trim(),
     };
@@ -43,6 +44,7 @@ export class User {
     auth_id: string;
     email: string;
     nickname: string;
+    last_login_at: Date | null;
     created_at: Date;
     updated_at: Date;
   }): User {
@@ -51,6 +53,7 @@ export class User {
       data.auth_id,
       data.email,
       data.nickname,
+      data.last_login_at,
       data.created_at,
       data.updated_at
     );
@@ -58,7 +61,7 @@ export class User {
 }
 
 export type CreateUserInput = {
-  auth_id: string;
+  authId: string;
   email: string;
   nickname: string;
 };
