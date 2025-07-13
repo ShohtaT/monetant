@@ -1,5 +1,5 @@
-import { Payment, CreatePaymentInput } from '@/backend/domains/payment/entities/Payment';
-import { PaymentRepository } from '@/backend/domains/payment/repositories/PaymentRepository';
+import { Payment, CreatePaymentInput } from '../../../domains/payment/entities/Payment';
+import { PaymentRepository } from '../../../domains/payment/repositories/PaymentRepository';
 import { DatabaseError } from '../../../utils/errors';
 import { prisma } from '../../../../lib/prisma';
 

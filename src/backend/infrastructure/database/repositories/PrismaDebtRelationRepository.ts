@@ -1,8 +1,8 @@
 import {
   DebtRelation,
   CreateDebtRelationInput,
-} from '@/backend/domains/payment/entities/DebtRelation';
-import { DebtRelationRepository } from '@/backend/domains/payment/repositories/DebtRelationRepository';
+} from '../../../domains/payment/entities/DebtRelation';
+import { DebtRelationRepository } from '../../../domains/payment/repositories/DebtRelationRepository';
 import { DatabaseError } from '../../../utils/errors';
 import { prisma } from '../../../../lib/prisma';
 
