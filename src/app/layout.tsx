@@ -30,7 +30,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
-          <div className="flex justify-center mx-3 mb-20 pt-4">
+          <div className="flex justify-center">
             <div className="w-[420px]">{children}</div>
           </div>
           <ToastContainer
