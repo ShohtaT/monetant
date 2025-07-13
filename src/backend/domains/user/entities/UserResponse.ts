@@ -4,6 +4,7 @@ export interface UserResponse {
   id: number;
   email: string;
   nickname: string;
+  lastLoginAt: Date | null;
 }
 
 export interface AuthSignupResponse {
@@ -23,5 +24,6 @@ export function toUserResponse(user: User): UserResponse {
     id: user.id,
     email: user.email,
     nickname: user.nickname,
+    lastLoginAt: user.lastLoginAt,
   };
 }
